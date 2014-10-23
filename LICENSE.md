@@ -1,5 +1,4 @@
-This software is OSI Certified Open Source Software.
-OSI Certified is a certification mark of the Open Source Initiative.
+GNU-GPL style license for GBpy package.
 
 Copyright (c) 2014, Arash Dehghan Banadaki and Srikanth Patala.
 All rights reserved.
@@ -17,7 +16,7 @@ This file is part of GBpy.
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+    along with GBpy.  If not, see <http://www.gnu.org/licenses/>.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
