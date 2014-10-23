@@ -1,3 +1,7 @@
+# Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
+# Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
+# License: GNU-GPL Style.
+
 import numpy as np
 import os
 file_dir = os.path.dirname(os.path.realpath(__file__))

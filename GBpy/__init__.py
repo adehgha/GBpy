@@ -1,3 +1,7 @@
+# Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
+# Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
+# License: GNU-GPL Style.
+
 from bp_basis import *
 from Col import *
 from csl_dsc_genlattice import *

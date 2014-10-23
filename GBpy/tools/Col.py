@@ -1,3 +1,7 @@
+# Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
+# Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
+# License: GNU-GPL Style.
+
 class Col(object):
     """
     This class is defined to ouput a word or sentence in a different color
