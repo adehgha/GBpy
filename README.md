@@ -4,9 +4,9 @@ is a complete python package for constructing the geometrical properties of
 a Bicrystal. It includes all the necessary tools for constructing a simulation box
 for grain boundary simulation calculations.
 
-- `csl_fidner_smith`, a state machine
-- `dsc_finder`, a state superclass
-- `symmetry_operations`, a whitespace-sensitive version of `StateMachine`
+- `csl_fidner_smith`, finds the CSL lattice associated with a bicrystal.  
+- `dsc_finder`, finds the DSC lattice for a bicrystal.
+- `symmetry_operations`, performs symmetery operations for various crystals.
 etc.......
 
 Classes:
