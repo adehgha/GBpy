@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>lattice &mdash; GBPy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="GBPy 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">GBPy 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for lattice</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">file_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c"># Load Rotations Transformations</span>
+<span class="n">path_dir2</span> <span class="o">=</span> <span class="n">file_dir</span> <span class="o">+</span> <span class="s">&#39;/tools/&#39;</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path_dir2</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">transformations</span> <span class="kn">as</span> <span class="nn">trans</span>
+
+
+<div class="viewcode-block" id="Lattice"><a class="viewcode-back" href="../index.html#lattice.Lattice">[docs]</a><span class="k">class</span> <span class="nc">Lattice</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class contains all the crystallographic information required for each</span>
+<span class="sd">    atom type. Currently there are only two pre-configured atoms available in</span>
+<span class="sd">    class i.e. &#39;Al&#39; and &#39;Mg&#39;. Up on need user can create a new instance of this</span>
+<span class="sd">    class with the same attributes. The attributes of this class are:</span>
+<span class="sd">    ...</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    elem_type: string</span>
+<span class="sd">        Element of Interest</span>
+
+<span class="sd">    pearson: string</span>
+<span class="sd">        Pearson symbol for the lattice</span>
+
+<span class="sd">    lat_params: dictionary</span>
+<span class="sd">        Lattice parameters (&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;alpha&#39;, &#39;beta&#39;, &#39;gamma&#39;)</span>
+
+<span class="sd">    l_g_go: numpy array</span>
+<span class="sd">        Primitve basis of the lattice</span>
+
+<span class="sd">    basis_atoms:</span>
+<span class="sd">        Location of the basis atoms in the primitive lattice</span>
+
+<span class="sd">    cryst_ptgrp: string</span>
+<span class="sd">        Crystallographic point group of the lattice</span>
+
+<span class="sd">    burgers_mag: float</span>
+<span class="sd">        The smallest burgers vector in the lattice</span>
+
+<span class="sd">    eam_file:</span>
+<span class="sd">        eam_file name for atomistic simulations</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">    Method for printing the lattice class</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    --------</span>
+<span class="sd">    Examples of elem_type</span>
+<span class="sd">    elem_type = &#39;Mg&#39;;</span>
+<span class="sd">    elem_type = &#39;Al&#39;;</span>
+<span class="sd">    elem_type = &#39;Cu&#39;;</span>
+<span class="sd">    elem_type = &#39;Ni&#39;;</span>
+<span class="sd">    elem_type = &#39;cF_Id&#39;;</span>
+<span class="sd">    elem_type = &#39;cI_Id&#39;;</span>
+<span class="sd">    elem_type = &#39;cP_Id&#39;;</span>
+<span class="sd">    elem_type = &#39;hP_Id&#39;;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="n">nargs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nargs</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">elem_type</span> <span class="o">=</span> <span class="s">&#39;cF_Id&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">elem_type</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">elem_type</span> <span class="o">==</span> <span class="s">&#39;cF_Id&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">=</span> <span class="s">&#39;cF_Id&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pearson</span> <span class="o">=</span> <span class="s">&#39;cF&#39;</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lat_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;beta&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;gamma&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">}</span>
+            <span class="n">b1x</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+            <span class="n">b1y</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+            <span class="n">b1z</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_g_go</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">b1x</span><span class="p">,</span> <span class="n">b1y</span><span class="p">,</span> <span class="n">b1z</span><span class="p">))</span>
+            <span class="c"># Point group symmetry of the lattice</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cryst_ptgrp</span> <span class="o">=</span> <span class="s">&#39;Oh&#39;</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">elem_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;al&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">=</span> <span class="s">&#39;Al&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pearson</span> <span class="o">=</span> <span class="s">&#39;cF&#39;</span>
+
+            <span class="n">a</span> <span class="o">=</span> <span class="mf">4.05</span>
+            <span class="n">a_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lat_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">,</span> <span class="s">&#39;beta&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">,</span> <span class="s">&#39;gamma&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">}</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cryst_ptgrp</span> <span class="o">=</span> <span class="s">&#39;Oh&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">burgers_mag</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">eam_file</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s">&#39;alloy&#39;</span><span class="p">,</span> <span class="s">&#39;Al99.eam.alloy&#39;</span><span class="p">])</span>
+
+            <span class="n">b1x</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+            <span class="n">b1y</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+            <span class="n">b1z</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_g_go</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">b1x</span><span class="p">,</span> <span class="n">b1y</span><span class="p">,</span> <span class="n">b1z</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">basis_atoms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+        <span class="c"># Hexagonal Lattices</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">elem_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;hp_id&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">=</span> <span class="s">&#39;hP_Id&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pearson</span> <span class="o">=</span> <span class="s">&#39;hP&#39;</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
+            <span class="n">CAratio</span> <span class="o">=</span> <span class="mf">1.633</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">CAratio</span>
+            <span class="n">a_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">b_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">g_ang</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lat_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="n">b</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">,</span> <span class="s">&#39;beta&#39;</span><span class="p">:</span> <span class="n">b_ang</span><span class="p">,</span> <span class="s">&#39;gamma&#39;</span><span class="p">:</span> <span class="n">g_ang</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cryst_ptgrp</span> <span class="o">=</span> <span class="s">&#39;D6h&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">burgers_mag</span> <span class="o">=</span> <span class="n">a</span>
+            <span class="n">b1x</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>
+            <span class="n">b1y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">g_ang</span><span class="p">])),</span> <span class="n">b1x</span><span class="p">)</span>
+            <span class="n">b1z</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_g_go</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">b1x</span><span class="p">,</span> <span class="n">b1y</span><span class="p">,</span> <span class="n">b1z</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">basis_atoms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mf">2.</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="p">]])</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">elem_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;hp_ca&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nargs</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Provide the c/a ratio&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">nargs</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">=</span> <span class="s">&#39;hP_ca&#39;</span>
+                    <span class="n">ca_ratio</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pearson</span> <span class="o">=</span> <span class="s">&#39;hP&#39;</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">ca_ratio</span>
+            <span class="n">a_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">b_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">g_ang</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lat_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="n">b</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">,</span> <span class="s">&#39;beta&#39;</span><span class="p">:</span> <span class="n">b_ang</span><span class="p">,</span> <span class="s">&#39;gamma&#39;</span><span class="p">:</span> <span class="n">g_ang</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cryst_ptgrp</span> <span class="o">=</span> <span class="s">&#39;D6h&#39;</span>
+            <span class="n">b1x</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>
+            <span class="n">b1y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">g_ang</span><span class="p">])),</span> <span class="n">b1x</span><span class="p">)</span>
+            <span class="n">b1z</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_g_go</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">b1x</span><span class="p">,</span> <span class="n">b1y</span><span class="p">,</span> <span class="n">b1z</span><span class="p">))</span>
+
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">elem_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;mg&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">=</span> <span class="s">&#39;Mg&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pearson</span> <span class="o">=</span> <span class="s">&#39;hP&#39;</span>
+
+            <span class="n">a</span> <span class="o">=</span> <span class="mf">3.181269601</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="n">CAratio</span> <span class="o">=</span> <span class="mf">1.632993162</span><span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">CAratio</span>
+            <span class="n">a_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">b_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">g_ang</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lat_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="n">b</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">,</span> <span class="s">&#39;beta&#39;</span><span class="p">:</span> <span class="n">b_ang</span><span class="p">,</span> <span class="s">&#39;gamma&#39;</span><span class="p">:</span> <span class="n">g_ang</span><span class="p">}</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cryst_ptgrp</span> <span class="o">=</span> <span class="s">&#39;D6h&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">burgers_mag</span> <span class="o">=</span> <span class="n">a</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">eam_file</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s">&#39;fs&#39;</span><span class="p">,</span> <span class="s">&#39;Mg.eam.fs&#39;</span><span class="p">])</span>
+
+            <span class="n">b1x</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>
+            <span class="n">b1y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">g_ang</span><span class="p">])),</span> <span class="n">b1x</span><span class="p">)</span>
+            <span class="n">b1z</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_g_go</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">b1x</span><span class="p">,</span> <span class="n">b1y</span><span class="p">,</span> <span class="n">b1z</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">basis_atoms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mf">2.</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="p">]])</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+
+        <span class="c">#### Tetragonal Lattices</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">elem_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;tp_id&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">=</span> <span class="s">&#39;tP_Id&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pearson</span> <span class="o">=</span> <span class="s">&#39;tP&#39;</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="n">CAratio</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">CAratio</span>
+            <span class="n">a_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">b_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">g_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lat_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="n">b</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">,</span> <span class="s">&#39;beta&#39;</span><span class="p">:</span> <span class="n">b_ang</span><span class="p">,</span> <span class="s">&#39;gamma&#39;</span><span class="p">:</span> <span class="n">g_ang</span><span class="p">}</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cryst_ptgrp</span> <span class="o">=</span> <span class="s">&#39;D4h&#39;</span>
+
+            <span class="n">b1x</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>
+            <span class="n">b1y</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>
+            <span class="n">b1z</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_g_go</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">b1x</span><span class="p">,</span> <span class="n">b1y</span><span class="p">,</span> <span class="n">b1z</span><span class="p">))</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">elem_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;tp_ca&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nargs</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Provide the c/a ratio&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">nargs</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">=</span> <span class="s">&#39;tP_ca&#39;</span>
+                    <span class="n">ca_ratio</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pearson</span> <span class="o">=</span> <span class="s">&#39;tP&#39;</span>
+
+            <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">ca_ratio</span>
+            <span class="n">a_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">b_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">g_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lat_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="n">b</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span> <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">,</span> <span class="s">&#39;beta&#39;</span><span class="p">:</span> <span class="n">b_ang</span><span class="p">,</span> <span class="s">&#39;gamma&#39;</span><span class="p">:</span> <span class="n">g_ang</span><span class="p">}</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cryst_ptgrp</span> <span class="o">=</span> <span class="s">&#39;D4h&#39;</span>
+
+            <span class="n">b1x</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>
+            <span class="n">b1y</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])</span>
+            <span class="n">b1z</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_g_go</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">b1x</span><span class="p">,</span> <span class="n">b1y</span><span class="p">,</span> <span class="n">b1z</span><span class="p">))</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+
+        <span class="c"># Rhombohedral lattices</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">elem_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;hr_id&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">=</span> <span class="s">&#39;hR_Id&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pearson</span> <span class="o">=</span> <span class="s">&#39;hR&#39;</span>
+            
+            <span class="c">## Lattice Parameters for Corundum</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="mf">4.75</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="mf">12.982</span>
+            <span class="c">## Using the relation between hexagonal and rhombohedral lattices</span>
+            <span class="n">tau</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span> <span class="o">-</span> <span class="p">(</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="n">cos_ang</span> <span class="o">=</span> <span class="n">tau</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">tau</span><span class="p">);</span>
+            <span class="n">a_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">cos_ang</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lat_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">,</span> <span class="s">&#39;beta&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">,</span> <span class="s">&#39;gamma&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">}</span>
+
+            <span class="n">k1</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">cos_ang</span><span class="p">)</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span>
+            <span class="n">k2</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">cos_ang</span><span class="p">)</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span>
+            <span class="n">b1x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">k1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">k1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">k2</span><span class="p">])</span>
+            <span class="n">b1y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">k1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">k1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">k2</span><span class="p">])</span>
+            <span class="n">b1z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_g_go</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">b1x</span><span class="p">,</span> <span class="n">b1y</span><span class="p">,</span> <span class="n">b1z</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">cryst_ptgrp</span> <span class="o">=</span> <span class="s">&#39;D3d&#39;</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+        <span class="k">if</span> <span class="n">elem_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s">&#39;hr_ca&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">nargs</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Provide the c/a ratio&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">nargs</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">elem_type</span> <span class="o">=</span> <span class="s">&#39;hR_ca&#39;</span>
+                    <span class="n">ca_ratio</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pearson</span> <span class="o">=</span> <span class="s">&#39;hR&#39;</span>
+            
+            <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">ca_ratio</span>
+            <span class="c">## Using the relation between hexagonal and rhombohedral lattices</span>
+            <span class="n">tau</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span> <span class="o">-</span> <span class="p">(</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">c</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="n">cos_ang</span> <span class="o">=</span> <span class="n">tau</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">tau</span><span class="p">);</span>
+            <span class="n">a_ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">cos_ang</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lat_params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s">&#39;alpha&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">,</span> <span class="s">&#39;beta&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">,</span> <span class="s">&#39;gamma&#39;</span><span class="p">:</span> <span class="n">a_ang</span><span class="p">}</span>
+
+            <span class="n">k1</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">cos_ang</span><span class="p">)</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span>
+            <span class="n">k2</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">cos_ang</span><span class="p">)</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span>
+            <span class="n">b1x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">k1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">k1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">k2</span><span class="p">])</span>
+            <span class="n">b1y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">k1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">k1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">k2</span><span class="p">])</span>
+            <span class="n">b1z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">l_g_go</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">b1x</span><span class="p">,</span> <span class="n">b1y</span><span class="p">,</span> <span class="n">b1z</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cryst_ptgrp</span> <span class="o">=</span> <span class="s">&#39;D3d&#39;</span>
+        <span class="c"># ------------------------------------------------------------------------------------------------------</span>
+
+        
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">l1</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="n">str1</span> <span class="o">=</span> <span class="s">&#39;Lattice:&#39;</span>
+        <span class="n">str1</span> <span class="o">+=</span> <span class="s">&#39;Pearson Symbol: </span><span class="si">%s</span><span class="s"> </span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">l1</span><span class="o">.</span><span class="n">pearson</span><span class="p">)</span>
+        <span class="n">str1</span> <span class="o">+=</span> <span class="s">&#39;Lattice Parameters: </span><span class="se">\n</span><span class="s"> a = </span><span class="si">%f</span><span class="s"> </span><span class="se">\t</span><span class="s"> b = </span><span class="si">%f</span><span class="s"> </span><span class="se">\t</span><span class="s"> c = </span><span class="si">%f</span><span class="s"> </span><span class="se">\t</span><span class="s"> alpha = </span><span class="si">%f</span><span class="s"> </span><span class="se">\t</span><span class="s"> beta = </span><span class="si">%f</span><span class="s"> </span><span class="se">\t</span><span class="s"> gamma = </span><span class="si">%f</span><span class="s"> </span><span class="se">\n</span><span class="s">&#39;</span> \
+            <span class="o">%</span><span class="p">(</span><span class="n">l1</span><span class="o">.</span><span class="n">lat_params</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">],</span> <span class="n">l1</span><span class="o">.</span><span class="n">lat_params</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">l1</span><span class="o">.</span><span class="n">lat_params</span><span class="p">[</span><span class="s">&#39;c&#39;</span><span class="p">],</span>
+              <span class="n">l1</span><span class="o">.</span><span class="n">lat_params</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">],</span> <span class="n">l1</span><span class="o">.</span><span class="n">lat_params</span><span class="p">[</span><span class="s">&#39;beta&#39;</span><span class="p">],</span> <span class="n">l1</span><span class="o">.</span><span class="n">lat_params</span><span class="p">[</span><span class="s">&#39;gamma&#39;</span><span class="p">])</span>
+        <span class="n">str1</span> <span class="o">+=</span> <span class="s">&#39;Point Group: </span><span class="si">%s</span><span class="s"> </span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">l1</span><span class="o">.</span><span class="n">cryst_ptgrp</span><span class="p">)</span>
+        <span class="n">str1</span> <span class="o">+=</span> <span class="s">&#39;Primitive lattice (l_g_go): </span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">str1</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">l1</span><span class="o">.</span><span class="n">l_g_go</span><span class="p">)</span>
+        <span class="n">str1</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">str1</span> <span class="o">+=</span> <span class="s">&#39;Crystal Point group: &#39;</span>
+        <span class="n">str1</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cryst_ptgrp</span>
+        <span class="n">str1</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">return</span> <span class="n">str1</span>
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">GBPy 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Srikanth Patala, Arash D. Banadaki.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

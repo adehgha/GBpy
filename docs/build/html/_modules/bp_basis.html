@@ -1,0 +1,473 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>bp_basis &mdash; GBPy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="GBPy 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">GBPy 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for bp_basis</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">fractions</span> <span class="kn">import</span> <span class="n">gcd</span>
+<span class="kn">import</span> <span class="nn">integer_manipulations</span> <span class="kn">as</span> <span class="nn">int_man</span>
+<span class="kn">import</span> <span class="nn">find_csl_dsc</span> <span class="kn">as</span> <span class="nn">fcd</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">file_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+<span class="c"># Load the following modules from tools directory</span>
+<span class="n">path_dir1</span> <span class="o">=</span> <span class="n">file_dir</span> <span class="o">+</span> <span class="s">&#39;/tools/&#39;</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path_dir1</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">Col</span>
+<span class="kn">import</span> <span class="nn">lll_reduction</span> <span class="kn">as</span> <span class="nn">lll_red</span>
+<span class="kn">import</span> <span class="nn">smith_nf</span> <span class="kn">as</span> <span class="nn">snf</span>
+<span class="c"># -----------------------------------------------------------------------------------------------------------</span>
+
+
+<div class="viewcode-block" id="check_int_mats"><a class="viewcode-back" href="../index.html#bp_basis.check_int_mats">[docs]</a><span class="k">def</span> <span class="nf">check_int_mats</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The function checks whether or not the elements of</span>
+<span class="sd">    $A_{left}^{-1}$*B are integers</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    l1, l2 : numpy arrays of same dimensions</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    cond: numpy boolean array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">l1_linv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l1</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">l1</span><span class="p">)),</span> <span class="n">l1</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">cond</span> <span class="o">=</span> <span class="n">int_man</span><span class="o">.</span><span class="n">int_check</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l1_linv</span><span class="p">,</span> <span class="n">l2</span><span class="p">),</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cond</span>
+<span class="c"># -----------------------------------------------------------------------------------------------------------</span>
+
+</div>
+<div class="viewcode-block" id="check_2d_csl"><a class="viewcode-back" href="../index.html#bp_basis.check_2d_csl">[docs]</a><span class="k">def</span> <span class="nf">check_2d_csl</span><span class="p">(</span><span class="n">l_pl1_g1</span><span class="p">,</span> <span class="n">l_pl2_g1</span><span class="p">,</span> <span class="n">l_csl_g1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The function checks whether or not the CSL basis may be expressed</span>
+<span class="sd">    as a linear integer combination of the plane bases of planes 1 and 2</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    l_pl1_g1, l_pl2_g1: numpy arrays of basis vectors for plane 1 and 2</span>
+<span class="sd">    in the g1 reference frame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ct</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">str1</span> <span class="o">=</span> <span class="s">&#39;Check &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; : --&gt; &#39;</span>
+    <span class="k">if</span> <span class="n">check_int_mats</span><span class="p">(</span><span class="n">l_pl1_g1</span><span class="p">,</span> <span class="n">l_csl_g1</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="n">str2</span> <span class="o">=</span> <span class="s">&#39;YES</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;yel&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;The 2D CSL does not contain base1.&#39;</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="n">str1</span><span class="p">,</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">Col</span><span class="p">()</span>
+    <span class="n">txt</span><span class="o">.</span><span class="n">c_prnt</span><span class="p">(</span><span class="n">str2</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+    <span class="c"># --------------------------</span>
+    <span class="n">ct</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">str1</span> <span class="o">=</span> <span class="s">&#39;Check &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ct</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; : --&gt; &#39;</span>
+    <span class="k">if</span> <span class="n">check_int_mats</span><span class="p">(</span><span class="n">l_pl2_g1</span><span class="p">,</span> <span class="n">l_csl_g1</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="n">str2</span> <span class="o">=</span> <span class="s">&#39;YES</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;yel&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;The 2D CSL does not contain base2.&#39;</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="n">str1</span><span class="p">,</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">Col</span><span class="p">()</span>
+    <span class="n">txt</span><span class="o">.</span><span class="n">c_prnt</span><span class="p">(</span><span class="n">str2</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+<span class="c"># -----------------------------------------------------------------------------------------------------------</span>
+
+</div>
+<div class="viewcode-block" id="lbi_dioph_soln"><a class="viewcode-back" href="../index.html#bp_basis.lbi_dioph_soln">[docs]</a><span class="k">def</span> <span class="nf">lbi_dioph_soln</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the diophantaine solution for the equation ax + by = c</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">gcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">fmod</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;No Solutions Exist&#39;</span><span class="p">)</span>
+
+    <span class="n">mult</span> <span class="o">=</span> <span class="n">c</span> <span class="o">/</span> <span class="n">k</span>
+
+    <span class="c"># b1 = extended_euclid(a, b) ####&lt;----------------- must be verified</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">snf</span><span class="o">.</span><span class="n">extgcd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">mult</span> <span class="o">*</span> <span class="n">b1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="n">mult</span> <span class="o">*</span> <span class="n">b1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">a</span><span class="o">*</span><span class="n">x1</span> <span class="o">+</span> <span class="n">b</span><span class="o">*</span><span class="n">x2</span> <span class="o">-</span> <span class="n">c</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Something wrong with the Algorithm&#39;</span><span class="p">)</span>
+
+    <span class="n">tk</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">b</span><span class="o">-</span><span class="n">a</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">tk_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">tk</span><span class="p">)],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">tk</span><span class="p">)]])</span>
+    <span class="n">x_sol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x1</span><span class="p">],</span> <span class="p">[</span><span class="n">x1</span><span class="p">]])</span> <span class="o">+</span> <span class="n">tk_mat</span> <span class="o">*</span> <span class="n">b</span>
+    <span class="n">y_sol</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x2</span><span class="p">],</span> <span class="p">[</span><span class="n">x2</span><span class="p">]])</span> <span class="o">-</span> <span class="n">tk_mat</span> <span class="o">*</span> <span class="n">a</span>
+    <span class="n">sol_mag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x_sol</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">y_sol</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sol_mag</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="n">sol_mag</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">int_soln</span> <span class="o">=</span> <span class="p">[</span><span class="n">x_sol</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">y_sol</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span>
+    <span class="k">return</span> <span class="n">int_soln</span>
+<span class="c"># -----------------------------------------------------------------------------------------------------------</span>
+
+</div>
+<div class="viewcode-block" id="compute_basis_vec"><a class="viewcode-back" href="../index.html#bp_basis.compute_basis_vec">[docs]</a><span class="k">def</span> <span class="nf">compute_basis_vec</span><span class="p">(</span><span class="n">d_eq</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The function computes y1, y2, y3 such that h\*y1 + k\*y2 + l\*y3 = 0</span>
+<span class="sd">    and modulus of y1 is a minimum</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------------</span>
+<span class="sd">    d_eq: numpy array or list of size 3 and dimension 1</span>
+<span class="sd">    h = d_eq[0], k = d_eq[1], l = d_eq[2]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ------------</span>
+<span class="sd">    np.array([y1, y2, y3])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">hp</span> <span class="o">=</span> <span class="n">d_eq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">kp</span> <span class="o">=</span> <span class="n">d_eq</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">lp</span> <span class="o">=</span> <span class="n">d_eq</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="c"># Find the minimum y1 such that y2 and y3 are solutions of the equation.</span>
+    <span class="c"># kp*y2 + lp*y3 = -hp*y1 (Diaphontane Equation).</span>
+    <span class="c"># Solutions exist if gcd(kp,lp) is a multiple of hp*y1</span>
+    <span class="n">cond</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">y1</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">cond</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">fmod</span><span class="p">(</span><span class="n">hp</span> <span class="o">*</span> <span class="n">y1</span><span class="p">,</span> <span class="n">gcd</span><span class="p">(</span><span class="n">kp</span><span class="p">,</span> <span class="n">lp</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cond</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">y1</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c"># Diophantine Equation: ax + by = c</span>
+    <span class="c"># To solve: f = kp*x + lp*y + hp*m = 0;</span>
+    <span class="n">avar</span> <span class="o">=</span> <span class="n">kp</span>
+    <span class="n">bvar</span> <span class="o">=</span> <span class="n">lp</span>
+    <span class="n">cvar</span> <span class="o">=</span> <span class="o">-</span><span class="n">hp</span> <span class="o">*</span> <span class="n">y1</span>
+    <span class="n">int_soln</span> <span class="o">=</span> <span class="n">lbi_dioph_soln</span><span class="p">(</span><span class="n">avar</span><span class="p">,</span> <span class="n">bvar</span><span class="p">,</span> <span class="n">cvar</span><span class="p">)</span>
+    <span class="n">y2</span> <span class="o">=</span> <span class="n">int_soln</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y3</span> <span class="o">=</span> <span class="n">int_soln</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">kp</span><span class="o">*</span><span class="n">y2</span> <span class="o">+</span> <span class="n">lp</span><span class="o">*</span><span class="n">y3</span> <span class="o">+</span> <span class="n">hp</span><span class="o">*</span><span class="n">y1</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Error with Diophantine solution&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">y3</span><span class="p">])</span>
+<span class="c"># -----------------------------------------------------------------------------------------------------------</span>
+
+</div>
+<div class="viewcode-block" id="bp_basis"><a class="viewcode-back" href="../index.html#bp_basis.bp_basis">[docs]</a><span class="k">def</span> <span class="nf">bp_basis</span><span class="p">(</span><span class="n">bp_g1</span><span class="p">,</span> <span class="n">lattice</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The function computes the primitve basis of the plane if the</span>
+<span class="sd">    boundary plane normal and the underlying lattice are specified</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------------</span>
+<span class="sd">    bp_g1: numpy array</span>
+<span class="sd">    Boundary plane normal in &#39;g1&#39; reference frame</span>
+
+<span class="sd">    lattice: Lattice class</span>
+<span class="sd">    Attributes of the under lattice</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -----------</span>
+<span class="sd">    l_pl_g1: numpy array</span>
+<span class="sd">    The primitive basis of the plane with boundary plane normal bp_g1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">l_g1_go1</span> <span class="o">=</span> <span class="n">lattice</span><span class="o">.</span><span class="n">l_g_go</span>
+    <span class="c"># Metric Tensor $G = S^T S$</span>
+    <span class="n">g_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l_g1_go1</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">l_g1_go1</span><span class="p">)</span>
+
+    <span class="n">rat_tols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1e-05</span><span class="p">,</span> <span class="mf">1e-06</span><span class="p">,</span> <span class="mf">1e-07</span><span class="p">,</span> <span class="mf">1e-08</span><span class="p">,</span> <span class="mf">1e-09</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">])</span>
+    <span class="n">d_eq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">rat_tols</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">d_eq_norms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">rat_tols</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rat_tols</span><span class="p">)):</span>
+        <span class="n">d_eq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">int_man</span><span class="o">.</span><span class="n">int_finder</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">bp_g1</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">g_g1</span><span class="p">),</span> <span class="n">rat_tols</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">d_eq_norms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">d_eq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">d_eq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+
+    <span class="c"># Add repeatablity of the numerator</span>
+    <span class="n">t_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">d_eq_norms</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="n">d_eq_norms</span><span class="p">))</span>
+    <span class="n">hp</span> <span class="o">=</span> <span class="n">d_eq</span><span class="p">[</span><span class="n">t_ind</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">kp</span> <span class="o">=</span> <span class="n">d_eq</span><span class="p">[</span><span class="n">t_ind</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">lp</span> <span class="o">=</span> <span class="n">d_eq</span><span class="p">[</span><span class="n">t_ind</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">hp</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">kp</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">lp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;hkl indices cannot all be zero&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">hp</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">kp</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">lp</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">gc_f1_p</span> <span class="o">=</span> <span class="n">gcd</span><span class="p">(</span><span class="n">kp</span><span class="p">,</span> <span class="n">lp</span><span class="p">)</span>
+            <span class="n">bv1_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="n">lp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">],</span> <span class="p">[</span><span class="n">kp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">]])</span>
+            <span class="n">bv2_g1</span> <span class="o">=</span> <span class="n">compute_basis_vec</span><span class="p">([</span><span class="n">hp</span><span class="p">,</span> <span class="n">kp</span><span class="p">,</span> <span class="n">lp</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">hp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">kp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">bv1_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                        <span class="n">bv2_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                    <span class="k">elif</span> <span class="n">lp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">bv1_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                        <span class="n">bv2_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">gc_f1_p</span> <span class="o">=</span> <span class="n">gcd</span><span class="p">(</span><span class="n">kp</span><span class="p">,</span> <span class="n">lp</span><span class="p">)</span>
+                        <span class="n">bv1_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="n">lp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">],</span>
+                                           <span class="p">[</span><span class="n">kp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">]])</span>
+                        <span class="n">bv2_g1</span> <span class="o">=</span> <span class="n">compute_basis_vec</span><span class="p">([</span><span class="n">hp</span><span class="p">,</span> <span class="n">kp</span><span class="p">,</span> <span class="n">lp</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">kp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">lp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">bv1_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                            <span class="n">bv2_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">gc_f1_p</span> <span class="o">=</span> <span class="n">gcd</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">lp</span><span class="p">)</span>
+                            <span class="n">bv1_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="n">lp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                               <span class="p">[</span><span class="n">hp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">]])</span>
+                            <span class="n">bv2_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="n">lp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                               <span class="p">[</span><span class="n">hp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">]])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">lp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">gc_f1_p</span> <span class="o">=</span> <span class="n">gcd</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">kp</span><span class="p">)</span>
+                            <span class="n">bv1_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="n">kp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">],</span>
+                                               <span class="p">[</span><span class="n">hp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                            <span class="n">bv2_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="n">kp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">],</span>
+                                               <span class="p">[</span><span class="n">hp</span> <span class="o">/</span> <span class="n">gc_f1_p</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="c">#  The reduced basis vectors for the plane</span>
+    <span class="n">l_pl_g1</span> <span class="o">=</span> <span class="n">lll_red</span><span class="o">.</span><span class="n">lll_reduction</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">bv1_g1</span><span class="p">,</span> <span class="n">bv2_g1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">l_pl_g1</span>
+<span class="c"># -----------------------------------------------------------------------------------------------------------</span>
+
+</div>
+<div class="viewcode-block" id="pl_density"><a class="viewcode-back" href="../index.html#bp_basis.pl_density">[docs]</a><span class="k">def</span> <span class="nf">pl_density</span><span class="p">(</span><span class="n">l_pl_g1</span><span class="p">,</span> <span class="n">l_g1_go1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For a given two-dimensional plane basis, the planar density is</span>
+<span class="sd">    computed</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------------</span>
+<span class="sd">    l_pl_g1: numpy array</span>
+
+<span class="sd">    l_g1_go1: numpy array</span>
+<span class="sd">    Basis vectors of the underlying lattice with respect to the</span>
+<span class="sd">    orthogonal reference frame &#39;go1&#39;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pd: float</span>
+<span class="sd">    Planar density = (1/area covered by plane basis)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">l_pl_go1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l_g1_go1</span><span class="p">,</span> <span class="n">l_pl_g1</span><span class="p">)</span>
+    <span class="n">planar_basis_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">l_pl_go1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+                                                <span class="n">l_pl_go1</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]))</span>
+    <span class="n">pd</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">planar_basis_area</span>
+    <span class="k">return</span> <span class="n">pd</span>
+<span class="c"># -----------------------------------------------------------------------------------------------------------</span>
+
+</div>
+<div class="viewcode-block" id="csl_finder_2d"><a class="viewcode-back" href="../index.html#bp_basis.csl_finder_2d">[docs]</a><span class="k">def</span> <span class="nf">csl_finder_2d</span><span class="p">(</span><span class="n">l_pl1_g1</span><span class="p">,</span> <span class="n">l_pl2_g1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given two plane bases, the 2D CSL bases are obtined by utilizing the</span>
+<span class="sd">    smith normal form of the transformation between the two bases</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------------</span>
+<span class="sd">    l_pl1_g1, l_pl2_g1: numpy array</span>
+<span class="sd">    Basis vectors of planes 1 and 2 expressed in g1 reference frame</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ---------------</span>
+<span class="sd">    l_2d_csl_g1: numpy array</span>
+<span class="sd">    The basis vectors of the 2D CSL expressed in g1 reference frame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">l1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">l_pl1_g1</span><span class="p">)</span>
+    <span class="n">l2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">l_pl2_g1</span><span class="p">)</span>
+
+    <span class="c"># L2 = L1*T (T := T_Pl1ToPl2_Pl1)</span>
+    <span class="n">l1_linv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l1</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">l1</span><span class="p">)),</span> <span class="n">l1</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l1_linv</span><span class="p">,</span> <span class="n">l2</span><span class="p">)</span>
+
+    <span class="c"># # Obtain N1 and N2</span>
+    <span class="n">n1</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">int_man</span><span class="o">.</span><span class="n">int_mult</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">int_man</span><span class="o">.</span><span class="n">int_check</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+    <span class="c"># A = U*E*V&#39;; E is a diagonal matrix</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">snf</span><span class="o">.</span><span class="n">smith_nf</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+    <span class="n">l2_n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+    <span class="n">l_2d_csl_g1</span> <span class="o">=</span> <span class="n">fcd</span><span class="o">.</span><span class="n">cls_elem_div_thm_l2</span><span class="p">(</span><span class="n">e</span><span class="o">/</span><span class="n">n1</span><span class="p">,</span> <span class="n">l2_n</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">int_man</span><span class="o">.</span><span class="n">int_check</span><span class="p">(</span><span class="n">l_2d_csl_g1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="n">l_2d_csl_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">l_2d_csl_g1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s">&#39;Wrong CSL computation&#39;</span><span class="p">)</span>
+
+    <span class="n">l_2d_csl_g1</span> <span class="o">=</span> <span class="n">lll_red</span><span class="o">.</span><span class="n">lll_reduction</span><span class="p">(</span><span class="n">l_2d_csl_g1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">l_2d_csl_g1</span>
+<span class="c"># -----------------------------------------------------------------------------------------------------------</span>
+
+</div>
+<div class="viewcode-block" id="gb_2d_csl"><a class="viewcode-back" href="../index.html#bp_basis.gb_2d_csl">[docs]</a><span class="k">def</span> <span class="nf">gb_2d_csl</span><span class="p">(</span><span class="n">bp1_g1</span><span class="p">,</span> <span class="n">t_g1tog2_g1</span><span class="p">,</span> <span class="n">lattice</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For a given boundary plane normal &#39;bp1_g1&#39; and the misorientation</span>
+<span class="sd">    matrix &#39;t_g1tog2_g1&#39;, the two-dimensional CSL lattice is computed</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------------</span>
+<span class="sd">    bp1_g1: numpy array</span>
+
+<span class="sd">    t_g1tog2_g1: numpy array</span>
+
+<span class="sd">    lattice: Lattice class</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -----------</span>
+<span class="sd">    l_2d_csl_g1: numpy array</span>
+<span class="sd">    The basis vectors of the 2D CSL expressed in g1 reference frame</span>
+
+<span class="sd">    l_pl1_g1, l_pl2_g1: numpy arrays</span>
+<span class="sd">    Basis vectors of planes 1 and 2 expressed in g1 reference frame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">l_g1_go1</span> <span class="o">=</span> <span class="n">lattice</span><span class="o">.</span><span class="n">l_g_go</span>
+
+    <span class="n">bp1_go1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l_g1_go1</span><span class="p">,</span> <span class="n">bp1_g1</span><span class="p">)</span>
+    <span class="n">l_g2_g1</span> <span class="o">=</span> <span class="n">t_g1tog2_g1</span>
+    <span class="n">l_g2_go1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l_g1_go1</span><span class="p">,</span> <span class="n">l_g2_g1</span><span class="p">)</span>
+    <span class="n">l_go1_g2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">l_g2_go1</span><span class="p">)</span>
+    <span class="n">bp2_g2</span> <span class="o">=</span> <span class="n">int_man</span><span class="o">.</span><span class="n">int_finder</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="o">-</span><span class="n">l_go1_g2</span><span class="p">,</span> <span class="n">bp1_go1</span><span class="p">))</span>
+
+    <span class="n">l_pl1_g1</span> <span class="o">=</span> <span class="n">bp_basis</span><span class="p">(</span><span class="n">bp1_g1</span><span class="p">,</span> <span class="n">lattice</span><span class="p">)</span>
+    <span class="n">l_pl2_g2</span> <span class="o">=</span> <span class="n">bp_basis</span><span class="p">(</span><span class="n">bp2_g2</span><span class="p">,</span> <span class="n">lattice</span><span class="p">)</span>
+
+    <span class="n">l_pl2_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l_g2_g1</span><span class="p">,</span> <span class="n">l_pl2_g2</span><span class="p">)</span>
+
+    <span class="n">l_2d_csl_g1</span> <span class="o">=</span> <span class="n">csl_finder_2d</span><span class="p">(</span><span class="n">l_pl1_g1</span><span class="p">,</span> <span class="n">l_pl2_g1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">l_2d_csl_g1</span><span class="p">,</span> <span class="n">l_pl1_g1</span><span class="p">,</span> <span class="n">l_pl2_g1</span>
+<span class="c"># -----------------------------------------------------------------------------------------------------------</span>
+
+</div>
+<div class="viewcode-block" id="bicryst_planar_den"><a class="viewcode-back" href="../index.html#bp_basis.bicryst_planar_den">[docs]</a><span class="k">def</span> <span class="nf">bicryst_planar_den</span><span class="p">(</span><span class="n">bp1_go1</span><span class="p">,</span> <span class="n">t_g1tog2_go1</span><span class="p">,</span> <span class="n">lattice</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The function computes the planar densities of the planes</span>
+<span class="sd">    1 and 2 and the two-dimensional CSL</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ---------------</span>
+<span class="sd">    bp1_go1: numpy array</span>
+<span class="sd">    The boundary plane normal components in go1 reference frame</span>
+
+<span class="sd">    t_g1tog2_go1: numpy array</span>
+<span class="sd">    Transformation matrix from g1 to g2 in go1 reference frame</span>
+
+<span class="sd">    lattice: Lattice class</span>
+<span class="sd">    Attributes of the underlying lattice</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -----------</span>
+<span class="sd">    pl_den_pl1, pl_den_pl2: numpy array</span>
+<span class="sd">    The planar density of planes 1 and 2</span>
+
+<span class="sd">    pl_den_csl: numpy array</span>
+<span class="sd">    The planare density of the two-dimensional CSL</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">l_g1_go1</span> <span class="o">=</span> <span class="n">lattice</span><span class="o">.</span><span class="n">l_g_go</span>
+    <span class="n">l_go1_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">l_g1_go1</span><span class="p">)</span>
+
+    <span class="n">bp1_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l_go1_g1</span><span class="p">,</span> <span class="n">bp1_go1</span><span class="p">)</span>
+
+    <span class="n">t_g1tog2_g1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">l_go1_g1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">t_g1tog2_go1</span><span class="p">,</span> <span class="n">l_g1_go1</span><span class="p">))</span>
+
+    <span class="n">l_2d_csl_g1</span><span class="p">,</span> <span class="n">l_pl1_g1</span><span class="p">,</span> <span class="n">l_pl2_g1</span> <span class="o">=</span> <span class="n">gb_2d_csl</span><span class="p">(</span><span class="n">bp1_g1</span><span class="p">,</span> <span class="n">t_g1tog2_g1</span><span class="p">,</span> <span class="n">lattice</span><span class="p">)</span>
+    <span class="n">check_2d_csl</span><span class="p">(</span><span class="n">l_pl1_g1</span><span class="p">,</span> <span class="n">l_pl2_g1</span><span class="p">,</span> <span class="n">l_2d_csl_g1</span><span class="p">)</span>
+
+    <span class="n">pl_den_pl1</span> <span class="o">=</span> <span class="n">pl_density</span><span class="p">(</span><span class="n">l_pl1_g1</span><span class="p">,</span> <span class="n">l_g1_go1</span><span class="p">)</span>
+    <span class="n">pl_den_pl2</span> <span class="o">=</span> <span class="n">pl_density</span><span class="p">(</span><span class="n">l_pl2_g1</span><span class="p">,</span> <span class="n">l_g1_go1</span><span class="p">)</span>
+    <span class="n">pl_den_csl</span> <span class="o">=</span> <span class="n">pl_density</span><span class="p">(</span><span class="n">l_2d_csl_g1</span><span class="p">,</span> <span class="n">l_g1_go1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pl_den_pl1</span><span class="p">,</span> <span class="n">pl_den_pl2</span><span class="p">,</span> <span class="n">pl_den_csl</span>
+<span class="c"># -----------------------------------------------------------------------------------------------------------</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">GBPy 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Srikanth Patala, Arash D. Banadaki.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
