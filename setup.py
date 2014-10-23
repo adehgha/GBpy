@@ -9,7 +9,7 @@ del sys.path[0]
 
 setup(name='GBpy',
     version='1.0',
-    description="GBpy is an opensource python package for calculating the geometric properties of interfaces in crsytals.",
+    description="GBpy is an opensource python package for calculating the geometric properties of interfaces in crystals.",
     author='Arash Dehghan Banadaki, Srikanth Patala',
     author_email='adehgha@ncsu.edu, spatala@ncsu.edu',
     license='Copyright the authors.'
