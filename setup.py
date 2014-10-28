@@ -1,11 +1,11 @@
-mport sys
+import sys
 import os
 from setuptools import setup
 
 main_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(main_dir, "GBpy"))
 import GBpy
-del sys.path[0]
+# del sys.path[0]
 
 setup(name='GBpy',
     version='1.0',
