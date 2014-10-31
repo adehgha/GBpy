@@ -288,6 +288,7 @@ def int_finder(input_v, tol=1e-6, order='all', tol1=1e-6):
     """
 
     input1 = np.array(input_v)
+    Sz = input1.shape
     if np.ndim(input1) == 1:
         input1 = np.reshape(input1, (1, input1.shape[0]))
 
@@ -298,18 +299,17 @@ def int_finder(input_v, tol=1e-6, order='all', tol1=1e-6):
         if (order == 'all'):
             input1 = input1 / tmult
         elif (order == 'rows'):
-            tmult = np.tile(tmult, (np.shape(input1[1]))).transpose()
+            tmult = np.tile(tmult, (np.shape(input1[1])))
             input1 = input1 / tmult
-        elif (order == 'cols' or order == 'columns'):
-            tmult = np.tile(tmult, (np.shape(input1[0])))
+        elif (order == 'col' or order == 'cols' or order == 'columns'):
+            tmult = np.tile(tmult, (np.shape(input1[0])[0], 1))
             input1 = input1 / tmult
         output_v = input1
-        if input_v.ndim == 1:
+        if len(Sz) == 1:
             output_v = np.reshape(output_v, (np.size(output_v), ))
         return output_v
     else:
         #   By default it flattens the array (if nargin < 3)
-        Sz = input1.shape
         if order.lower() == 'all':
             input1.shape = (1, Sz[0]*Sz[1])
         else:
@@ -364,7 +364,7 @@ def int_finder(input_v, tol=1e-6, order='all', tol1=1e-6):
             if Keys == 0 and Switch == 1:
                 output_v = output_v.T
 
-        if input_v.ndim == 1:
+        if len(Sz) == 1:
             output_v = np.reshape(output_v, (np.size(output_v), ))
 
         return output_v

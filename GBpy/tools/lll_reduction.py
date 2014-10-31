@@ -3,8 +3,7 @@
 # License: GNU-GPL Style.
 
 import numpy as np
-import integer_manipulations as int_man
-
+from GBpy import integer_manipulations as int_man
 
 def lll_reduction(matrix, delta=0.75):
     """
