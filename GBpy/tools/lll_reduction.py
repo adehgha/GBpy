@@ -3,7 +3,12 @@
 # License: GNU-GPL Style.
 
 import numpy as np
-from GBpy import integer_manipulations as int_man
+import os, sys, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+import integer_manipulations as int_man
+
 
 def lll_reduction(matrix, delta=0.75):
     """

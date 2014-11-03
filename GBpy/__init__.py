@@ -1,7 +1,6 @@
 # Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
 # Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
 # License: GNU-GPL Style.
-
 from integer_manipulations import *
 from bp_basis import *
 from tools import *

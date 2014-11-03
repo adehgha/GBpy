@@ -292,7 +292,7 @@ def int_finder(input_v, tol=1e-6, order='all', tol1=1e-6):
     if np.ndim(input1) == 1:
         input1 = np.reshape(input1, (1, input1.shape[0]))
 
-    if int_check(input1, 17).all():
+    if int_check(input1, 15).all():
         input1 = np.around(input1)
         # Divide by LCM (rows, cols, all) <--- To Do
         tmult = gcd_array(input1.astype(int), order)
@@ -311,7 +311,8 @@ def int_finder(input_v, tol=1e-6, order='all', tol1=1e-6):
     else:
         #   By default it flattens the array (if nargin < 3)
         if order.lower() == 'all':
-            input1.shape = (1, Sz[0]*Sz[1])
+            if len(Sz) != 1:
+                input1.shape = (1, Sz[0]*Sz[1])
         else:
             Switch = 0
             err_msg = "Not a valid input. For the third argument please"+ \
@@ -357,7 +358,8 @@ def int_finder(input_v, tol=1e-6, order='all', tol1=1e-6):
 
         # --------------------------
         if order.lower() == 'all':
-            output_v.shape = (Sz[0], Sz[1])
+            if len(Sz) != 1:
+                output_v.shape = (Sz[0], Sz[1])
         else:
             if (Keys) == 1 or (Keys) == 2:
                 output_v = output_v.T
