@@ -48,7 +48,8 @@ def test_cubic_cslmats(l1):
         sig_type = 'common'
 
         # Load Python genererated CSL matrices
-        pkl_file = '../python_csls/'+l1.elem_type + '_csl_' + sig_type + '_rotations' + '.pkl'
+        pkl_file = ('../python_csls/' + l1.elem_type +
+                    '_csl_' + sig_type + '_rotations' + '.pkl')
         jar1 = open(pkl_file, 'rb')
         sig_rots_p = pickle.load(jar1)
 

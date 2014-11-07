@@ -23,7 +23,7 @@ import csl_utility_functions as csl_util
 # 3: Common rotations for primitive hexagonal lattices
 # 4: Common rotations for primitive rhombohedral lattices
 
-test_case = 5
+test_case = 1
 # Input parameters for pkl files
 if test_case == 1:
     sig_type = 'common'
@@ -47,7 +47,7 @@ elif test_case == 5:
     l1 = lat.Lattice(lat_type, ca_rat)
 
 sig_rots = {}
-sig_num = np.arange(50) + 1
+sig_num = np.arange(250) + 1
 
 for i in sig_num:
     print i

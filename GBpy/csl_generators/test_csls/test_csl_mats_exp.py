@@ -11,7 +11,6 @@ file_dir = os.path.dirname(os.path.realpath(__file__))
 path_dir = file_dir + '/../../lattice/'
 sys.path.append(path_dir)
 import lattice as lat
-
 # Load  testing python files
 import test_cubic_cslmats as t_cubic
 import test_lit_cslmats as t_lit
@@ -57,5 +56,3 @@ elif test_case == 7:
     sig_type = 'specific'
     elem_type = 'hR_ca'
     t_lit.test_lit_specific_cslmats(elem_type)
-
-

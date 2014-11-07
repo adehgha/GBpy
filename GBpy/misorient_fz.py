@@ -39,7 +39,7 @@ def check_cond(g, cryst_ptgrp, tol):
     q2 = quat.getq2(g)
     q3 = quat.getq3(g)
 
-    if cryst_ptgrp == 'D3':
+    if cryst_ptgrp == 'D3' or cryst_ptgrp == 'D3d':
         cond1 = q3 > -tol
         cond2 = q3 - q0/np.sqrt(3) < tol
         cond3 = q1 - q0 < tol
@@ -59,7 +59,7 @@ def check_cond(g, cryst_ptgrp, tol):
             return True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-    if cryst_ptgrp == 'D4':
+    if cryst_ptgrp == 'D4' or cryst_ptgrp == 'D4h':
         cond1 = q3 > -tol
         cond2 = (q3 - (np.sqrt(2)-1)*q0) < tol
         cond3 = (q1 - q0) < tol
@@ -80,7 +80,7 @@ def check_cond(g, cryst_ptgrp, tol):
             return True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-    if cryst_ptgrp == 'D6':
+    if cryst_ptgrp == 'D6' or cryst_ptgrp == 'D6h':
         cond1 = q3 > -tol
         cond2 = (q3 - (2-np.sqrt(3))*q0) < tol
         cond3 = (q1 - q0) < tol
@@ -101,7 +101,7 @@ def check_cond(g, cryst_ptgrp, tol):
             return True
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-    if cryst_ptgrp == 'O':
+    if cryst_ptgrp == 'O' or cryst_ptgrp == 'Oh':
         cond1 = q1 - q2 > -tol
         cond2 = q2 - q3 > -tol
         cond3 = q3 > -tol
