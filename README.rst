@@ -7,16 +7,19 @@ for grain boundary simulation.
 
 .. image:: GBpy/docs/images/pic.png
 
-- ``GBpy.bp_basis``, collection of functions for calculating the basis vectors of a single or bicrystal (general lattices).
-- ``GBpy.find_csl_dsc``, collection of functions for finding the CSL and DSC lattices of a bicrystal (general lattices).
-- ``GBpy.generate_symm_ops``, a function for constructing various group symmetry operations.
-- ``GBpy.geometry.quaternion``, collection of functions for quaternion operations.
-- ``GBpy.misorient_fz``, function for finding the unique disorientations in fundamental zone of various crystal point groups.
-- ``GBpy.integer_manipulations``, collection of many useful ineteger manipulation functions.
+Functions:
+----------------------
+* ``GBpy.bp_basis``, collection of functions for calculating the basis vectors of a single or bicrystal (general lattices).
+* ``GBpy.find_csl_dsc``, collection of functions for finding the CSL and DSC lattices of a bicrystal (general lattices).
+* ``GBpy.generate_symm_ops``, a function for constructing various group symmetry operations.
+* ``GBpy.geometry.quaternion``, collection of functions for quaternion operations.
+* ``GBpy.misorient_fz``, function for finding the unique disorientations in fundamental zone of various crystal point groups.
+* ``GBpy.integer_manipulations``, collection of many useful ineteger manipulation functions.
 
 and many other useful tools. Please refer to the documentation and example for detailed description and utility of functions.
 
 Classes:
+~~~~~~~~~~~~~~~~~~~~~
 
 - ``lattice``: Includes all the crystallographic data required for an element used by the code.
 - ``quaternion``: Quaternion construction and operations.
