@@ -1,50 +1,66 @@
 GBpy
 ======================
-is a complete python package for constructing the geometrical properties of
+Is a python package for finding the geometrical properties of
 a Bicrystal. It includes all the necessary tools for constructing a simulation box
-for grain boundary simulation calculations.
+for grain boundary simulation.
 
-- `csl_fidner_smith`, finds the CSL lattice associated with a bicrystal.  
-- `dsc_finder`, finds the DSC lattice for a bicrystal.
-- `symmetry_operations`, performs symmetery operations for various crystals.
-etc.......
+.. image:: /GBpy/docs/images/pic.png
+
+- `GBpy.bp_basis`, collection of functions for calculating the basis vectors of a single or bicrystal (general lattices).
+- `GBpy.find_csl_dsc`, collection of functions for finding the CSL and DSC lattices of a bicrystal (general lattices).
+- `GBpy.generate_symm_ops`, a function for constructing various group symmetry operations.
+- `GBpy.geometry.quaternion`, collection of functions for quaternion operations.
+- `GBpy.misorient_fz`, function for finding the unique disorientations in fundamental zone of various crystal point groups.
+- `GBpy.integer_manipulations`, collection of many useful ineteger manipulation functions.
+
+and many other useful tools. Please refer to the documentation and example for detailed description and utility of functions.
 
 Classes:
 
-- `LatType()`: Includes all the crystallographic data required for an element used by the code.
+- `lattice`: Includes all the crystallographic data required for an element used by the code.
+- `quaternion`: Quaternion construction and operations.
 
 
-How To Use This Module
-======================
-(See the individual classes, methods, and attributes for details.)
+How To Use This Package
+----------------------
 
-1. Import it: ``import GBpy`` or ``from GBpy import ...``.
-   You will also need to ``import numpy``.
+1. Clone the repository:
 
-2. Find the appropriate misorientation `R_G1toG2_G1` for the particular 
-   Sigma value of your interest::
+          git clone https://github.com/adehgha/GBpy.git
 
-       class Sigma_Rots(Sigma):
+2. Run the setup script.	
 
-   Within the class definition:
+          python setup.py
+          
+3. Import the package: 
 
-   a) Include find the numerator and denominator of the element of the rotation matrix 
-      form the second and third element of the Sigma_Rots instance.
+          import GBpy
+          
+4. Call the function by using:
 
-          R_N = Sigma_Rots['Sigma_Rots'][0, cnt][0][1]
-          R_D = Sigma_Rots['Sigma_Rots'][0, cnt][0][2]
+          GBpy.<name_of_the_function>
+for example to find the 2D basis vectors of a plane with Miller indices of (h,k,l):
 
-3. Find the CSL and DSC lattices from in G1 frame::
+          GBpy.bp_basis.bp_basis([h,k,l])
 
-          [L_CSL_G1, L_DSC_G1] = find_csl_dsc(L_G1_GO1, R_G1toG2_G1)
-       
-4. Convert the obtained basis vectors to orthogonal basis frame.
+5. You can also use the tools provided in this package individually by importing the functions separately. For example use :``from GBpy import <name_of_the_function> as foo``.
 
-.
-.
-.
+Consult the documentation for further details.
 
-- $Id: GBpy ???? 08-14-2014 ??:??:??Z milde $
-- Authors: Srikanth Patala <spatala@ncsu.edu>
--          Arash D Banadaki <adehgha@ncsu.edu>
-- Copyright: This module has been placed in the public domain.\n
+Prerequisites
+----------------------
+
+1. install `numpy` from here1_:
+.. _here1: http://www.numpy.org/
+2. install `scipy` from here_2:
+.. _here2: http://www.scipy.org/
+3. install `setuptools` from here_3:
+.. _here3: https://pypi.python.org/pypi/setuptools
+
+
+Authors:
+----------------------
+        Srikanth Patala <spatala@ncsu.edu>
+        Arash D Banadaki <adehgha@ncsu.edu>
+        
+Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
