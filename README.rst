@@ -51,7 +51,8 @@ How to Use This Package
 .. code-block:: pycon
 
     >>> GBpy.<name_of_the_function>
-	for example to find the 2D basis vectors of a plane with Miller indices of (h,k,l):
+	
+for example to find the 2D basis vectors of a plane with Miller indices of (h,k,l):
 
 .. code-block:: pycon
 
