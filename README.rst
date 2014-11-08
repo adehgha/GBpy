@@ -25,7 +25,7 @@ Classes:
 - ``quaternion``: Quaternion construction and operations.
 
 
-How To Use This Package
+How to Use This Package
 ----------------------
 
 1. Clone the repository:
@@ -63,7 +63,7 @@ Prerequisites
 
 Authors:
 ----------------------
-* `Srikanth Patala <spatala@ncsu.edu>`__, `web address:<http://patala.org/>`__.
-* `Arash D Banadaki <adehgha@ncsu.edu>`__
+* `Srikanth Patala <spatala@ncsu.edu>`__, `web address: <http://patala.org/>`__.
+* `Arash Dehghan Banadaki <adehgha@ncsu.edu>`__
 
 Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
