@@ -30,24 +30,34 @@ How to Use This Package
 
 1. Clone the repository:
 
-          $ git clone https://github.com/adehgha/GBpy.git
+.. code-block:: console
 
-2. Run the setup script.	
+    $ git clone https://github.com/adehgha/GBpy.git
 
-          $ python setup.py
+2. Run the setup script.
+	
+.. code-block:: console
+
+    $ python setup.py
           
 3. Import the package: 
 
-          >>> import GBpy
+.. code-block:: pycon
+
+    >>> import GBpy
           
 4. Call the function by using:
 
-          >>> GBpy.<name_of_the_function>
+.. code-block:: pycon
+
+    >>> GBpy.<name_of_the_function>
 	for example to find the 2D basis vectors of a plane with Miller indices of (h,k,l):
 
-          >>> GBpy.bp_basis.bp_basis([h,k,l])
+.. code-block:: pycon
 
-5. You can also use the tools provided in this package individually by importing the functions separately. For example use :``from GBpy import <name_of_the_function> as foo``.
+    >>> GBpy.bp_basis.bp_basis([h,k,l])
+
+5. You can also use the tools provided in this package individually by importing the functions separately. For example use :``from GBpy import <name_of_the_function> as <a_name>``.
 
 Consult the documentation for further details.
 
