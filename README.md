@@ -4,7 +4,7 @@ Is a python package for finding the geometrical properties of
 a Bicrystal. It includes all the necessary tools for constructing a simulation box
 for grain boundary simulation.
 
-.. image:: /GBpy/docs/images/pic.png
+	.. image:: GBpy/docs/images/pic.png
 
 - `GBpy.bp_basis`, collection of functions for calculating the basis vectors of a single or bicrystal (general lattices).
 - `GBpy.find_csl_dsc`, collection of functions for finding the CSL and DSC lattices of a bicrystal (general lattices).
@@ -50,17 +50,17 @@ Consult the documentation for further details.
 Prerequisites
 ----------------------
 
-1. install `numpy` from here1_:
-.. _here1: http://www.numpy.org/
-2. install `scipy` from here_2:
-.. _here2: http://www.scipy.org/
-3. install `setuptools` from here_3:
-.. _here3: https://pypi.python.org/pypi/setuptools
+1. install `numpy` from here_:
+	.. _here: http://www.numpy.org/
+2. install `scipy` from here_:
+	.. _here: http://www.scipy.org/
+3. install `setuptools` from here_:
+	.. _here: https://pypi.python.org/pypi/setuptools
 
 
 Authors:
 ----------------------
-        Srikanth Patala <spatala@ncsu.edu>
-        Arash D Banadaki <adehgha@ncsu.edu>
+-Srikanth Patala <spatala@ncsu.edu>
+-Arash D Banadaki <adehgha@ncsu.edu>
         
 Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
