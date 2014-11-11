@@ -1,4 +1,5 @@
-# Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
+# Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>
+#               Srikanth Patala <spatala@ncsu.edu>
 # Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
 # License: GNU-GPL Style.
 
@@ -32,11 +33,15 @@ def unique_rows_tol(xin, tol=1e-12, return_index=False, return_inverse=False):
     else:
         y = xin.copy()
         sz2 = np.shape(y)[1]
-        sort_tup = []
-        for i in range(sz2):
-            sort_tup.append(y[:, sz2 - i - 1])
-        ind = np.lexsort(sort_tup)
-        y1 = y[ind, :]
+        # sort_tup = []
+        # for i in range(sz2):
+        #     sort_tup.append(y[:, sz2 - i - 1])
+        # ind = np.lexsort((y[:, 1], y[:, 0]))
+        # y1 = xin[ind, 0:2]
+        # ind = np.lexsort(sort_tup)
+        # y1 = xin[ind, :]
+        ind = np.lexsort(xin.T)
+        y1 = xin[np.lexsort(xin.T)]
 
     ci = 0
     u = np.empty((0, sz2), dtype=y.dtype)
@@ -70,3 +75,25 @@ def unique_rows_tol(xin, tol=1e-12, return_index=False, return_inverse=False):
             return u, ret_ind
         elif return_inverse:
             return u, ret_inv.tolist()
+
+# def unique_rows_tol(data, prec):
+#     d_r = np.fix(data * 10 ** prec) / 10 ** prec + 0.0
+#     b = np.ascontiguousarray(d_r).view(np.dtype((np.void,
+#                                                  d_r.dtype.itemsize
+#                                                  * d_r.shape[1])))
+#     return np.unique(b).view(d_r.dtype).reshape(-1, d_r.shape[1])
+
+# import pickle
+
+# pkl_file = ('bpnormals.pkl')
+# jar1 = open(pkl_file, 'rb')
+# bpnormals_go1 = pickle.load(jar1)
+
+# unq_bpn_go1, ia, ic = unique_rows_tol(bpnormals_go1, 1e-12, True, True)
+
+# unq_bpn_go2 = unique_rows(bpnormals_go1, 12)
+
+
+# print unq_bpn_go1
+
+# print unq_bpn_go2
