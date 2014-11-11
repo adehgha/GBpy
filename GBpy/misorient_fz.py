@@ -6,13 +6,7 @@ import numpy as np
 import sys
 import pickle
 import os
-
-file_dir = os.path.dirname(os.path.realpath(__file__))
-path_dir1 = file_dir + '/geometry/'
-sys.path.append(path_dir1)
 import quaternion as quat
-# path_dir2 = file_dir + '/tools/'
-# sys.path.append(path_dir2)
 
 
 def check_cond(g, cryst_ptgrp, tol):

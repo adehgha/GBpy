@@ -7,19 +7,9 @@ import sys
 import os
 import integer_manipulations as int_man
 import misorient_fz as mis_fz
-
-file_dir = os.path.dirname(os.path.realpath(__file__))
-# Load Quaternion Module
-path_dir1 = file_dir + '/geometry/'
-sys.path.append(path_dir1)
 import quaternion as quat
-
-# Load Rotations Transformations , Matrix operations,
-# Unique Rows With Tolerance, Modules
-path_dir2 = file_dir + '/tools/'
-sys.path.append(path_dir2)
-import transformations as trans
-import unique_rows_tol as unq_tol
+import tools.transformations as trans
+import tools.unique_rows_tol as unq_tol
 
 #################################################
 #################################################

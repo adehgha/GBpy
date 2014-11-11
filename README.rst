@@ -12,7 +12,7 @@ Functions:
 * ``GBpy.bp_basis``, collection of functions for calculating the basis vectors of a single or bicrystal (general lattices).
 * ``GBpy.find_csl_dsc``, collection of functions for finding the CSL and DSC lattices of a bicrystal (general lattices).
 * ``GBpy.generate_symm_ops``, a function for constructing various group symmetry operations.
-* ``GBpy.geometry.quaternion``, collection of functions for quaternion operations.
+* ``GBpy.quaternion``, collection of functions for quaternion operations.
 * ``GBpy.misorient_fz``, function for finding the unique disorientations in fundamental zone of various crystal point groups.
 * ``GBpy.integer_manipulations``, collection of many useful ineteger manipulation functions.
 

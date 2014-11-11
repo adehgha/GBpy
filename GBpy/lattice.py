@@ -4,13 +4,8 @@
 
 import numpy as np
 import os
-file_dir = os.path.dirname(os.path.realpath(__file__))
 import sys
-
-# Load Rotations Transformations
-path_dir2 = file_dir + '/tools/'
-sys.path.append(path_dir2)
-import transformations as trans
+from tools import vrrotvec2mat
 
 
 class Lattice(object):
@@ -180,7 +175,7 @@ class Lattice(object):
             self.cryst_ptgrp = 'D6h'
             self.burgers_mag = a
             b1x = a*np.array([1., 0., 0.])
-            b1y = np.dot(trans.vrrotvec2mat(np.array([0., 0., 1., g_ang])), b1x)
+            b1y = np.dot(vrrotvec2mat(np.array([0., 0., 1., g_ang])), b1x)
             b1z = c*np.array([0., 0., 1.])
             self.l_g_go = np.column_stack((b1x, b1y, b1z))
             self.basis_atoms = np.array([[0., 0., 0.], [1./3, 2./3, 1./2]])
@@ -201,7 +196,7 @@ class Lattice(object):
             self.lat_params = {'a': a, 'b': b, 'c': c, 'alpha': a_ang, 'beta': b_ang, 'gamma': g_ang}
             self.cryst_ptgrp = 'D6h'
             b1x = a*np.array([1., 0., 0.])
-            b1y = np.dot(trans.vrrotvec2mat(np.array([0., 0., 1., g_ang])), b1x)
+            b1y = np.dot(vrrotvec2mat(np.array([0., 0., 1., g_ang])), b1x)
             b1z = c*np.array([0., 0., 1.])
             self.l_g_go = np.column_stack((b1x, b1y, b1z))
 
@@ -220,7 +215,7 @@ class Lattice(object):
             self.eam_file = np.array(['fs', 'Mg.eam.fs'])
 
             b1x = a*np.array([1., 0., 0.])
-            b1y = np.dot(trans.vrrotvec2mat(np.array([0., 0., 1., g_ang])), b1x)
+            b1y = np.dot(vrrotvec2mat(np.array([0., 0., 1., g_ang])), b1x)
             b1z = c*np.array([0., 0., 1.])
             self.l_g_go = np.column_stack((b1x, b1y, b1z))
 

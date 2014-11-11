@@ -8,13 +8,7 @@ import integer_manipulations as int_man
 import find_csl_dsc as fcd
 import sys
 import os
-file_dir = os.path.dirname(os.path.realpath(__file__))
-# Load the following modules from tools directory
-path_dir1 = file_dir + '/tools/'
-sys.path.append(path_dir1)
-import Col
-import lll_reduction as lll_red
-import smith_nf as snf
+from tools import Col, lll_reduction, smith_nf, extgcd
 # -----------------------------------------------------------------------------------------------------------
 
 
@@ -58,7 +52,7 @@ def check_2d_csl(l_pl1_g1, l_pl2_g1, l_csl_g1):
         raise Exception('The 2D CSL does not contain base1.')
 
     print str1
-    txt = Col.Col()
+    txt = Col()
     txt.c_prnt(str2, color)
     # --------------------------
     ct += 1
@@ -70,7 +64,7 @@ def check_2d_csl(l_pl1_g1, l_pl2_g1, l_csl_g1):
         raise Exception('The 2D CSL does not contain base2.')
 
     print str1
-    txt = Col.Col()
+    txt = Col()
     txt.c_prnt(str2, color)
 # -----------------------------------------------------------------------------------------------------------
 
@@ -87,7 +81,7 @@ def lbi_dioph_soln(a, b, c):
 
     # b1 = extended_euclid(a, b) ####<----------------- must be verified
     b1 = np.zeros(2)
-    b1[0], b1[1], _ = snf.extgcd(a, b)
+    b1[0], b1[1], _ = extgcd(a, b)
 
     x1 = mult * b1[0]
     x2 = mult * b1[1]
@@ -211,7 +205,7 @@ def bp_basis(miller_ind):
                                                [h / gc_f1_p], [1]])
 
     #  The reduced basis vectors for the plane
-    l_pl_g1 = lll_red.lll_reduction(np.column_stack([bv1_g1, bv2_g1]))
+    l_pl_g1 = lll_reduction(np.column_stack([bv1_g1, bv2_g1]))
     return l_pl_g1
 # -----------------------------------------------------------------------------------------------------------
 
@@ -272,7 +266,7 @@ def csl_finder_2d(l_pl1_g1, l_pl2_g1):
         a = np.around(a)
 
     # A = U*E*V'; E is a diagonal matrix
-    u, e, v = snf.smith_nf(a)
+    u, e, v = smith_nf(a)
 
     l2_n = np.dot(l2, np.linalg.inv(v.T))
     l_2d_csl_g1 = fcd.csl_elem_div_thm_l2(e/n1, l2_n)
@@ -282,7 +276,7 @@ def csl_finder_2d(l_pl1_g1, l_pl2_g1):
     else:
         raise Exception('Wrong CSL computation')
 
-    l_2d_csl_g1 = lll_red.lll_reduction(l_2d_csl_g1[:, 0:2])
+    l_2d_csl_g1 = lll_reduction(l_2d_csl_g1[:, 0:2])
 
     return l_2d_csl_g1
 # -----------------------------------------------------------------------------------------------------------

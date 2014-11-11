@@ -7,15 +7,9 @@ import sys
 import pickle
 import os
 import shutil
-
-file_dir = os.path.dirname(os.path.realpath(__file__))
-path_dir1 = file_dir + '/geometry/'
-path_dir2 = file_dir + '/tools/'
-sys.path.append(path_dir1)
-sys.path.append(path_dir2)
 import quaternion as quat
-import transformations as trans
-import matrix_ops as mat_ops
+import tools.transformations as trans
+import tools.eq as eq
 
 
 def generate_symm_mats(cryst_ptgrp, tol=1e-10):
@@ -407,7 +401,7 @@ def generate_symm_mats(cryst_ptgrp, tol=1e-10):
             tcheck = 0
             # for ct2 in np.arange(0, numops+1):
             ct2 = np.arange(0, numops+1)
-            if mat_ops.eq(tM1, symm_mat[ct2, :, :], tol):
+            if eq(tM1, symm_mat[ct2, :, :], tol):
                 tcheck = 1
             if tcheck == 0:
                 symm_mat[numops+1, :, :] = np.copy(tM1)

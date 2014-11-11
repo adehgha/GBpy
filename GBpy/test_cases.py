@@ -9,12 +9,7 @@ import sys
 import find_csl_dsc as fcd
 import lattice as lat
 import bp_basis as bpb
-
-file_dir = os.path.dirname(os.path.realpath(__file__))
-# Load Quaternion Module
-path_dir1 = file_dir + '/tools/'
-sys.path.append(path_dir1)
-from smith_nf import smith_nf
+from tools import smith_nf
 
 
 def test_int_mult():

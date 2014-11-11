@@ -4,9 +4,9 @@
 
 import numpy as np
 import integer_manipulations as int_man
-from tools.lll_reduction import lll_reduction
-from tools.smith_nf import smith_nf
-from tools.message_display import message_display
+from tools import lll_reduction
+from tools import smith_nf
+from tools import message_display
 
 
 def sigma_calc(t_g1tog2_g1):
