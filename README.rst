@@ -38,7 +38,7 @@ How to Use This Package
 	
 .. code-block:: console
 
-    $ python setup.py
+    $ python setup.py install
           
 3. Import the package: 
 
