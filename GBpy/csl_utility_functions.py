@@ -1,15 +1,16 @@
-# Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
+# Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>
+#              Srikanth Patala <spatala@ncsu.edu>
 # Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
 # License: GNU-GPL Style.
 
 import numpy as np
-import sys
-import os
+# import sys
+# import os
 import integer_manipulations as int_man
 import misorient_fz as mis_fz
 import quaternion as quat
-import tools.transformations as trans
-import tools.unique_rows_tol as unq_tol
+import tools as trans
+
 
 #################################################
 #################################################
@@ -962,7 +963,7 @@ def disorient_sigmarots(r_g1tog2_g1, l_g_go, cryst_ptgrp):
 
     qt1 = quat.double(qfz_go1togo2_go1)
     qt1 = qt1.transpose()
-    [t1, ia] = unq_tol.unique_rows_tol(qt1, 1e-06, True)
+    [t1, ia] = trans.unique_rows_tol(qt1, 1e-06, True)
 
     # Change rotations to the fundamental zone
     rots_g1tog2_g1 = np.zeros((np.size(ia), 3, 3))

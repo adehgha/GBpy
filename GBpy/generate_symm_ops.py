@@ -8,8 +8,7 @@ import pickle
 import os
 import shutil
 import quaternion as quat
-import tools.transformations as trans
-import tools.eq as eq
+import tools as trans
 
 
 def generate_symm_mats(cryst_ptgrp, tol=1e-10):
@@ -401,7 +400,7 @@ def generate_symm_mats(cryst_ptgrp, tol=1e-10):
             tcheck = 0
             # for ct2 in np.arange(0, numops+1):
             ct2 = np.arange(0, numops+1)
-            if eq(tM1, symm_mat[ct2, :, :], tol):
+            if trans.eq(tM1, symm_mat[ct2, :, :], tol):
                 tcheck = 1
             if tcheck == 0:
                 symm_mat[numops+1, :, :] = np.copy(tM1)
