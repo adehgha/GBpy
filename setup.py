@@ -18,8 +18,29 @@ setup(name='GBpy',
     description="GBpy is an opensource python package for calculating the geometric properties of interfaces in crystals.",
     long_description=read('README.rst'),
     url='https://github.com/adehgha/GBpy',
+    download_url = 'https://github.com/adehgha/GBpy/tarball/0.1.0',
     platforms='any',
     requires=['numpy', 'scipy'],
-    classifiers=['Development Status :: 1 - Alpha', 'Topic :: Utilities'],
+    keywords = ['bicrystallography', 'interfaces', 'grain boundaries'],
+    classifiers=['Development Status :: 2 - Pre-Alpha', 'Topic :: Utilities'],
     license='License :: GNU-GPL',
 )
+
+# from distutils.core import setup
+# with open('README.rst') as f:
+#     long_description = f.read()
+
+# setup(name='GBpy',
+#     version='0.1.0',
+#     author='Arash Dehghan Banadaki, Srikanth Patala',
+#     author_email='adehgha@ncsu.edu, spatala@ncsu.edu',
+#     description="GBpy is an opensource python package for calculating the geometric properties of interfaces in crystals.",
+#     long_description=long_description,
+#     url='https://github.com/adehgha/GBpy',
+#     download_url = 'https://github.com/adehgha/GBpy/tarball/0.1.0',
+#     platforms='any',
+#     requires=['numpy', 'scipy'],
+#     keywords = ['bicrystallography', 'interfaces', 'grain boundaries'],
+#     classifiers=['Development Status :: 2 - Pre-Alpha', 'Topic :: Utilities'],
+#     license='License :: GNU-GPL',
+# )
