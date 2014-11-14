@@ -1,0 +1,928 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>generate_symm_ops &mdash; GBPy 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="GBPy 1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">GBPy 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for generate_symm_ops</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="n">file_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
+<span class="n">path_dir1</span> <span class="o">=</span> <span class="n">file_dir</span> <span class="o">+</span> <span class="s">&#39;/geometry/&#39;</span>
+<span class="n">path_dir2</span> <span class="o">=</span> <span class="n">file_dir</span> <span class="o">+</span> <span class="s">&#39;/tools/&#39;</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path_dir1</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path_dir2</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">quaternion</span> <span class="kn">as</span> <span class="nn">quat</span>
+<span class="kn">import</span> <span class="nn">transformations</span> <span class="kn">as</span> <span class="nn">trans</span>
+<span class="kn">import</span> <span class="nn">matrix_ops</span> <span class="kn">as</span> <span class="nn">mat_ops</span>
+
+
+<div class="viewcode-block" id="generate_symm_mats"><a class="viewcode-back" href="../index.html#generate_symm_ops.generate_symm_mats">[docs]</a><span class="k">def</span> <span class="nf">generate_symm_mats</span><span class="p">(</span><span class="n">cryst_ptgrp</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Give crystallographic point group, this function generates all the symmetry</span>
+<span class="sd">    operations (as matrices) that belong to the point group using &#39;generators&#39;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------------</span>
+<span class="sd">    cryst_ptgrp: string</span>
+<span class="sd">    Crystallogrphic point group in Schoenflies notation</span>
+
+<span class="sd">    tol: float</span>
+<span class="sd">    The tolerance used to check if two matrices are the same</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ------------</span>
+<span class="sd">    symm_mat: numpy array</span>
+<span class="sd">    Size: n x 3 x3</span>
+<span class="sd">    Symmetry operations as matrices for the corresponding point group</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">prop_grps</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;C1&#39;</span><span class="p">,</span> <span class="s">&#39;C2&#39;</span><span class="p">,</span> <span class="s">&#39;C3&#39;</span><span class="p">,</span> <span class="s">&#39;C4&#39;</span><span class="p">,</span> <span class="s">&#39;C6&#39;</span><span class="p">,</span> <span class="s">&#39;D2&#39;</span><span class="p">,</span> <span class="s">&#39;D3&#39;</span><span class="p">,</span> <span class="s">&#39;D4&#39;</span><span class="p">,</span> <span class="s">&#39;D6&#39;</span><span class="p">,</span>
+                 <span class="s">&#39;T&#39;</span><span class="p">,</span> <span class="s">&#39;O&#39;</span><span class="p">]</span>
+    <span class="n">laue_grps</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Ci&#39;</span><span class="p">,</span> <span class="s">&#39;C2h&#39;</span><span class="p">,</span> <span class="s">&#39;C3i&#39;</span><span class="p">,</span> <span class="s">&#39;C4h&#39;</span><span class="p">,</span> <span class="s">&#39;C6h&#39;</span><span class="p">,</span> <span class="s">&#39;D2h&#39;</span><span class="p">,</span> <span class="s">&#39;D3d&#39;</span><span class="p">,</span> <span class="s">&#39;D4h&#39;</span><span class="p">,</span> <span class="s">&#39;D6h&#39;</span><span class="p">,</span>
+                 <span class="s">&#39;Th&#39;</span><span class="p">,</span> <span class="s">&#39;Oh&#39;</span><span class="p">]</span>
+    <span class="c"># noncentro_grps = [&#39;Cs&#39;, &#39;S4&#39;, &#39;S6&#39;, &#39;C2v&#39;, &#39;C3v&#39;, &#39;C4v&#39;, &#39;C6v&#39;, &#39;D2d&#39;,</span>
+    <span class="c"># &#39;D3h&#39;, &#39;Td&#39;]</span>
+
+    <span class="k">if</span> <span class="n">cryst_ptgrp</span> <span class="ow">in</span> <span class="n">prop_grps</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C1&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C2&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C3&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C4&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C6&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D2&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D3&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D4&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D6&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;T&#39;</span><span class="p">:</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">12</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;O&#39;</span><span class="p">:</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">24</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+    <span class="k">if</span> <span class="n">cryst_ptgrp</span> <span class="ow">in</span> <span class="n">laue_grps</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;Ci&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C2h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C3i&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C4h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C6h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D2h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D3d&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D4h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D6h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;Td&#39;</span><span class="p">:</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">12</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;Oh&#39;</span><span class="p">:</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">24</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">gsz</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">vrrotvec2mat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">order_ptgrp</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">symm_mat</span><span class="p">[:</span><span class="n">gsz</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">generators</span>
+
+    <span class="n">count1</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">numops</span> <span class="o">=</span> <span class="n">gsz</span><span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">while</span> <span class="n">numops</span> <span class="o">&lt;</span> <span class="n">order_ptgrp</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">initsize</span> <span class="o">=</span> <span class="n">numops</span>
+        <span class="k">for</span> <span class="n">ct1</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">count1</span><span class="p">,</span> <span class="n">initsize</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">symm_mat</span><span class="p">[</span><span class="n">ct1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+            <span class="n">t2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">symm_mat</span><span class="p">[</span><span class="n">count1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+            <span class="n">tM1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+            <span class="n">tcheck</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c"># for ct2 in np.arange(0, numops+1):</span>
+            <span class="n">ct2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">numops</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mat_ops</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">tM1</span><span class="p">,</span> <span class="n">symm_mat</span><span class="p">[</span><span class="n">ct2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">tol</span><span class="p">):</span>
+                <span class="n">tcheck</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">tcheck</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">symm_mat</span><span class="p">[</span><span class="n">numops</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">tM1</span><span class="p">)</span>
+                <span class="n">numops</span> <span class="o">=</span> <span class="n">numops</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">numops</span> <span class="o">==</span> <span class="n">initsize</span><span class="p">:</span>
+            <span class="n">count1</span> <span class="o">=</span> <span class="n">count1</span><span class="o">+</span><span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">symm_mat</span>
+
+</div>
+<div class="viewcode-block" id="generate_symm_quats"><a class="viewcode-back" href="../index.html#generate_symm_ops.generate_symm_quats">[docs]</a><span class="k">def</span> <span class="nf">generate_symm_quats</span><span class="p">(</span><span class="n">cryst_ptgrp</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Give crystallographic point group, this function generates all the symmetry</span>
+<span class="sd">    operations (as quaternions) that belong to the point group</span>
+<span class="sd">    using &#39;generators&#39;</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------------</span>
+<span class="sd">    cryst_ptgrp: string</span>
+<span class="sd">    Crystallogrphic point group in Schoenflies notation</span>
+
+<span class="sd">    tol: float</span>
+<span class="sd">    The tolerance used to check if two matrices are the same</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ------------</span>
+<span class="sd">    symm_quat: quaternion array</span>
+<span class="sd">    Size: n x 5</span>
+<span class="sd">    Symmetry operations as matrices for the corresponding point group</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">prop_grps</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;C1&#39;</span><span class="p">,</span> <span class="s">&#39;C2&#39;</span><span class="p">,</span> <span class="s">&#39;C3&#39;</span><span class="p">,</span> <span class="s">&#39;C4&#39;</span><span class="p">,</span> <span class="s">&#39;C6&#39;</span><span class="p">,</span> <span class="s">&#39;D2&#39;</span><span class="p">,</span> <span class="s">&#39;D3&#39;</span><span class="p">,</span> <span class="s">&#39;D4&#39;</span><span class="p">,</span> <span class="s">&#39;D6&#39;</span><span class="p">,</span>
+                 <span class="s">&#39;T&#39;</span><span class="p">,</span> <span class="s">&#39;O&#39;</span><span class="p">]</span>
+    <span class="n">laue_grps</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Ci&#39;</span><span class="p">,</span> <span class="s">&#39;C2h&#39;</span><span class="p">,</span> <span class="s">&#39;C3i&#39;</span><span class="p">,</span> <span class="s">&#39;C4h&#39;</span><span class="p">,</span> <span class="s">&#39;C6h&#39;</span><span class="p">,</span> <span class="s">&#39;D2h&#39;</span><span class="p">,</span> <span class="s">&#39;D3d&#39;</span><span class="p">,</span> <span class="s">&#39;D4h&#39;</span><span class="p">,</span> <span class="s">&#39;D6h&#39;</span><span class="p">,</span>
+                 <span class="s">&#39;Th&#39;</span><span class="p">,</span> <span class="s">&#39;Oh&#39;</span><span class="p">]</span>
+    <span class="c"># noncentro_grps = [&#39;Cs&#39;, &#39;S4&#39;, &#39;S6&#39;, &#39;C2v&#39;, &#39;C3v&#39;, &#39;C4v&#39;, &#39;C6v&#39;, &#39;D2d&#39;,</span>
+    <span class="c"># &#39;D3h&#39;, &#39;Td&#39;]</span>
+
+    <span class="c"># if cryst_ptgrp in prop_grps:</span>
+    <span class="c">#     rot_type = &#39;proper&#39;</span>
+    <span class="c"># elif cryst_ptgrp in laue_grps:</span>
+    <span class="c">#     rot_type = &#39;improper&#39;</span>
+    <span class="c"># else:</span>
+    <span class="c">#     raise Exception(&#39;Wrong Input for crystal point group&#39;)</span>
+
+    <span class="k">if</span> <span class="n">cryst_ptgrp</span> <span class="ow">in</span> <span class="n">prop_grps</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C1&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C2&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C3&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C4&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C6&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D2&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D3&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D4&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D6&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;T&#39;</span><span class="p">:</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">12</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;O&#39;</span><span class="p">:</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">24</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+    <span class="k">if</span> <span class="n">cryst_ptgrp</span> <span class="ow">in</span> <span class="n">laue_grps</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;Ci&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C2h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C3i&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C4h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;C6h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D2h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D3d&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D4h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;D6h&#39;</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">6</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;Td&#39;</span><span class="p">:</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">12</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+        <span class="k">elif</span> <span class="n">cryst_ptgrp</span> <span class="o">==</span> <span class="s">&#39;Oh&#39;</span><span class="p">:</span>
+            <span class="n">gsz</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">order_ptgrp</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">24</span>
+            <span class="c"># Generators</span>
+            <span class="n">generators</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="n">gsz</span><span class="p">)))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">generators</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">trans</span><span class="o">.</span><span class="n">axang2quat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+            <span class="c"># Symmetry Operations</span>
+            <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="n">order_ptgrp</span><span class="p">]))</span>
+            <span class="n">symm_quat</span><span class="p">[:,</span> <span class="p">:</span><span class="n">gsz</span><span class="p">]</span> <span class="o">=</span> <span class="n">generators</span>
+
+    <span class="n">count1</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">numops</span> <span class="o">=</span> <span class="n">gsz</span><span class="o">-</span><span class="mi">1</span>
+
+    <span class="k">while</span> <span class="n">numops</span> <span class="o">&lt;</span> <span class="n">order_ptgrp</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">initsize</span> <span class="o">=</span> <span class="n">numops</span>
+        <span class="k">for</span> <span class="n">ct1</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">count1</span><span class="p">,</span> <span class="n">initsize</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">symm_quat</span><span class="p">[:,</span> <span class="n">ct1</span><span class="p">]</span>
+            <span class="n">t2</span> <span class="o">=</span> <span class="n">symm_quat</span><span class="p">[:,</span> <span class="n">count1</span><span class="p">]</span>
+            <span class="n">tM1</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">mtimes</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+            <span class="n">tcheck</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">ct2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">numops</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">quat</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">tM1</span><span class="p">,</span> <span class="n">symm_quat</span><span class="p">[:,</span> <span class="n">ct2</span><span class="p">],</span> <span class="n">tol</span><span class="p">):</span>
+                <span class="n">tcheck</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">tcheck</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">symm_quat</span><span class="p">[:,</span> <span class="n">numops</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tM1</span>
+                <span class="n">numops</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">numops</span> <span class="o">==</span> <span class="n">initsize</span><span class="p">:</span>
+            <span class="n">count1</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">symm_quat</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">antipodal</span><span class="p">(</span><span class="n">symm_quat</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">symm_quat</span>
+
+</div>
+<div class="viewcode-block" id="save_symm_pkl"><a class="viewcode-back" href="../index.html#generate_symm_ops.save_symm_pkl">[docs]</a><span class="k">def</span> <span class="nf">save_symm_pkl</span><span class="p">(</span><span class="n">cryst_ptgrp</span><span class="p">,</span> <span class="n">op_type</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A pkl file with the symmetry operations of op_type (matrices or</span>
+<span class="sd">    quaternions) are created and stored in the &#39;pkl_files&#39; directory</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------------</span>
+<span class="sd">    cryst_ptgrp: string</span>
+<span class="sd">    Crystallogrphic point group in Schoenflies notation</span>
+
+<span class="sd">    op_type: {&#39;matrices&#39;, &#39;quats&#39;}</span>
+<span class="sd">    Creates matrices or quaternion symmetry operations depending on op_type</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-10</span>
+    <span class="k">if</span> <span class="n">op_type</span> <span class="o">==</span> <span class="s">&#39;matrices&#39;</span><span class="p">:</span>
+        <span class="n">symm_ops</span> <span class="o">=</span> <span class="n">generate_symm_mats</span><span class="p">(</span><span class="n">cryst_ptgrp</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+        <span class="n">fstr</span> <span class="o">=</span> <span class="s">&#39;mats&#39;</span>
+    <span class="k">elif</span> <span class="n">op_type</span> <span class="o">==</span> <span class="s">&#39;quats&#39;</span><span class="p">:</span>
+        <span class="n">symm_ops</span> <span class="o">=</span> <span class="n">generate_symm_quats</span><span class="p">(</span><span class="n">cryst_ptgrp</span><span class="p">,</span> <span class="n">tol</span><span class="p">)</span>
+        <span class="n">fstr</span> <span class="o">=</span> <span class="s">&#39;quats&#39;</span>
+
+    <span class="n">pkl_file</span> <span class="o">=</span> <span class="s">&#39;symm_&#39;</span> <span class="o">+</span> <span class="n">fstr</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="n">cryst_ptgrp</span> <span class="o">+</span> <span class="s">&#39;.pkl&#39;</span>
+    <span class="n">jar</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">pkl_file</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">symm_ops</span><span class="p">,</span> <span class="n">jar</span><span class="p">)</span>
+    <span class="n">jar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c"># Move to pkl_files</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">pkl_file</span><span class="p">,</span> <span class="s">&#39;pkl_files/&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">GBPy 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Srikanth Patala, Arash D. Banadaki.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
