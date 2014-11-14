@@ -24,6 +24,10 @@ Classes:
 - ``lattice``: Includes all the crystallographic data required for an element used by the code.
 - ``quaternion``: Quaternion construction and operations.
 
+Documentation:
+~~~~~~~~~~~~~~~~~~~~~
+
+Please visit the documentation page `here <https://pypi.python.org/pypi/setuptools>`__ .
 
 How to Use This Package
 ----------------------
@@ -39,6 +43,12 @@ How to Use This Package
 .. code-block:: console
 
     $ python setup.py install
+
+Or to install the stable version of GBpy:
+               
+.. code-block:: console
+                
+    $ pip install GBpy
           
 3. Import the package: 
 
@@ -60,7 +70,7 @@ for example to find the 2D basis vectors of a plane with Miller indices of (h,k,
 
 5. You can also use the tools provided in this package individually by importing the functions separately. For example use :``from GBpy import <name_of_the_function> as <a_name>``.
 
-Consult the documentation for further details.
+Consult the `documentation <https://pypi.python.org/pypi/setuptools>`__ for further details.
 
 Prerequisites
 ----------------------
