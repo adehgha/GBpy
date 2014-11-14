@@ -27,7 +27,7 @@ Classes:
 Documentation:
 ~~~~~~~~~~~~~~~~~~~~~
 
-Please visit the documentation page `here <https://pypi.python.org/pypi/setuptools>`__ .
+Please visit the documentation page `here <https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/build/html/index.html>`__ .
 
 How to Use This Package
 ----------------------
@@ -70,7 +70,7 @@ for example to find the 2D basis vectors of a plane with Miller indices of (h,k,
 
 5. You can also use the tools provided in this package individually by importing the functions separately. For example use :``from GBpy import <name_of_the_function> as <a_name>``.
 
-Consult the `documentation <https://pypi.python.org/pypi/setuptools>`__ for further details.
+Consult the `documentation <https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/build/html/index.html>`__ for further details.
 
 Prerequisites
 ----------------------
