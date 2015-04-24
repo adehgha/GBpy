@@ -357,7 +357,7 @@ def gb_2d_csl(inds, t_mat, l_g_go,
 
 
 def bicryst_planar_den(inds, t_mat, l_g_go, inds_type='miller_index',
-                       mat_ref='t_g1tog2_go1'):
+                       mat_ref='go1'):
     """
     The function computes the planar densities of the planes
     1 and 2 and the two-dimensional CSL
@@ -371,7 +371,7 @@ def bicryst_planar_den(inds, t_mat, l_g_go, inds_type='miller_index',
     {'miller_index', 'normal_go', 'normal_g'}
 
     t_mat: numpy array
-    Transformation matrix from g1 to g2 in go1 reference frame
+    Transformation matrix from g1 to g2 in go1(or g1) reference frame
 
     mat_ref: string
     {'go1', 'g1'}
