@@ -411,7 +411,7 @@
 
 </div>
 <div class="viewcode-block" id="bicryst_planar_den"><a class="viewcode-back" href="../index.html#bp_basis.bicryst_planar_den">[docs]</a><span class="k">def</span> <span class="nf">bicryst_planar_den</span><span class="p">(</span><span class="n">inds</span><span class="p">,</span> <span class="n">t_mat</span><span class="p">,</span> <span class="n">l_g_go</span><span class="p">,</span> <span class="n">inds_type</span><span class="o">=</span><span class="s">&#39;miller_index&#39;</span><span class="p">,</span>
-                       <span class="n">mat_ref</span><span class="o">=</span><span class="s">&#39;t_g1tog2_go1&#39;</span><span class="p">):</span>
+                       <span class="n">mat_ref</span><span class="o">=</span><span class="s">&#39;go1&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The function computes the planar densities of the planes</span>
 <span class="sd">    1 and 2 and the two-dimensional CSL</span>
@@ -425,7 +425,7 @@
 <span class="sd">        {&#39;miller_index&#39;, &#39;normal_go&#39;, &#39;normal_g&#39;}</span>
 
 <span class="sd">    t_mat: numpy array</span>
-<span class="sd">        Transformation matrix from g1 to g2 in go1 reference frame.</span>
+<span class="sd">        Transformation matrix from g1 to g2 in go1 (or g1) reference frame.</span>
 
 <span class="sd">    mat_ref: string</span>
 <span class="sd">        {&#39;go1&#39;, &#39;g1&#39;}</span>

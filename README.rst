@@ -3,7 +3,8 @@
 .. image:: https://raw.githubusercontent.com/adehgha/GBpy/master/GBpy/docs/images/pic.png
         
 * GBpy on `GitHub <https://github.com/adehgha/GBpy>`__
-* GBpy `Documentation <https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/build/html/index.html>`__
+* GBpy `Documentation <https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/_build/html/index.html>`__
+* GBpy `Tutorials <https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/tutorials/index.html>`__
 
 .. image:: https://img.shields.io/pypi/v/GBpy.svg
     :target: https://pypi.python.org/pypi/GBpy
@@ -24,7 +25,7 @@ Functions:
 * ``GBpy.misorient_fz``, function for finding the unique disorientations in fundamental zone of various crystal point groups.
 * ``GBpy.integer_manipulations``, collection of many useful ineteger manipulation functions.
                 
-and many other useful tools. Please refer to the `documentation <https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/build/html/index.html>`__ and example for detailed description and utility of functions.
+and many other useful tools. Please refer to the `documentation <https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/_build/html/index.html>`__ and `tutorials <https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/tutorials/index.html>`__ for detailed description and utility of functions.
                 
 Classes:
 ========
@@ -76,7 +77,7 @@ How to Use This Package:
 
 
                 
-Consult the `documentation <https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/build/html/index.html>`__ for further details.
+Consult the `documentation <https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/_build/html/index.html>`__ for further details.
         
         
 Prerequisites:
