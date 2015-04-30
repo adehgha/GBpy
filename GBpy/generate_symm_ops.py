@@ -1,6 +1,10 @@
 # Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
-# Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
+# Copyright (c) 2015,  Arash Dehghan Banadaki and Srikanth Patala.
 # License: GNU-GPL Style.
+# How to cite GBpy:
+# Banadaki, A. D. & Patala, S. "An efficient algorithm for computing the primitive bases of a general lattice plane",
+# Journal of Applied Crystallography 48, 585-588 (2015). doi:10.1107/S1600576715004446
+
 
 import numpy as np
 import sys
@@ -9,6 +13,7 @@ import os
 import shutil
 import quaternion as quat
 import tools as trans
+# -----------------------------------------------------------------------------------------------------------
 
 
 def generate_symm_mats(cryst_ptgrp, tol=1e-10):
@@ -19,16 +24,16 @@ def generate_symm_mats(cryst_ptgrp, tol=1e-10):
     Parameters
     -----------------
     cryst_ptgrp: string
-    Crystallogrphic point group in Schoenflies notation
+        Crystallogrphic point group in Schoenflies notation
 
     tol: float
-    The tolerance used to check if two matrices are the same
+        The tolerance used to check if two matrices are the same
 
     Returns
     ------------
     symm_mat: numpy array
-    Size: n x 3 x3
-    Symmetry operations as matrices for the corresponding point group
+        Size: n x 3 x3 \v
+        Symmetry operations as matrices for the corresponding point group
     """
 
     prop_grps = ['C1', 'C2', 'C3', 'C4', 'C6', 'D2', 'D3', 'D4', 'D6',
@@ -409,6 +414,7 @@ def generate_symm_mats(cryst_ptgrp, tol=1e-10):
             count1 = count1+1
 
     return symm_mat
+# -----------------------------------------------------------------------------------------------------------
 
 
 def generate_symm_quats(cryst_ptgrp, tol=1e-10):
@@ -420,16 +426,16 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
     Parameters
     -----------------
     cryst_ptgrp: string
-    Crystallogrphic point group in Schoenflies notation
+        Crystallogrphic point group in Schoenflies notation
 
     tol: float
-    The tolerance used to check if two matrices are the same
+        The tolerance used to check if two matrices are the same
 
     Returns
     ------------
     symm_quat: quaternion array
-    Size: n x 5
-    Symmetry operations as matrices for the corresponding point group
+        Size: n x 5 \v
+        Symmetry operations as matrices for the corresponding point group
     """
 
     prop_grps = ['C1', 'C2', 'C3', 'C4', 'C6', 'D2', 'D3', 'D4', 'D6',
@@ -799,6 +805,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
 
     symm_quat = quat.antipodal(symm_quat)
     return symm_quat
+# -----------------------------------------------------------------------------------------------------------
 
 
 def save_symm_pkl(cryst_ptgrp, op_type):
@@ -809,10 +816,10 @@ def save_symm_pkl(cryst_ptgrp, op_type):
     Parameters
     -----------------
     cryst_ptgrp: string
-    Crystallogrphic point group in Schoenflies notation
+        Crystallogrphic point group in Schoenflies notation
 
     op_type: {'matrices', 'quats'}
-    Creates matrices or quaternion symmetry operations depending on op_type
+        Creates matrices or quaternion symmetry operations depending on op_type
     """
 
     tol = 1e-10
@@ -830,3 +837,4 @@ def save_symm_pkl(cryst_ptgrp, op_type):
 
     # Move to pkl_files
     shutil.move(pkl_file, 'pkl_files/')
+# -----------------------------------------------------------------------------------------------------------

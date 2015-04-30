@@ -1,12 +1,15 @@
 # Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
-# Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
+# Copyright (c) 2015,  Arash Dehghan Banadaki and Srikanth Patala.
 # License: GNU-GPL Style.
+# How to cite GBpy:
+# Banadaki, A. D. & Patala, S. "An efficient algorithm for computing the primitive bases of a general lattice plane",
+# Journal of Applied Crystallography 48, 585-588 (2015). doi:10.1107/S1600576715004446
+
 
 import numpy as np
 import os
 import sys
 from tools import vrrotvec2mat
-
 
 class Lattice(object):
     """
@@ -50,14 +53,14 @@ class Lattice(object):
     Notes
     --------
     Examples of elem_type
-    elem_type = 'Mg';
-    elem_type = 'Al';
-    elem_type = 'Cu';
-    elem_type = 'Ni';
-    elem_type = 'cF_Id';
-    elem_type = 'cI_Id';
-    elem_type = 'cP_Id';
-    elem_type = 'hP_Id';
+    elem_type = 'Mg'; \v
+    elem_type = 'Al'; \v
+    elem_type = 'Cu'; \v
+    elem_type = 'Ni'; \v
+    elem_type = 'cF_Id'; \v
+    elem_type = 'cI_Id'; \v
+    elem_type = 'cP_Id'; \v
+    elem_type = 'hP_Id'; \v
     """
 
     def __init__(self, *args):
@@ -322,3 +325,4 @@ class Lattice(object):
         str1 += self.cryst_ptgrp
         str1 += '\n'
         return str1
+# ------------------------------------------------------------------------------------------------------
