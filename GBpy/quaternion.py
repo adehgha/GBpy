@@ -1,6 +1,10 @@
 # Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
-# Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
+# Copyright (c) 2015,  Arash Dehghan Banadaki and Srikanth Patala.
 # License: GNU-GPL Style.
+# How to cite GBpy:
+# Banadaki, A. D. & Patala, S. "An efficient algorithm for computing the primitive bases of a general lattice plane",
+# Journal of Applied Crystallography 48, 585-588 (2015). doi:10.1107/S1600576715004446
+
 
 import numpy as np
 # import vector3d as vec3d
@@ -17,7 +21,7 @@ class quaternion(np.ndarray):
     Attributes
     ----------
     quaternion: numpy array
-    5 x n dimensions
+        5 x n dimensions
 
     """
 
@@ -312,7 +316,7 @@ def double(g):
     Parameters
     ----------------
     g: quaternion class
-    quaternions
+        quaternions
 
     Returns:
     -----------
@@ -429,10 +433,13 @@ def dot(q1, q2):
     """
     Inner Product of quaternions q1 and q2
 
-    Input:
-        q1, q2 - @quaternion
-    Output:
-        double
+    Parameters
+    ----------
+    q1, q2: @quaternion
+
+    Returns
+    -------
+    dot_product: double
     """
     a1 = getq0(q1)
     b1 = getq1(q1)
@@ -726,6 +733,3 @@ def inverse(q1):
 # def uminus
 # def unique
 # def vertcat
-
-
-

@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GBpy.Test_quaternion &mdash; GBpy 0.1.2 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="GBpy 0.1.2 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">GBpy 0.1.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for GBpy.Test_quaternion</h1><div class="highlight"><pre>
+<span class="c"># Authors: Arash Dehghan Banadaki &lt;adehgha@ncsu.edu&gt;, Srikanth Patala &lt;spatala@ncsu.edu&gt;</span>
+<span class="c"># Copyright (c) 2015,  Arash Dehghan Banadaki and Srikanth Patala.</span>
+<span class="c"># License: GNU-GPL Style.</span>
+<span class="c"># How to cite GBpy:</span>
+<span class="c"># Banadaki, A. D. &amp; Patala, S. &quot;An efficient algorithm for computing the primitive bases of a general lattice plane&quot;,</span>
+<span class="c"># Journal of Applied Crystallography 48, 585-588 (2015). doi:10.1107/S1600576715004446</span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="c"># import quaternion_v1 as quat</span>
+
+<span class="c">#############################################################</span>
+<span class="c"># Test Cases</span>
+<span class="c"># Case 1: No Arguments</span>
+
+
+<div class="viewcode-block" id="test_quaternion"><a class="viewcode-back" href="../../images/docs1/GBpy.html#GBpy.Test_quaternion.test_quaternion">[docs]</a><span class="k">def</span> <span class="nf">test_quaternion</span><span class="p">(</span><span class="n">type1</span><span class="p">,</span> <span class="n">case</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">type1</span> <span class="o">==</span> <span class="s">&#39;Init&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">case</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">q1</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">()</span>
+            <span class="k">print</span> <span class="n">q1</span>
+        <span class="k">if</span> <span class="n">case</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">ctn</span> <span class="o">=</span> <span class="mi">10</span>
+            <span class="n">a1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">ctn</span><span class="p">)</span>
+            <span class="n">b1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">ctn</span><span class="p">)</span>
+            <span class="n">c1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">ctn</span><span class="p">)</span>
+            <span class="n">d1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">ctn</span><span class="p">)</span>
+
+            <span class="n">e1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">ctn</span><span class="p">)</span>
+
+            <span class="n">q1</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">e1</span><span class="p">)</span>
+
+            <span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+            <span class="k">print</span> <span class="n">q1</span>
+    <span class="k">if</span> <span class="n">type1</span> <span class="o">==</span> <span class="s">&#39;Slice&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">case</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">ctn</span> <span class="o">=</span> <span class="mi">10</span>
+            <span class="n">a1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">ctn</span><span class="p">)</span>
+            <span class="n">b1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">ctn</span><span class="p">)</span>
+            <span class="n">c1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">ctn</span><span class="p">)</span>
+            <span class="n">d1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">ctn</span><span class="p">)</span>
+
+            <span class="n">e1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">ctn</span><span class="p">)</span>
+
+            <span class="n">q1</span> <span class="o">=</span> <span class="n">quat</span><span class="o">.</span><span class="n">quaternion</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">e1</span><span class="p">)</span>
+            <span class="n">q2</span> <span class="o">=</span> <span class="n">q1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+
+            <span class="k">print</span> <span class="n">q1</span>
+
+            <span class="n">q1</span>
+
+            <span class="k">print</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span>
+            <span class="k">print</span> <span class="n">q2</span>
+
+<span class="c"># type1 = &#39;Init&#39;; case = 5</span>
+<span class="c">##type1 = &#39;Slice&#39;; case = 5</span>
+<span class="c">##test_quaternion(type1, case)</span>
+
+<span class="c"># # Case 2: One Argument 2</span>
+<span class="c"># P1 = np.random.rand(4,3); v1 = vec3d.vector3d(P1); q1 = quaternion(v1);</span>
+<span class="c"># # Case 2: One Argument quaternion</span>
+<span class="c"># q2 = quaternion(q1[:,0]);</span>
+<span class="c"># # Case 2: One argument</span>
+<span class="c"># q3 = quaternion(np.random.rand(4,))</span>
+<span class="c"># q3 = quaternion(np.random.rand(4,3));</span>
+
+<span class="c"># # Case 3: Two Arguments</span>
+<span class="c"># # Vector3d and scalar</span>
+<span class="c"># q3 = quaternion(0.5, v1);</span>
+<span class="c"># P1 = np.random.rand(10,1);</span>
+<span class="c"># V2 = vec3d.vector3d(np.random.rand(10,3));</span>
+<span class="c"># q3 = quaternion(P1, V2);</span>
+
+<span class="c"># P1 = np.random.rand(10,);</span>
+<span class="c"># V2 = vec3d.vector3d(np.random.rand(10,3));</span>
+<span class="c"># q3 = quaternion(P1, V2);</span>
+
+
+<span class="c"># P1 = np.random.rand(10,);</span>
+<span class="c"># V2 = np.random.rand(10,3);</span>
+<span class="c"># q3 = quaternion(P1, V2);</span>
+
+<span class="c"># # Case 3: 4 arguments</span>
+<span class="c"># V1 = np.random.rand(10,);</span>
+<span class="c"># V2 = np.random.rand(10,);</span>
+<span class="c"># V3 = np.random.rand(10,);</span>
+<span class="c"># V4 = np.random.rand(10,);</span>
+<span class="c"># q3 = quaternion(V1, V2, V3, V4);</span>
+
+<span class="c"># print q3;</span>
+<span class="c">##############################################################</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">GBpy 0.1.2 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Arash D. Banadaki, Srikanth Patala.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

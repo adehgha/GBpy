@@ -1,6 +1,10 @@
 # Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
-# Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
+# Copyright (c) 2015,  Arash Dehghan Banadaki and Srikanth Patala.
 # License: GNU-GPL Style.
+# How to cite GBpy:
+# Banadaki, A. D. & Patala, S. "An efficient algorithm for computing the primitive bases of a general lattice plane",
+# Journal of Applied Crystallography 48, 585-588 (2015). doi:10.1107/S1600576715004446
+
 
 import numpy as np
 from fractions import gcd
@@ -108,7 +112,7 @@ def compute_basis_vec(d_eq):
     Parameters
     -----------------
     d_eq: numpy array or list of size 3 and dimension 1
-    h = d_eq[0], k = d_eq[1], l = d_eq[2]
+        h = d_eq[0], k = d_eq[1], l = d_eq[2]
 
     Returns
     ------------
@@ -152,12 +156,12 @@ def bp_basis(miller_ind):
     Parameters
     ---------------
     miller_ind: numpy array
-    Miller indices of the plane (h k l)
+        Miller indices of the plane (h k l)
 
     Returns
     -----------
     l_pl_g1: numpy array
-    The primitive basis of the plane in 'g1' reference frame
+        The primitive basis of the plane in 'g1' reference frame
     """
     miller_ind = int_man.int_finder(miller_ind)
     h = miller_ind[0]
@@ -220,13 +224,13 @@ def pl_density(l_pl_g1, l_g1_go1):
     l_pl_g1: numpy array
 
     l_g1_go1: numpy array
-    Basis vectors of the underlying lattice with respect to the
-    orthogonal reference frame 'go1'
+        Basis vectors of the underlying lattice with respect to the
+        orthogonal reference frame 'go1'
 
     Returns
     ----------
     pd: float
-    Planar density = (1/area covered by plane basis)
+        Planar density = (1/area covered by plane basis)
     """
     l_pl_go1 = np.dot(l_g1_go1, l_pl_g1)
     planar_basis_area = np.linalg.norm(np.cross(l_pl_go1[:, 0],
@@ -244,12 +248,12 @@ def csl_finder_2d(l_pl1_g1, l_pl2_g1):
     Parameters
     ---------------
     l_pl1_g1, l_pl2_g1: numpy array
-    Basis vectors of planes 1 and 2 expressed in g1 reference frame
+        Basis vectors of planes 1 and 2 expressed in g1 reference frame
 
     Returns
     ---------------
     l_2d_csl_g1: numpy array
-    The basis vectors of the 2D CSL expressed in g1 reference frame
+        The basis vectors of the 2D CSL expressed in g1 reference frame
     """
 
     l1 = np.array(l_pl1_g1)
@@ -291,16 +295,16 @@ def gb_2d_csl(inds, t_mat, l_g_go,
     Parameters
     ------------------
     inds: numpy array
-    The boundary plane indices
+        The boundary plane indices
 
     inds_type: string
-    {'miller_index', 'normal_go', 'normal_g'}
+        {'miller_index', 'normal_go', 'normal_g'}
 
     t_mat: numpy array
-    Transformation matrix from g1 to g2 in 'mat_ref' reference frame
+        Transformation matrix from g1 to g2 in 'mat_ref' reference frame
 
     mat_ref: string
-    {'go1', 'g1'}
+        {'go1', 'g1'}
 
     lattice: Lattice class
     Attributes of the underlying lattice
@@ -308,9 +312,9 @@ def gb_2d_csl(inds, t_mat, l_g_go,
     Returns
     -----------
     l_2d_csl_g1, l_pl1_g1, l_pl2_g1: numpy arrays
-    l_2d_csl_g1 is the 2d CSL in g1 ref frame
-    l_pl1_g1 is the plane 1 basis in g1 ref frame
-    l_pl2_g1 is the plane 2 basis in g1 ref frame
+        ``l_2d_csl_g1`` is the 2d CSL in g1 ref frame.\v
+        ``l_pl1_g1`` is the plane 1 basis in g1 ref frame.\v
+        ``l_pl2_g1`` is the plane 2 basis in g1 ref frame.\v
     """
 
     l_g1_go1 = l_g_go
@@ -365,27 +369,31 @@ def bicryst_planar_den(inds, t_mat, l_g_go, inds_type='miller_index',
     Parameters
     ---------------
     inds: numpy array
-    The boundary plane indices
+        The boundary plane indices.
 
     inds_type: string
-    {'miller_index', 'normal_go', 'normal_g'}
+        {'miller_index', 'normal_go', 'normal_g'}
 
     t_mat: numpy array
+<<<<<<< HEAD
     Transformation matrix from g1 to g2 in go1(or g1) reference frame
+=======
+        Transformation matrix from g1 to g2 in go1 (or g1) reference frame.
+>>>>>>> 6297dd0b52c748a9634292685fe7da034038e5e6
 
     mat_ref: string
-    {'go1', 'g1'}
+        {'go1', 'g1'}
 
     lattice: Lattice class
-    Attributes of the underlying lattice
+        Attributes of the underlying lattice.
 
     Returns
     -----------
     pl_den_pl1, pl_den_pl2: numpy array
-    The planar density of planes 1 and 2
+        The planar density of planes 1 and 2.
 
     pl_den_csl: numpy array
-    The planare density of the two-dimensional CSL
+        The planare density of the two-dimensional CSL.
     """
     l_g1_go1 = l_g_go
     l_rg1_go1 = fcd.reciprocal_mat(l_g1_go1)

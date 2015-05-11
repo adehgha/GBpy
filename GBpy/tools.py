@@ -1,11 +1,15 @@
 # Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
-# Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
+# Copyright (c) 2015,  Arash Dehghan Banadaki and Srikanth Patala.
 # License: GNU-GPL Style.
+# How to cite GBpy:
+# Banadaki, A. D. & Patala, S. "An efficient algorithm for computing the primitive bases of a general lattice plane",
+# Journal of Applied Crystallography 48, 585-588 (2015). doi:10.1107/S1600576715004446
+
 
 import numpy as np
 import os, sys, inspect
 import integer_manipulations as int_man
-
+# -----------------------------------------------------------------------------------------------------------
 
 
 class Col(object):
@@ -13,12 +17,7 @@ class Col(object):
     This class is defined to ouput a word or sentence in a different color
     to the standard shell.
     The colors available are:
-    pink
-    blue
-    green
-    dgrn: dark green
-    yellow
-    amber
+    ``pink``, ``blue``, ``green``, ``dgrn``: dark green, ``yellow``, ``amber``
     """
     def __init__(self):
         self.pink = '\033[95m'
@@ -30,6 +29,23 @@ class Col(object):
         self.ENDC = '\033[0m'
 
     def c_prnt(self, text, color):
+        """
+        Print a string in color,
+
+        Parameters
+        ----------
+        Col: Col class instance
+            an instance of the ``Col`` class
+
+        text: string
+            Text to be shown in color.
+
+        color: string
+
+        Returns
+        --------
+        N/A
+        """
         if color is 'pink':
             a = self.pink
         elif color is 'blue':
@@ -45,7 +61,7 @@ class Col(object):
         else:
             raise Exception('The color you selected is not acceptable')
         print a + text + self.ENDC
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def lll_reduction(matrix, delta=0.75):
@@ -62,11 +78,16 @@ def lll_reduction(matrix, delta=0.75):
     c-reduced basis. This method returns a basis which is as "good" as
     possible, with "good" defined by orthongonality of the lattice vectors.
 
-    Args:
-        delta (float): Reduction parameter. Default of 0.75 is usually
-            fine.
-    Returns:
-        Reduced lattice.
+    Parameters
+    ----------
+    delta: float
+        Reduction parameter. \v
+        Default of 0.75 is usually fine.
+
+    Returns
+    -------
+    a: numpy array
+        Reduced lattice:
     """
 
     if int_man.int_check(matrix, 10).all():
@@ -137,7 +158,7 @@ def lll_reduction(matrix, delta=0.75):
     else:
         raise Exception(
             'The input to the lll_algorithm is expected to be integral')
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def eq(m1, m2, tol):
@@ -183,7 +204,7 @@ def eq(m1, m2, tol):
             return np.where(max1)
         else:
             raise Exception('Wrong Input Types')
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def message_display(CheckMatrix, Checknumber, Message, Precis):
@@ -199,7 +220,7 @@ def message_display(CheckMatrix, Checknumber, Message, Precis):
     else:
         txt.c_prnt('<<<Error>>>', 'amber')
         raise Exception('Something wrong!!')
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def extgcd(x, y):
@@ -216,7 +237,7 @@ def extgcd(x, y):
         return a, b, g
     else:
         return -a, -b, -g
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def ehermite(a, b):
@@ -230,6 +251,17 @@ def ehermite(a, b):
     John Gilbert, 415-812-4487, December 1993
     gilbert@parc.xerox.com
     Xerox Palo Alto Research Center
+
+    Parameters
+    ----------
+    a, b: integers
+
+    Returns
+    -------
+    E: numpy array 3x3
+        integer matrix with determinant 1 such that E * [a;b] = [g;0],
+        where g is the gcd of a and b.
+
     """
     [c, d, g] = extgcd(a, b)
     if g:
@@ -238,7 +270,7 @@ def ehermite(a, b):
         E = np.array([[1, 0], [0, 1]])
 
     return E
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def left_matrix_division(X, Y):
@@ -252,7 +284,7 @@ def left_matrix_division(X, Y):
     # # ---------
     solution = (np.around(tmp_solution*1e10))/1e10
     return solution
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def smith_nf(matrix):
@@ -270,6 +302,19 @@ def smith_nf(matrix):
     Originally implemented by: John Gilbert, 415-812-4487, December 1993
     gilbert@parc.xerox.com
     Xerox Palo Alto Research Center
+
+    Parameters
+    -----------
+    matrix: numpy array
+
+    Returns
+    --------
+    S: numpy array
+        S is diagonal and nonnegative, S(i,i) divides S(i+1,i+1) for all i
+    U: numpy array
+        det(U) =+-1
+    V: numpy array
+        det(V) =+-1
     """
 
     A=np.copy(matrix)
@@ -380,11 +425,30 @@ def smith_nf(matrix):
     U = np.around(U)
     V = np.around(V)
     return U, S, V
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
+
+
 def vrrotvec2mat(ax_ang):
     """
-    Create a rotation matrix corresponding to the rotation around a general
-    axis by a specified angle.
+    Create a Rotation Matrix from Axis-Angle vector:
+
+    Parameters
+    ----------
+    ``ax_ang``: numpy 5xn array
+        The 3D rotation axis and angle (ax_ang) \v
+        5 entries: \v
+        First 3: axis \v
+        4: angle \v
+        5: 1 for proper and -1 for improper \v
+
+    Returns
+    -------
+    mtx: nx3x3 numpy array
+        3x3 rotation matrices
+
+    See Also
+    --------
+    mat2quat, axang2quat, vrrotmat2vec
     """
     
     #file_dir = os.path.dirname(os.path.realpath(__file__))
@@ -447,28 +511,35 @@ def vrrotvec2mat(ax_ang):
         mtx = mtx.reshape(msz, 3, 3)
 
     return mtx
+# -----------------------------------------------------------------------------------------------------------
 
 
 def vrrotmat2vec(mat1, rot_type='proper'):
     """
     Create an axis-angle np.array from Rotation Matrix:
-    ====================
 
-    @param mat:  The nx3x3 rotation matrices to convert
-    @type mat:   nx3x3 numpy array
+    Parameters
+    ----------
+    mat1: nx3x3 numpy array
+        The nx3x3 rotation matrices to convert
+    rot_type: string ('proper' or 'improper')
+        ``improper`` if there is a possibility of
+        having improper matrices in the input,
+        ``proper`` otherwise. \v
+        Default: ``proper``
 
-    @param rot_type: 'improper' if there is a possibility of
-                      having improper matrices in the input,
-                      'proper' otherwise. 'proper' by default
-    @type  rot_type: string ('proper' or 'improper')
+    Returns
+    -------
+    ``ax_ang``: numpy 5xn array
+        The 3D rotation axis and angle (ax_ang) \v
+        5 entries: \v
+        First 3: axis \v
+        4: angle \v
+        5: 1 for proper and -1 for improper \v
 
-    @return:    The 3D rotation axis and angle (ax_ang)
-                5 entries:
-                   First 3: axis
-                   4: angle
-                   5: 1 for proper and -1 for improper
-    @rtype:     numpy 5xn array
-
+    See Also
+    --------
+    mat2quat, axang2quat, vrrotvec2mat
     """
     mat = np.copy(mat1)
     if mat.ndim == 2:
@@ -585,11 +656,26 @@ def vrrotmat2vec(mat1, rot_type='proper'):
         ax_ang[:4, ind3] = np.vstack((axis.transpose(), phi.transpose()))
 
     return ax_ang
+# -----------------------------------------------------------------------------------------------------------
 
 
 def quat2mat(q):
     """
     Convert Quaternion Arrays to Rotation Matrix
+
+        Parameters
+    ----------
+    q: numpy array (5 x 1)
+        quaternion
+
+    Returns
+    ----------
+    g: numpy array (3 x 3)
+        rotation matrix
+
+    See Also
+    --------
+    mat2quat, axang2quat
     """
     sz = quat.get_size(q)
     q0 = quat.getq0(q)
@@ -618,11 +704,31 @@ def quat2mat(q):
         g[inds1, :, :] = -g[inds1, :, :]
 
     return g
+# -----------------------------------------------------------------------------------------------------------
 
 
 def mat2quat(mat, rot_type='proper'):
     """
-    Convert Matrices to Quaternions
+    Convert Rotation Matrices to Quaternions
+
+    Parameters
+    ----------
+    mat: numpy array or a list of (3 x 3)
+        rotation matrix
+
+    rot_type: string ('proper' or 'improper')
+        ``improper`` if there is a possibility of
+        having improper matrices in the input,
+        ``proper`` otherwise. \v
+        Default: ``proper``
+
+    Returns
+    ----------
+    quaternion_rep: numpy array (5 x 1)
+
+    See Also
+    --------
+    quat2mat, axang2quat
     """
     ax_ang = vrrotmat2vec(mat, rot_type)
 
@@ -633,11 +739,20 @@ def mat2quat(mat, rot_type='proper'):
     qtype = ax_ang[4, :]
 
     return quat.quaternion(q0, q1, q2, q3, qtype)
+# -----------------------------------------------------------------------------------------------------------
 
 
 def axang2quat(ax_ang):
     """
     Create a quaternion corresponding to the rotation specified by an axis and an angle
+
+    Parameters
+    ----------
+    ax_ang: numpy array or a list of (4 x 1)
+
+    Returns
+    ----------
+    quaternion_rep: numpy array (5 x 1)
     """
     if ax_ang.ndim == 1:
         if np.size(ax_ang) == 5:
@@ -673,6 +788,7 @@ def axang2quat(ax_ang):
 
     qtype = ax_ang[4, :]
     return quat.quaternion(q0, q1, q2, q3, qtype)
+# -----------------------------------------------------------------------------------------------------------
 
 # mats = np.zeros((20, 3, 3))
 # ct1 = 0
@@ -724,17 +840,36 @@ def axang2quat(ax_ang):
 #
 # for i in range(np.shape(Mats)[0]):
 #     print vrrotmat2vec(np.dot(Mats[i, :, :],(mats[i, :, :].transpose())))
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def unique_rows_tol(data, tol=1e-12, return_index=False, return_inverse=False):
     """
+    This function returns the unique rows of the input matrix within that are within the
+    specified tolerance.
 
-    :param data: input matrix as a n-dimensional numpy array
-    :param tol: tolerance of comparison for each rows
-    :param return_index: flag to return the index of unique rows based on the indices of the output
-    :param return_inverse: flag to return the index of unique rows based on the indices of the input
-    :return:
+    Parameters
+    ----------
+    data: numpy array (m x n)
+    tol: double
+        tolerance of comparison for each rows
+        Default: 1e-12
+    return_index: Boolean
+        flag to return the index of unique rows based on the indices of the output
+    return_inverse: Boolean
+        flag to return the index of unique rows based on the indices of the input
+
+    Returns
+    ----------
+    unique_rows: numpy array (m' x n)
+    ia: numpy array, integer (m' x 1)
+        unique rows based on the indices of the output
+    ic: numpy array, integer (m x 1)
+        unique rows based on the indices of the input
+
+    See Also
+    --------
+    unique
     """
     prec = -np.fix(np.log10(tol))
     d_r = np.fix(data * 10 ** prec) / 10 ** prec + 0.0
@@ -750,7 +885,7 @@ def unique_rows_tol(data, tol=1e-12, return_index=False, return_inverse=False):
             return np.unique(b).view(d_r.dtype).reshape(-1, d_r.shape[1]), ia
         elif return_inverse:
             return np.unique(b).view(d_r.dtype).reshape(-1, d_r.shape[1]), ic
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def test_unique_rows():
@@ -758,7 +893,7 @@ def test_unique_rows():
     mat = np.array([[-1e-6, 1, 1], [1e-7, 1, 1], [0, 1, 1], [1, 1, 1]])
     c, ia, ic = unique_rows_tol(mat, prec, True, True)
     print unique_rows_tol(mat, prec, True, True)
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def test_lll_reduction():
@@ -780,4 +915,4 @@ def test_lll_reduction():
             # print Mat['Matrix'][i], '\n reduced: \n', H, '\n-------\n'
             print '\n______________________________________________\n'
             print Mat[j][i], '\n reduced: \n', b, '\n-------\n'
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------

@@ -1,12 +1,17 @@
 # Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
-# Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
+# Copyright (c) 2015,  Arash Dehghan Banadaki and Srikanth Patala.
 # License: GNU-GPL Style.
+# How to cite GBpy:
+# Banadaki, A. D. & Patala, S. "An efficient algorithm for computing the primitive bases of a general lattice plane",
+# Journal of Applied Crystallography 48, 585-588 (2015). doi:10.1107/S1600576715004446
+
 
 import numpy as np
 import integer_manipulations as int_man
 from tools import lll_reduction
 from tools import smith_nf
 from tools import message_display
+# -----------------------------------------------------------------------------------------------------------
 
 
 def sigma_calc(t_g1tog2_g1):
@@ -28,6 +33,7 @@ def sigma_calc(t_g1tog2_g1):
     Sigma22 = int_man.lcm_array(d2[:])
     Sigma = np.array([Sigma21, Sigma22]).max()
     return Sigma
+# -----------------------------------------------------------------------------------------------------------
 
 
 def reciprocal_mat(l_g_go):
@@ -38,12 +44,12 @@ def reciprocal_mat(l_g_go):
     Parameters
     ----------------
     l_g_go: numpy array
-    The primitive basis vectors b1x, b1y, b1z
+        The primitive basis vectors b1x, b1y, b1z
 
     Returns
     -----------
     rl_g_go: numpy array
-    The primitve reciprocal basis vectors
+        The primitve reciprocal basis vectors
     """
     InMat = np.array(l_g_go)
 
@@ -52,6 +58,7 @@ def reciprocal_mat(l_g_go):
     L2 = np.cross(InMat[:, 2], InMat[:, 0]) / np.linalg.det(InMat)
     rl_g_go = np.vstack((L1, L2, L3)).T
     return rl_g_go
+# -----------------------------------------------------------------------------------------------------------
 
 
 def csl_elem_div_thm_l1(T0, l_g1n_g1):
@@ -64,15 +71,15 @@ def csl_elem_div_thm_l1(T0, l_g1n_g1):
     Parameters
     ---------------
     T0: numpy array
-    The transformation matrix in G1n reference frame
+        The transformation matrix in G1n reference frame
 
     l_g1n_g1: numpy array
-    The 'new' basis vectors of g1 lattice (g1n) in g1 reference frame
+        The 'new' basis vectors of g1 lattice (g1n) in g1 reference frame
 
     Returns
     ------------
     l_csl_g1: numpy array
-    The CSL basis vectors in g1 reference frame
+        The CSL basis vectors in g1 reference frame
     """
     T0 = np.array(T0)
     L1 = np.array(l_g1n_g1)
@@ -100,15 +107,15 @@ def csl_elem_div_thm_l2(t0, l_g2n_g2):
     Parameters
     ---------------
     T0: numpy array
-    The transformation matrix in G1n reference frame
+        The transformation matrix in G1n reference frame
 
     l_g2n_g2: numpy array
-    The 'new' basis vectors of g2 lattice (g2n) in g2 reference frame
+        The 'new' basis vectors of g2 lattice (g2n) in g2 reference frame
 
     Returns
     ------------
     l_csl_g2: numpy array
-    The CSL basis vectors in g2 reference frame
+        The CSL basis vectors in g2 reference frame
     """
     t0 = np.array(t0)
     l2 = np.array(l_g2n_g2)
@@ -135,12 +142,12 @@ def csl_finder_smith(r_g1tog2_g1):
     Parameters
     ----------------
     r_g1tog2_g1: numpy array
-    The 3x3 transformation matrix in g1 reference frame
+        The 3x3 transformation matrix in g1 reference frame
 
     Returns
     -----------
     l_csl_g1: numpy array
-    3 x 3 matrix with the csl basis vectors as columns
+        3 x 3 matrix with the csl basis vectors as columns
 
     Notes
     ---------
@@ -218,6 +225,7 @@ def check_csl_finder_smith(r_g1tog2_g1, Sigma, L_G1_GO1, L_CSL_G1):
     Disp_str = ('V(CSL_GO1)/V(G1_GO1) = Sigma =  ' + "%0.0f"
                 % (np.linalg.det(L_CSL_GO1) / np.linalg.det(L_G1_GO1)))
     message_display(CheckBase3, 3, Disp_str, Precis)
+# -----------------------------------------------------------------------------------------------------------
 
 
 def dsc_finder(L_G2_G1, L_G1_GO1):
@@ -231,16 +239,16 @@ def dsc_finder(L_G2_G1, L_G1_GO1):
     Parameters
     ----------------
     l_g2_g1: numpy array
-    transformation matrix (r_g1tog2_g1)
+        transformation matrix (r_g1tog2_g1)
 
     l_g1_go1: numpy array
-    basis vectors (as columns) of the underlying lattice expressed in the
-    orthogonal 'go' reference frame
+        basis vectors (as columns) of the underlying lattice expressed in the
+        orthogonal 'go' reference frame
 
     Returns
     ------------
     l_dsc_g1: numpy array
-    The dsc lattice basis vectors (as columns) expressed in the g1 reference
+        The dsc lattice basis vectors (as columns) expressed in the g1 reference
 
     Notes
     ---------
@@ -334,6 +342,7 @@ def check_dsc_finder(R_G1ToG2_G1, Sigma, L_G1_GO1, L_DSC_G1, L_CSL_G1):
                 % (np.linalg.det(L_G1_GO1) / np.linalg.det(L_DSC_GO1)))
     Precis = 6
     message_display(CheckBase4, 4, Disp_str, Precis)
+# -----------------------------------------------------------------------------------------------------------
 
 
 def find_csl_dsc(L_G1_GO1, R_G1ToG2_G1):
@@ -344,17 +353,18 @@ def find_csl_dsc(L_G1_GO1, R_G1ToG2_G1):
     Parameters
     -----------------
     L_G1_GO1: numpy array
-    The three basis vectors for the primitive unit cell
-    (as columns) are given with respect to the GO1 reference
-    frame.
+        The three basis vectors for the primitive unit cell
+        (as columns) are given with respect to the GO1 reference
+        frame.
 
-    R_G1ToG2_G1: 3X3 numpy array The rotation matrix defining the
-    transformation in 'G1' reference frame. The subscript 'G1' refers
-    to the primitive unit cell of G lattice.
+    R_G1ToG2_G1: 3X3 numpy array
+        The rotation matrix defining the
+        transformation in 'G1' reference frame. The subscript 'G1' refers
+        to the primitive unit cell of G lattice.
 
     Returns
     l_csl_g1, l_dsc_g1: numpy arrays
-    The basis vectors of csl and dsc lattices in the g1 reference frame
+        The basis vectors of csl and dsc lattices in the g1 reference frame
     """
 
     R_G1ToG2_G1 = np.array(R_G1ToG2_G1)
@@ -365,3 +375,4 @@ def find_csl_dsc(L_G1_GO1, R_G1ToG2_G1):
     L_DSC_G1 = dsc_finder(R_G1ToG2_G1, L_G1_GO1)
 
     return L_CSL_G1, L_DSC_G1
+# -----------------------------------------------------------------------------------------------------------

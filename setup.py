@@ -12,13 +12,13 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(name='GBpy',
-    version='0.1.0',
+    version='0.1.2',
     author='Arash Dehghan Banadaki, Srikanth Patala',
     author_email='adehgha@ncsu.edu, spatala@ncsu.edu',
     description="GBpy is an opensource python package for calculating the geometric properties of interfaces in crystals.",
     long_description=read('README.rst'),
     url='https://github.com/adehgha/GBpy',
-    download_url = 'https://github.com/adehgha/GBpy/tarball/0.1.0',
+    download_url = 'https://github.com/adehgha/GBpy/tarball/0.1.2',
     platforms='any',
     requires=['numpy', 'scipy'],
     keywords = ['bicrystallography', 'interfaces', 'grain boundaries'],

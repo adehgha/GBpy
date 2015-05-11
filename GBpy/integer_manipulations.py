@@ -1,11 +1,15 @@
 # Authors: Arash Dehghan Banadaki <adehgha@ncsu.edu>, Srikanth Patala <spatala@ncsu.edu>
-# Copyright (c) 2014,  Arash Dehghan Banadaki and Srikanth Patala.
+# Copyright (c) 2015,  Arash Dehghan Banadaki and Srikanth Patala.
 # License: GNU-GPL Style.
+# How to cite GBpy:
+# Banadaki, A. D. & Patala, S. "An efficient algorithm for computing the primitive bases of a general lattice plane",
+# Journal of Applied Crystallography 48, 585-588 (2015). doi:10.1107/S1600576715004446
+
 
 import numpy as np
 from fractions import gcd
 from fractions import Fraction
-
+# -----------------------------------------------------------------------------------------------------------
 
 def gcd_array(input, order='all'):
     """
@@ -14,14 +18,14 @@ def gcd_array(input, order='all'):
     Parameters
     ----------
     input : numpy array or list of intgers
-    Input n-D array of integers (most suitable for 1D and 2D arrays)
+        Input n-D array of integers (most suitable for 1D and 2D arrays)
 
     order : {'rows', 'columns', 'col', 'all'}, optional
 
     Returns
     -------
     Agcd: numpy array
-    An array of greatest common divisors of the input
+        An array of greatest common divisors of the input
 
     Notes
     -------
@@ -79,7 +83,7 @@ def gcd_array(input, order='all'):
         Agcd.shape = (len(Agcd), 1)
 
     return np.absolute(Agcd)
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def lcm_vec(a, b):
@@ -90,12 +94,12 @@ def lcm_vec(a, b):
     Parameters
     ----------
     a, b : numpy array
-    Input 1D arrays of integers
+        Input 1D arrays of integers
 
     Returns
     -------
     lcm_vector: numpy array
-    Output 1D array of integers
+        Output 1D array of integers
 
     See Also
     --------
@@ -105,7 +109,7 @@ def lcm_vec(a, b):
     gcd_vec = np.vectorize(gcd)
     lcm_vector = a * (b / gcd_vec(a, b))
     return lcm_vector
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def lcm_array(input, order='all'):
@@ -115,14 +119,14 @@ def lcm_array(input, order='all'):
     Parameters
     ----------
     input : numpy array or list of intgers
-    Input n-D array of integers (most suitable for 1D and 2D arrays)
+        Input n-D array of integers (most suitable for 1D and 2D arrays)
 
     order : {'rows', 'columns', 'col', 'all'}, optional
 
     Returns
     -------
     Alcm: numpy array
-    An array of least common multiples of the input
+        An array of least common multiples of the input
 
     Notes
     -------
@@ -176,7 +180,7 @@ def lcm_array(input, order='all'):
         Alcm.shape = (len(Alcm), 1)
 
     return np.absolute(Alcm)
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def int_check(input, precis=6):
@@ -188,18 +192,18 @@ def int_check(input, precis=6):
     Parameters
     ----------
     input : numpy array or list
-    Input n-D array of floats
+        Input n-D array of floats.
 
     precis : Integer
-    Default = 6
-    A value that specifies the precision to which the number is an
-    integer. *precis = 6* implies a precision of :math:`10^{-6}`.
+        Default = 6.
+        A value that specifies the precision to which the number is an
+        integer. **precis = 6** implies a precision of :math:`10^{-6}`.
 
     Returns
     -------
     cond: Boolean
-    **True** if the element is an integer to a certain precision,
-    **False** otherwise
+        **True** if the element is an integer to a certain precision,
+        **False** otherwise
     """
 
     var = np.array(input)
@@ -207,7 +211,7 @@ def int_check(input, precis=6):
     t1 = abs(var)
     cond = (abs(t1 - np.around(t1)) < tval)
     return cond
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def rat(input, tol=1e-06):
@@ -220,15 +224,15 @@ def rat(input, tol=1e-06):
     input : numpy array or list of real numbers
 
     tol : floating point tolerance value
-    Default = 1e-06
+        Default = 1e-06
 
     Returns
     -------
     N, D: Integer numpy arrays
-    N and D contain the numerators (p) and denominators (q) of the
-    rational approximations
+        N and D contain the numerators (p) and denominators (q) of the
+        rational approximations
 
-    Notes
+    Notes:
     --------
     """
     input1 = np.array(input)
@@ -250,7 +254,7 @@ def rat(input, tol=1e-06):
             D[i, j] = (Fraction.from_float(input1[i, j]).
                        limit_denominator(nDec).denominator)
     return N, D
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def int_finder(input_v, tol=1e-6, order='all', tol1=1e-6):
@@ -264,10 +268,10 @@ def int_finder(input_v, tol=1e-6, order='all', tol1=1e-6):
     input1 : numpy array or list of real numbers
 
     tol : floating point tolerance value
-    Default = 1e-06
+        Default = 1e-06
 
     order : {'rows', 'columns', 'col', 'all'}
-    Defualt = 'all'
+        Defualt = 'all'
 
     tol1:
 
@@ -370,7 +374,7 @@ def int_finder(input_v, tol=1e-6, order='all', tol1=1e-6):
             output_v = np.reshape(output_v, (np.size(output_v), ))
 
         return output_v
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------
 
 
 def int_mult(input, tol=1e-06):
@@ -384,15 +388,15 @@ def int_mult(input, tol=1e-06):
     input : numpy array or list of real numbers
 
     tol : floating point tolerance value
-    Default = 1e-06
+        Default = 1e-06
 
     Returns
     -------
     N: numpy float array
-    An array of integers obtained by scaling input
+        An array of integers obtained by scaling input
 
     Int_Mat: numpy float array
-    An array of integers obtained by scaling input
+        An array of integers obtained by scaling input
 
     See Also
     --------
@@ -402,6 +406,7 @@ def int_mult(input, tol=1e-06):
     --------
     **Change this function to accept rows and columns as input**
     """
+
     T = np.array(input)
     IntMat = int_finder(T, tol)
     t_ind = np.where(abs(IntMat) == abs(IntMat).max())
@@ -409,4 +414,4 @@ def int_mult(input, tol=1e-06):
     t_ind_y = t_ind[1][0]
     N = IntMat[t_ind_x, t_ind_y] /input[t_ind_x, t_ind_y]
     return N, IntMat
-# ---------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------

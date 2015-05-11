@@ -1,0 +1,2083 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to GBpy’s documentation! &mdash; GBpy 0.1.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="GBpy 0.1.2 documentation" href="#" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">GBpy 0.1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <blockquote>
+<div>You can adapt this file completely to your liking, but it should at least
+contain the root <cite>toctree</cite> directive.</div></blockquote>
+<div class="section" id="welcome-to-gbpy-s-documentation">
+<h1>Welcome to GBpy&#8217;s documentation!<a class="headerlink" href="#welcome-to-gbpy-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+<div class="section" id="tutorials">
+<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
+<p>For a complete list of tutorials please click <a class="reference external" href="../../tutorials/index.html">here.</a></p>
+</div>
+<div class="section" id="module-lattice">
+<span id="lattice-class"></span><h1>Lattice Class<a class="headerlink" href="#module-lattice" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="lattice.Lattice">
+<em class="property">class </em><code class="descclassname">lattice.</code><code class="descname">Lattice</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lattice.html#Lattice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lattice.Lattice" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class contains all the crystallographic information required for each
+atom type. Currently there are only two pre-configured atoms available in
+class i.e. &#8216;Al&#8217; and &#8216;Mg&#8217;. Up on need user can create a new instance of this
+class with the same attributes. The attributes of this class are:
+...</p>
+<p class="rubric">Notes</p>
+<p>Examples of elem_type
+elem_type = &#8216;Mg&#8217;;</p>
+<p>elem_type = &#8216;Al&#8217;;</p>
+<p>elem_type = &#8216;Cu&#8217;;</p>
+<p>elem_type = &#8216;Ni&#8217;;</p>
+<p>elem_type = &#8216;cF_Id&#8217;;</p>
+<p>elem_type = &#8216;cI_Id&#8217;;</p>
+<p>elem_type = &#8216;cP_Id&#8217;;</p>
+<p>elem_type = &#8216;hP_Id&#8217;;</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="73%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>elem_type: string</td>
+<td>Element of Interest</td>
+</tr>
+<tr class="row-even"><td>pearson: string</td>
+<td>Pearson symbol for the lattice</td>
+</tr>
+<tr class="row-odd"><td>lat_params: dictionary</td>
+<td>Lattice parameters (&#8216;a&#8217;, &#8216;b&#8217;, &#8216;c&#8217;, &#8216;alpha&#8217;, &#8216;beta&#8217;, &#8216;gamma&#8217;)</td>
+</tr>
+<tr class="row-even"><td>l_g_go: numpy array</td>
+<td>Primitve basis of the lattice</td>
+</tr>
+<tr class="row-odd"><td>basis_atoms:</td>
+<td>Location of the basis atoms in the primitive lattice</td>
+</tr>
+<tr class="row-even"><td>cryst_ptgrp: string</td>
+<td>Crystallographic point group of the lattice</td>
+</tr>
+<tr class="row-odd"><td>burgers_mag: float</td>
+<td>The smallest burgers vector in the lattice</td>
+</tr>
+<tr class="row-even"><td>eam_file:</td>
+<td>eam_file name for atomistic simulations</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="79%" />
+<col width="21%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>str</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>Method for printing the lattice class</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-quaternion">
+<span id="geometry-tools"></span><h1>Geometry Tools<a class="headerlink" href="#module-quaternion" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="quaternion.quaternion">
+<em class="property">class </em><code class="descclassname">quaternion.</code><code class="descname">quaternion</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/quaternion.html#quaternion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#quaternion.quaternion" title="Permalink to this definition">¶</a></dt>
+<dd><p>The quaternion class is defined to define the quaternion parameterization
+of rotation and their operations
+...</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="59%" />
+<col width="41%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>quaternion: numpy array</td>
+<td>5 x n dimensions</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">all</span></code>([axis,&nbsp;out])</td>
+<td>Returns True if all elements evaluate to True.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">any</span></code>([axis,&nbsp;out])</td>
+<td>Returns True if any of the elements of <cite>a</cite> evaluate to True.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">argmax</span></code>([axis,&nbsp;out])</td>
+<td>Return indices of the maximum values along the given axis.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">argmin</span></code>([axis,&nbsp;out])</td>
+<td>Return indices of the minimum values along the given axis of <cite>a</cite>.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">argpartition</span></code>(kth[,&nbsp;axis,&nbsp;kind,&nbsp;order])</td>
+<td>Returns the indices that would partition this array.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">argsort</span></code>([axis,&nbsp;kind,&nbsp;order])</td>
+<td>Returns the indices that would sort this array.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">astype</span></code>(dtype[,&nbsp;order,&nbsp;casting,&nbsp;subok,&nbsp;copy])</td>
+<td>Copy of the array, cast to a specified type.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">byteswap</span></code>(inplace)</td>
+<td>Swap the bytes of the array elements</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">choose</span></code>(choices[,&nbsp;out,&nbsp;mode])</td>
+<td>Use an index array to construct a new array from a set of choices.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">clip</span></code>(a_min,&nbsp;a_max[,&nbsp;out])</td>
+<td>Return an array whose values are limited to <code class="docutils literal"><span class="pre">[a_min,</span> <span class="pre">a_max]</span></code>.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">compress</span></code>(condition[,&nbsp;axis,&nbsp;out])</td>
+<td>Return selected slices of this array along given axis.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">conj</span></code>()</td>
+<td>Complex-conjugate all elements.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">conjugate</span></code>()</td>
+<td>Return the complex conjugate, element-wise.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>([order])</td>
+<td>Return a copy of the array.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cumprod</span></code>([axis,&nbsp;dtype,&nbsp;out])</td>
+<td>Return the cumulative product of the elements along the given axis.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cumsum</span></code>([axis,&nbsp;dtype,&nbsp;out])</td>
+<td>Return the cumulative sum of the elements along the given axis.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">diagonal</span></code>([offset,&nbsp;axis1,&nbsp;axis2])</td>
+<td>Return specified diagonals.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">dot</span></code>(b[,&nbsp;out])</td>
+<td>Dot product of two arrays.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">dump</span></code>(file)</td>
+<td>Dump a pickle of the array to the specified file.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">dumps</span></code>()</td>
+<td>Returns the pickle of the array as a string.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fill</span></code>(value)</td>
+<td>Fill the array with a scalar value.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">flatten</span></code>([order])</td>
+<td>Return a copy of the array collapsed into one dimension.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">getfield</span></code>(dtype[,&nbsp;offset])</td>
+<td>Returns a field of the given array as a certain type.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">item</span></code>(*args)</td>
+<td>Copy an element of an array to a standard Python scalar and return it.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">itemset</span></code>(*args)</td>
+<td>Insert scalar into an array (scalar is cast to array&#8217;s dtype, if possible)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">max</span></code>([axis,&nbsp;out])</td>
+<td>Return the maximum along a given axis.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">mean</span></code>([axis,&nbsp;dtype,&nbsp;out])</td>
+<td>Returns the average of the array elements along given axis.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">min</span></code>([axis,&nbsp;out])</td>
+<td>Return the minimum along a given axis.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">newbyteorder</span></code>([new_order])</td>
+<td>Return the array with the same data viewed with a different byte order.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">nonzero</span></code>()</td>
+<td>Return the indices of the elements that are non-zero.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">partition</span></code>(kth[,&nbsp;axis,&nbsp;kind,&nbsp;order])</td>
+<td>Rearranges the elements in the array in such a way that value of the element in kth position is in the position it would be in a sorted array.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">prod</span></code>([axis,&nbsp;dtype,&nbsp;out])</td>
+<td>Return the product of the array elements over the given axis</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">ptp</span></code>([axis,&nbsp;out])</td>
+<td>Peak to peak (maximum - minimum) value along a given axis.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">put</span></code>(indices,&nbsp;values[,&nbsp;mode])</td>
+<td>Set <code class="docutils literal"><span class="pre">a.flat[n]</span> <span class="pre">=</span> <span class="pre">values[n]</span></code> for all <cite>n</cite> in indices.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">ravel</span></code>([order])</td>
+<td>Return a flattened array.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">repeat</span></code>(repeats[,&nbsp;axis])</td>
+<td>Repeat elements of an array.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">reshape</span></code>(shape[,&nbsp;order])</td>
+<td>Returns an array containing the same data with a new shape.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">resize</span></code>(new_shape[,&nbsp;refcheck])</td>
+<td>Change shape and size of array in-place.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">round</span></code>([decimals,&nbsp;out])</td>
+<td>Return <cite>a</cite> with each element rounded to the given number of decimals.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">searchsorted</span></code>(v[,&nbsp;side,&nbsp;sorter])</td>
+<td>Find indices where elements of v should be inserted in a to maintain order.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">setfield</span></code>(val,&nbsp;dtype[,&nbsp;offset])</td>
+<td>Put a value into a specified place in a field defined by a data-type.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">setflags</span></code>([write,&nbsp;align,&nbsp;uic])</td>
+<td>Set array flags WRITEABLE, ALIGNED, and UPDATEIFCOPY, respectively.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">sort</span></code>([axis,&nbsp;kind,&nbsp;order])</td>
+<td>Sort an array, in-place.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">squeeze</span></code>([axis])</td>
+<td>Remove single-dimensional entries from the shape of <cite>a</cite>.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">std</span></code>([axis,&nbsp;dtype,&nbsp;out,&nbsp;ddof])</td>
+<td>Returns the standard deviation of the array elements along given axis.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">sum</span></code>([axis,&nbsp;dtype,&nbsp;out])</td>
+<td>Return the sum of the array elements over the given axis.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">swapaxes</span></code>(axis1,&nbsp;axis2)</td>
+<td>Return a view of the array with <cite>axis1</cite> and <cite>axis2</cite> interchanged.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">take</span></code>(indices[,&nbsp;axis,&nbsp;out,&nbsp;mode])</td>
+<td>Return an array formed from the elements of <cite>a</cite> at the given indices.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">tofile</span></code>(fid[,&nbsp;sep,&nbsp;format])</td>
+<td>Write array to a file as text or binary (default).</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">tolist</span></code>()</td>
+<td>Return the array as a (possibly nested) list.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">tostring</span></code>([order])</td>
+<td>Construct a Python string containing the raw data bytes in the array.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">trace</span></code>([offset,&nbsp;axis1,&nbsp;axis2,&nbsp;dtype,&nbsp;out])</td>
+<td>Return the sum along diagonals of the array.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">transpose</span></code>(*axes)</td>
+<td>Returns a view of the array with axes transposed.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">var</span></code>([axis,&nbsp;dtype,&nbsp;out,&nbsp;ddof])</td>
+<td>Returns the variance of the array elements, along given axis.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">view</span></code>([dtype,&nbsp;type])</td>
+<td>New view of array with the same data.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-integer_manipulations">
+<span id="integer-manipulations"></span><h1>Integer Manipulations<a class="headerlink" href="#module-integer_manipulations" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="integer_manipulations.gcd_array">
+<code class="descclassname">integer_manipulations.</code><code class="descname">gcd_array</code><span class="sig-paren">(</span><em>input</em>, <em>order='all'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/integer_manipulations.html#gcd_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#integer_manipulations.gcd_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function computes the GCD of an array of numbers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input</strong> : numpy array or list of intgers</p>
+<blockquote>
+<div><p>Input n-D array of integers (most suitable for 1D and 2D arrays)</p>
+</div></blockquote>
+<p><strong>order</strong> : {&#8216;rows&#8217;, &#8216;columns&#8217;, &#8216;col&#8217;, &#8216;all&#8217;}, optional</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Agcd: numpy array</p>
+<blockquote class="last">
+<div><p>An array of greatest common divisors of the input</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><code class="xref py py-obj docutils literal"><span class="pre">gcd</span></code></dt>
+<dd>from fractions module for computing gcd of two integers</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If order = <strong>all</strong>, the input array is flattened and the GCD is calculated</li>
+<li>If order = <strong>rows</strong>, GCD of elements in each row is calculated</li>
+<li>If order = <strong>columns</strong> or <strong>cols</strong>, GCD of elements in each column is calculated</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="integer_manipulations.lcm_vec">
+<code class="descclassname">integer_manipulations.</code><code class="descname">lcm_vec</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/integer_manipulations.html#lcm_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#integer_manipulations.lcm_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function computes the LCM of two 1D array of integers of length
+and retruns a 1D array of lcm values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a, b</strong> : numpy array</p>
+<blockquote>
+<div><p>Input 1D arrays of integers</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">lcm_vector: numpy array</p>
+<blockquote class="last">
+<div><p>Output 1D array of integers</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">lcm_arry</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="integer_manipulations.lcm_array">
+<code class="descclassname">integer_manipulations.</code><code class="descname">lcm_array</code><span class="sig-paren">(</span><em>input</em>, <em>order='all'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/integer_manipulations.html#lcm_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#integer_manipulations.lcm_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function computes the LCM of an array of numbers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input</strong> : numpy array or list of intgers</p>
+<blockquote>
+<div><p>Input n-D array of integers (most suitable for 1D and 2D arrays)</p>
+</div></blockquote>
+<p><strong>order</strong> : {&#8216;rows&#8217;, &#8216;columns&#8217;, &#8216;col&#8217;, &#8216;all&#8217;}, optional</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Alcm: numpy array</p>
+<blockquote class="last">
+<div><p>An array of least common multiples of the input</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#integer_manipulations.gcd_array" title="integer_manipulations.gcd_array"><code class="xref py py-obj docutils literal"><span class="pre">gcd_array</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If order = <strong>all</strong>, the input array is flattened and the LCM is calculated</li>
+<li>If order = <strong>rows</strong>, LCM of elements in each row is calculated</li>
+<li>If order = <strong>columns</strong> or <strong>cols</strong>, LCM of elements in each column is calculated</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="integer_manipulations.int_check">
+<code class="descclassname">integer_manipulations.</code><code class="descname">int_check</code><span class="sig-paren">(</span><em>input</em>, <em>precis=6</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/integer_manipulations.html#int_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#integer_manipulations.int_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks whether the input variable (arrays) is an interger or not.
+A precision value is specified and the integer check is performed
+up to that decimal point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input</strong> : numpy array or list</p>
+<blockquote>
+<div><p>Input n-D array of floats.</p>
+</div></blockquote>
+<p><strong>precis</strong> : Integer</p>
+<blockquote>
+<div><p>Default = 6.
+A value that specifies the precision to which the number is an
+integer. <strong>precis = 6</strong> implies a precision of <span class="math">\(10^{-6}\)</span>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">cond: Boolean</p>
+<blockquote class="last">
+<div><p><strong>True</strong> if the element is an integer to a certain precision,
+<strong>False</strong> otherwise</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="integer_manipulations.rat">
+<code class="descclassname">integer_manipulations.</code><code class="descname">rat</code><span class="sig-paren">(</span><em>input</em>, <em>tol=1e-06</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/integer_manipulations.html#rat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#integer_manipulations.rat" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function returns a rational (p/q) approximation of a given
+floating point array to a given precision</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input</strong> : numpy array or list of real numbers</p>
+<p><strong>tol</strong> : floating point tolerance value</p>
+<blockquote>
+<div><p>Default = 1e-06</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">N, D: Integer numpy arrays</p>
+<blockquote class="last">
+<div><p>N and D contain the numerators (p) and denominators (q) of the
+rational approximations</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="integer_manipulations.int_finder">
+<code class="descclassname">integer_manipulations.</code><code class="descname">int_finder</code><span class="sig-paren">(</span><em>input_v</em>, <em>tol=1e-06</em>, <em>order='all'</em>, <em>tol1=1e-06</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/integer_manipulations.html#int_finder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#integer_manipulations.int_finder" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function computes the scaling factor required to multiply the
+given input array to obtain an integer array. The integer array is
+returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input1</strong> : numpy array or list of real numbers</p>
+<p><strong>tol</strong> : floating point tolerance value</p>
+<blockquote>
+<div><p>Default = 1e-06</p>
+</div></blockquote>
+<p><strong>order</strong> : {&#8216;rows&#8217;, &#8216;columns&#8217;, &#8216;col&#8217;, &#8216;all&#8217;}</p>
+<blockquote>
+<div><p>Defualt = &#8216;all&#8217;</p>
+</div></blockquote>
+<p><strong>tol1:</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">output: numpy float array</p>
+<p class="last">An array of integers obtained by scaling input</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#integer_manipulations.gcd_array" title="integer_manipulations.gcd_array"><code class="xref py py-obj docutils literal"><span class="pre">gcd_array</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>If order = <strong>all</strong>, the input array is flattened and then scaled</li>
+<li>If order = <strong>rows</strong>, elements in each row are scaled</li>
+<li>If order = <strong>columns</strong> or <strong>cols</strong>, elements in each column are scaled</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="integer_manipulations.int_mult">
+<code class="descclassname">integer_manipulations.</code><code class="descname">int_mult</code><span class="sig-paren">(</span><em>input</em>, <em>tol=1e-06</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/integer_manipulations.html#int_mult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#integer_manipulations.int_mult" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function computes the scaling factor required to multiply the
+given input array to obtain an integer array. The integer array is
+returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input</strong> : numpy array or list of real numbers</p>
+<p><strong>tol</strong> : floating point tolerance value</p>
+<blockquote>
+<div><p>Default = 1e-06</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">N: numpy float array</p>
+<blockquote>
+<div><p>An array of integers obtained by scaling input</p>
+</div></blockquote>
+<p>Int_Mat: numpy float array</p>
+<blockquote class="last">
+<div><p>An array of integers obtained by scaling input</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#integer_manipulations.int_finder" title="integer_manipulations.int_finder"><code class="xref py py-obj docutils literal"><span class="pre">int_finder</span></code></a></p>
+</div>
+<p class="rubric">Notes</p>
+<p><strong>Change this function to accept rows and columns as input</strong></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-csl_utility_functions">
+<span id="csl-utility-function"></span><h1>CSL Utility Function<a class="headerlink" href="#module-csl_utility_functions" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="csl_utility_functions.csl_rotations">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">csl_rotations</code><span class="sig-paren">(</span><em>sigma</em>, <em>sig_type</em>, <em>lat_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#csl_rotations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.csl_rotations" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function computes the CSL rotation matrices r_g1tog2_g1 corresponding
+to a give sigma and lattice</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sigma</strong> : int</p>
+<blockquote>
+<div><p>Sigma corresponding to the transformation matrix</p>
+</div></blockquote>
+<p><strong>sig_type: {&#8216;common&#8217;, &#8216;specific&#8217;}</strong></p>
+<blockquote>
+<div><p>If the sigma generating function depends on the lattice type, then
+sig_type is &#8216;specific&#8217;, otherwise it is &#8216;common&#8217;</p>
+</div></blockquote>
+<p><strong>lat_type: Lattice class</strong></p>
+<blockquote>
+<div><p>Attributes of the underlying lattice</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">sig_rots: dictionary</p>
+<p>keys: &#8216;N&#8217;, &#8216;D&#8217;</p>
+<p>sig_rots[&#8216;N&#8217;], sig_rots[&#8216;D&#8217;]: Numerator and Integer matrices</p>
+<blockquote class="last">
+<div><p>The transformation matrix is N/D in the g1 reference frame
+(i.e. r_g1tog2_g1)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The following steps are considered to obtain the sigma rotation:</p>
+<ul>
+<li><p class="first">compute_inp_params: computes tau and kmax that fixes the range of
+integer qudruples sampled</p>
+</li>
+<li><p class="first">mesh_muvw: Creates the integer quadruples that depend on sigma,
+tau, kmax, crystallographic point group</p>
+</li>
+<li><p class="first">eliminate_idrots: Eliminates Identity rotations</p>
+</li>
+<li><dl class="first docutils">
+<dt>If specific rotations are desired:</dt>
+<dd><ul class="first last simple">
+<li>mesh_muvw_fz: Restricts quadruples to fundamental zone</li>
+<li>check_fsig_int: Filters out quadruples that do not meet the
+condition specified in this function</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">sigtype_muvw: Filters out quadruple combinations depending on
+the type of sigma rotation</p>
+</li>
+<li><p class="first">eliminate_mults: Eliminates integer quadruples that are same except for
+a scaling factor</p>
+</li>
+<li><p class="first">check_sigma: Returns integer quadruples that result in the sigma rotation</p>
+</li>
+<li><p class="first">compute_tmat: Computes the transformation matrix from the integer
+quadruple</p>
+</li>
+<li><p class="first">disorient_sigmarots: Converts all the transformations to the fundamental
+zone of the corresponding crystallogrphic point group</p>
+</li>
+<li><p class="first">check_sigma_rots: Checks that the transformation matrix is a sigma
+rotation and returns them as numerator and denominator matrices</p>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.proper_ptgrp">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">proper_ptgrp</code><span class="sig-paren">(</span><em>cryst_ptgrp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#proper_ptgrp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.proper_ptgrp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the proper point group corresponding to a crystallographic point
+group</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Crystallogrphic point group in Schoenflies notation</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">proper_ptgrp: string</p>
+<blockquote class="last">
+<div><p>Proper point group in Schoenflies notation</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.largest_odd_factor">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">largest_odd_factor</code><span class="sig-paren">(</span><em>var_arr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#largest_odd_factor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.largest_odd_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that computes the larges odd factors of an array of integers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>var_arr: numpy array</strong></p>
+<blockquote>
+<div><p>Array of integers whose largest odd factors needs to be computed</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">odd_d: numpy array</p>
+<blockquote class="last">
+<div><p>Array of largest odd factors of each integer in var_arr</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.compute_inp_params">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">compute_inp_params</code><span class="sig-paren">(</span><em>lattice</em>, <em>sig_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#compute_inp_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.compute_inp_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>tau and kmax necessary for possible integer quadruple combinations
+are computed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lattice: Lattice class</strong></p>
+<blockquote>
+<div><p>Attributes of the underlying lattice</p>
+</div></blockquote>
+<p><strong>sig_type: {&#8216;common&#8217;, &#8216;specific&#8217;}</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tau: float</p>
+<blockquote>
+<div><p>tau is a rational number <span class="math">\(= \frac{\nu}{\mu}\)</span></p>
+</div></blockquote>
+<p>kmax: float</p>
+<blockquote class="last">
+<div><p>kmax is an integer that depends on <span class="math">\(\mu \ , \nu\)</span></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.mesh_muvw">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">mesh_muvw</code><span class="sig-paren">(</span><em>cryst_ptgrp</em>, <em>sigma</em>, <em>sig_type</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#mesh_muvw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.mesh_muvw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute max allowed values of [m,U,V,W] and generates an array
+of integer quadruples</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Proper point group in Schoenflies notation</p>
+</div></blockquote>
+<p><strong>sigma: integer</strong></p>
+<blockquote>
+<div><p>Sigma number</p>
+</div></blockquote>
+<p><strong>sig_type: {&#8216;common&#8217;, &#8216;specific&#8217;}</strong></p>
+<p><strong>args[0]: dictionary</strong></p>
+<p><strong>keys: &#8216;nu&#8217;, &#8216;mu&#8217;, &#8216;kmax&#8217;</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Integer quadruple numpy array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.mesh_muvw_fz">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">mesh_muvw_fz</code><span class="sig-paren">(</span><em>quad_int</em>, <em>cryst_ptgrp</em>, <em>sig_type</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#mesh_muvw_fz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.mesh_muvw_fz" title="Permalink to this definition">¶</a></dt>
+<dd><p>For given integer quadruples, the set belonging to the corresponding
+fundamental zone are separated out and retruned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>quad_int: numpy array</strong></p>
+<blockquote>
+<div><p>Integer quadruples</p>
+</div></blockquote>
+<p><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Proper point group in Schoenflies notation</p>
+</div></blockquote>
+<p><strong>sig_type: {&#8216;common&#8217;, &#8216;specific&#8217;}</strong></p>
+<p><strong>args[0]: dictionary</strong></p>
+<p><strong>keys: &#8216;nu&#8217;, &#8216;mu&#8217;, &#8216;kmax&#8217;</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Integer quadruple numpy array belonging to the fundamental zone</p>
+<p class="last">of the corresponding crystallographic point group</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.check_fsig_int">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">check_fsig_int</code><span class="sig-paren">(</span><em>quad_int</em>, <em>cryst_ptgrp</em>, <em>sigma</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#check_fsig_int"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.check_fsig_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>For specific sigma rotations, a function of m, U, V, W (fsig) is computed.
+The ratio of fsig and sigma should be a divisor of kmax. This
+condition is checked and those integer quadruples that satisfy
+this condition are returned</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>quad_int: numpy array</strong></p>
+<blockquote>
+<div><p>Integer quadruples</p>
+</div></blockquote>
+<p><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Proper point group in Schoenflies notation</p>
+</div></blockquote>
+<p><strong>sigma: float</strong></p>
+<blockquote>
+<div><p>sigma number</p>
+</div></blockquote>
+<p><strong>args[0]: dictionary</strong></p>
+<p><strong>keys: &#8216;nu&#8217;, &#8216;mu&#8217;, &#8216;kmax&#8217;</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">quad_int: numpy array</p>
+<p class="last">Integer quadruple array that satisfy the above mentioned condition</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.eliminate_idrots">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">eliminate_idrots</code><span class="sig-paren">(</span><em>quad_int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#eliminate_idrots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.eliminate_idrots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Eliminate the roations that belong to the identity matrix and return the
+integer quadruples</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.sigtype_muvw">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">sigtype_muvw</code><span class="sig-paren">(</span><em>quad_int</em>, <em>cryst_ptgrp</em>, <em>sig_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#sigtype_muvw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.sigtype_muvw" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of integer quadruples are different for common and specific sigma
+rotations. For example, for D4 point group, common rotations satisfy the
+condition u = 0 and v = 0 or m = 0 and w = 0. The specific rotations belong
+to the complimentary set. Depending on the sig_type (common, specific), the
+appropriate set of the integer quadruples are returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>quad_int: numpy array</strong></p>
+<blockquote>
+<div><p>Integer quadruples.</p>
+</div></blockquote>
+<p><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Proper point group in Schoenflies notation.</p>
+</div></blockquote>
+<p><strong>sig_type: {&#8216;common&#8217;, &#8216;specific&#8217;}</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">quad_int: numpy array</p>
+<blockquote class="last">
+<div><p>Integer quadruple array that satisfy the above mentioned condition.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.eliminate_mults">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">eliminate_mults</code><span class="sig-paren">(</span><em>quad_int</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#eliminate_mults"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.eliminate_mults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divide all the integer quadruples by their corresponding least common
+multiples and return the unique set of integer quadruples</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.check_sigma">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">check_sigma</code><span class="sig-paren">(</span><em>quad_int</em>, <em>sigma</em>, <em>cryst_ptgrp</em>, <em>sig_type</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#check_sigma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.check_sigma" title="Permalink to this definition">¶</a></dt>
+<dd><p>The integer quadruples that correspond to a sigma rotation satisfy
+certain conditions. These conditions are checked and all the
+quadruples that do not meet these requirements are filtered
+out. These conditions depend on the rotation type (common or
+specific) and the lattice type (crystallogrphic point group and mu, nu)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>quad_int: numpy array</strong></p>
+<blockquote>
+<div><p>Integer quadruples.</p>
+</div></blockquote>
+<p><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Proper point group in Schoenflies notation.</p>
+</div></blockquote>
+<p><strong>sig_type: {&#8216;common&#8217;, &#8216;specific&#8217;}</strong></p>
+<p><strong>args[0]: dictionary</strong></p>
+<p><strong>keys: &#8216;nu&#8217;, &#8216;mu&#8217;, &#8216;kmax&#8217;</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">quad_int: numpy array</p>
+<blockquote class="last">
+<div><p>Integer quadruple array that satisfy the above mentioned condition.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#csl_utility_functions.check_fsig_int" title="csl_utility_functions.check_fsig_int"><code class="xref py py-obj docutils literal"><span class="pre">check_fsig_int</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.gcd1d_arr">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">gcd1d_arr</code><span class="sig-paren">(</span><em>arr_tup</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#gcd1d_arr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.gcd1d_arr" title="Permalink to this definition">¶</a></dt>
+<dd><p>A tuple of one-D arrays are passed with equal size and the gcd of
+their rows is computed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>arr_tup: tuple</strong></p>
+<blockquote>
+<div><p>one-D arrays of integers of equal size.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">GCD of rows of 1D arrays of integers</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.compute_tmat">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">compute_tmat</code><span class="sig-paren">(</span><em>quad_int</em>, <em>tau</em>, <em>lat_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#compute_tmat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.compute_tmat" title="Permalink to this definition">¶</a></dt>
+<dd><p>The transformation matrix (r_g1tog2_g1) corresponding to the integer
+quadruple is computed. The matrix elements depend on m, U, V, W and the
+crystallographic point group and tau = (nu/mu)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>quad_int: numpy array</strong></p>
+<blockquote>
+<div><p>Integer quadruples.</p>
+</div></blockquote>
+<p><strong>tau: float</strong></p>
+<blockquote>
+<div><p><span class="math">\(\frac{\nu}{\mu}\)</span></p>
+</div></blockquote>
+<p><strong>lat_type: Lattice class</strong></p>
+<blockquote>
+<div><p>Attributes of the underlying lattice</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>g</strong> : numpy array</p>
+<blockquote class="last">
+<div><p>dimension = 3, n x 3 x  3 transformation matrices</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.disorient_sigmarots">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">disorient_sigmarots</code><span class="sig-paren">(</span><em>r_g1tog2_g1</em>, <em>l_g_go</em>, <em>cryst_ptgrp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#disorient_sigmarots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.disorient_sigmarots" title="Permalink to this definition">¶</a></dt>
+<dd><p>The disorientation corresponding to each rotation matrix is computed
+and the unique set is returned</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>r_g1tog2_g1: numpy array (n x 3 x 3)</strong></p>
+<blockquote>
+<div><p>Transformation matrices in g1 reference frame</p>
+</div></blockquote>
+<p><strong>l_g_go: numpy array</strong></p>
+<blockquote>
+<div><p>The primitive basis vectors of the underlying lattice in the orthogonal
+reference frame.</p>
+</div></blockquote>
+<p><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Proper point group in Schoenflies notation</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">rots_g1tog2_g1: numpy array (n x 3 x 3)</p>
+<blockquote class="last">
+<div><p>Transformation matrices in g1 reference frame in the fundamental zone</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="csl_utility_functions.check_sigma_rots">
+<code class="descclassname">csl_utility_functions.</code><code class="descname">check_sigma_rots</code><span class="sig-paren">(</span><em>r_g1tog2_g1</em>, <em>sigma</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/csl_utility_functions.html#check_sigma_rots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#csl_utility_functions.check_sigma_rots" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sigma transformation matrix has the property that sigma is the
+smallest integer such that sigma*T is an integer matrix. This condition
+is checked and the numerator and denominatr(sigma) matrices are
+returned</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>r_g1tog2_g1: numpy array (n x 3 x 3)</strong></p>
+<blockquote>
+<div><p>Transformation matrices in g1 reference frame</p>
+</div></blockquote>
+<p><strong>sigma: float</strong></p>
+<blockquote>
+<div><p>sigma number</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">{&#8216;N&#8217;: rots_n, &#8216;D&#8217;: rots_d}: dictionary</p>
+<p>rots_n: numpy array</p>
+<blockquote>
+<div><p>numerator matrices n x 3 x3</p>
+</div></blockquote>
+<p>rots_d: numpy array</p>
+<blockquote class="last">
+<div><p>denominator matrices n x 3 x3</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-find_csl_dsc">
+<span id="csl-dsc-computation"></span><h1>CSL/DSC Computation<a class="headerlink" href="#module-find_csl_dsc" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="find_csl_dsc.find_csl_dsc">
+<code class="descclassname">find_csl_dsc.</code><code class="descname">find_csl_dsc</code><span class="sig-paren">(</span><em>L_G1_GO1</em>, <em>R_G1ToG2_G1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/find_csl_dsc.html#find_csl_dsc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#find_csl_dsc.find_csl_dsc" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calls the csl_finder and dsc_finder and returns
+the CSL and DSC basis vectors in &#8216;g1&#8217; reference frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>L_G1_GO1: numpy array</strong></p>
+<blockquote>
+<div><p>The three basis vectors for the primitive unit cell
+(as columns) are given with respect to the GO1 reference
+frame.</p>
+</div></blockquote>
+<p><strong>R_G1ToG2_G1: 3X3 numpy array</strong></p>
+<blockquote>
+<div><p>The rotation matrix defining the
+transformation in &#8216;G1&#8217; reference frame. The subscript &#8216;G1&#8217; refers
+to the primitive unit cell of G lattice.</p>
+</div></blockquote>
+<p><strong>Returns</strong></p>
+<p><strong>l_csl_g1, l_dsc_g1: numpy arrays</strong></p>
+<blockquote class="last">
+<div><p>The basis vectors of csl and dsc lattices in the g1 reference frame</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="find_csl_dsc.sigma_calc">
+<code class="descclassname">find_csl_dsc.</code><code class="descname">sigma_calc</code><span class="sig-paren">(</span><em>t_g1tog2_g1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/find_csl_dsc.html#sigma_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#find_csl_dsc.sigma_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the sigma of the transformation matrix</p>
+<ul class="simple">
+<li>if det(T) = det(T^{-1}) then sigma1 = sigma2 is returned</li>
+<li>if det(T) neq det(T^{-1}) then max(sigma1, sigma2) is returned</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="find_csl_dsc.reciprocal_mat">
+<code class="descclassname">find_csl_dsc.</code><code class="descname">reciprocal_mat</code><span class="sig-paren">(</span><em>l_g_go</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/find_csl_dsc.html#reciprocal_mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#find_csl_dsc.reciprocal_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>The reciprocal matrix with reciprocal basis vectors is computed for the
+input matrix with primitve basis vectors</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l_g_go: numpy array</strong></p>
+<blockquote>
+<div><p>The primitive basis vectors b1x, b1y, b1z</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">rl_g_go: numpy array</p>
+<blockquote class="last">
+<div><p>The primitve reciprocal basis vectors</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="find_csl_dsc.csl_elem_div_thm_l1">
+<code class="descclassname">find_csl_dsc.</code><code class="descname">csl_elem_div_thm_l1</code><span class="sig-paren">(</span><em>T0</em>, <em>l_g1n_g1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/find_csl_dsc.html#csl_elem_div_thm_l1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#find_csl_dsc.csl_elem_div_thm_l1" title="Permalink to this definition">¶</a></dt>
+<dd><p>The csl basis vectors are obtained from the diagonal matrix using the
+algorithm specified in doi:10.1107/S056773947601231X. There are two
+algorithms specified based on numerators or denominators of the T0 matrix.
+The numerators are used in this function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>T0: numpy array</strong></p>
+<blockquote>
+<div><p>The transformation matrix in G1n reference frame</p>
+</div></blockquote>
+<p><strong>l_g1n_g1: numpy array</strong></p>
+<blockquote>
+<div><p>The &#8216;new&#8217; basis vectors of g1 lattice (g1n) in g1 reference frame</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">l_csl_g1: numpy array</p>
+<blockquote class="last">
+<div><p>The CSL basis vectors in g1 reference frame</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="find_csl_dsc.csl_elem_div_thm_l2">
+<code class="descclassname">find_csl_dsc.</code><code class="descname">csl_elem_div_thm_l2</code><span class="sig-paren">(</span><em>t0</em>, <em>l_g2n_g2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/find_csl_dsc.html#csl_elem_div_thm_l2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#find_csl_dsc.csl_elem_div_thm_l2" title="Permalink to this definition">¶</a></dt>
+<dd><p>The csl basis vectors are obtained from the diagonal matrix using the
+algorithm specified in doi:10.1107/S056773947601231X. There are two
+algorithms specified based on numerators or denominators of the T0 matrix.
+The denominators are used in this function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>T0: numpy array</strong></p>
+<blockquote>
+<div><p>The transformation matrix in G1n reference frame</p>
+</div></blockquote>
+<p><strong>l_g2n_g2: numpy array</strong></p>
+<blockquote>
+<div><p>The &#8216;new&#8217; basis vectors of g2 lattice (g2n) in g2 reference frame</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">l_csl_g2: numpy array</p>
+<blockquote class="last">
+<div><p>The CSL basis vectors in g2 reference frame</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="find_csl_dsc.csl_finder_smith">
+<code class="descclassname">find_csl_dsc.</code><code class="descname">csl_finder_smith</code><span class="sig-paren">(</span><em>r_g1tog2_g1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/find_csl_dsc.html#csl_finder_smith"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#find_csl_dsc.csl_finder_smith" title="Permalink to this definition">¶</a></dt>
+<dd><p>This funciton extracts the CSL basis when transformation between the two
+lattices is given (r_g1tog2_g1). The algorithms used are based on the
+following article: doi:10.1107/S056773947601231X)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>r_g1tog2_g1: numpy array</strong></p>
+<blockquote>
+<div><p>The 3x3 transformation matrix in g1 reference frame</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">l_csl_g1: numpy array</p>
+<blockquote class="last">
+<div><p>3 x 3 matrix with the csl basis vectors as columns</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The &#8220;Reduced&#8221; refer to the use of LLL algorithm to compute a
+basis that is as close to orthogonal as possible.
+(Refer to <a class="reference external" href="http://en.wikipedia.org/wiki/Lattice_reduction">http://en.wikipedia.org/wiki/Lattice_reduction</a>) for further
+detials on the concept of Lattice Reduction</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="find_csl_dsc.check_csl_finder_smith">
+<code class="descclassname">find_csl_dsc.</code><code class="descname">check_csl_finder_smith</code><span class="sig-paren">(</span><em>r_g1tog2_g1</em>, <em>Sigma</em>, <em>L_G1_GO1</em>, <em>L_CSL_G1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/find_csl_dsc.html#check_csl_finder_smith"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#find_csl_dsc.check_csl_finder_smith" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function checks the obtained CSL basis vectors are correct by
+using the following conditions:
+* The CSL basis vectors are integer combinations of basis vectors of
+lattice 1
+* The CSL basis vectors are integer combinations of basis vectors of
+lattice 2
+* The volume enclosed by the CSL is sigma times the volume of lattice 1</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="find_csl_dsc.dsc_finder">
+<code class="descclassname">find_csl_dsc.</code><code class="descname">dsc_finder</code><span class="sig-paren">(</span><em>L_G2_G1</em>, <em>L_G1_GO1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/find_csl_dsc.html#dsc_finder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#find_csl_dsc.dsc_finder" title="Permalink to this definition">¶</a></dt>
+<dd><p>The DSC lattice is computed for the bi-crystal, if the transformation
+matrix l_g2_g1 is given and the basis vectors of the underlying crystal
+l_g_go (in the orthogonal reference go frame) are known. The following
+relationship is used: <strong>The reciprocal of the coincidence site lattice of
+the reciprocal lattices is the DSC lattice</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l_g2_g1: numpy array</strong></p>
+<blockquote>
+<div><p>transformation matrix (r_g1tog2_g1)</p>
+</div></blockquote>
+<p><strong>l_g1_go1: numpy array</strong></p>
+<blockquote>
+<div><p>basis vectors (as columns) of the underlying lattice expressed in the
+orthogonal &#8216;go&#8217; reference frame</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">l_dsc_g1: numpy array</p>
+<blockquote class="last">
+<div><p>The dsc lattice basis vectors (as columns) expressed in the g1 reference</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The &#8220;Reduced&#8221; refer to the use of LLL algorithm to compute a
+basis that is as close to orthogonal as possible.
+(Refer to <a class="reference external" href="http://en.wikipedia.org/wiki/Lattice_reduction">http://en.wikipedia.org/wiki/Lattice_reduction</a>) for further
+detials on the concept of Lattice Reduction</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="find_csl_dsc.check_dsc_finder">
+<code class="descclassname">find_csl_dsc.</code><code class="descname">check_dsc_finder</code><span class="sig-paren">(</span><em>R_G1ToG2_G1</em>, <em>Sigma</em>, <em>L_G1_GO1</em>, <em>L_DSC_G1</em>, <em>L_CSL_G1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/find_csl_dsc.html#check_dsc_finder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#find_csl_dsc.check_dsc_finder" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function checks the obtained DSC basis vectors are correct by
+using the following conditions:
+* Lattice 1 basis vectors are integer combinations of basis vectors of
+the DSC lattice
+* Lattice 2 basis vectors are integer combinations of basis vectors of
+the DSC lattice
+* The volume enclosed by the DSC is 1/sigma times the volume of lattice 1</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-bp_basis">
+<span id="boundary-plane-basis"></span><h1>Boundary Plane Basis<a class="headerlink" href="#module-bp_basis" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="bp_basis.check_int_mats">
+<code class="descclassname">bp_basis.</code><code class="descname">check_int_mats</code><span class="sig-paren">(</span><em>l1</em>, <em>l2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bp_basis.html#check_int_mats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bp_basis.check_int_mats" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function checks whether or not the elements of
+$A_{left}^{-1}$*B are integers</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>l1, l2</strong> : numpy arrays of same dimensions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">cond: numpy boolean array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bp_basis.check_2d_csl">
+<code class="descclassname">bp_basis.</code><code class="descname">check_2d_csl</code><span class="sig-paren">(</span><em>l_pl1_g1</em>, <em>l_pl2_g1</em>, <em>l_csl_g1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bp_basis.html#check_2d_csl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bp_basis.check_2d_csl" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function checks whether or not the CSL basis may be expressed
+as a linear integer combination of the plane bases of planes 1 and 2</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l_pl1_g1, l_pl2_g1: numpy arrays of basis vectors for plane 1 and 2</strong></p>
+<p class="last"><strong>in the g1 reference frame</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bp_basis.lbi_dioph_soln">
+<code class="descclassname">bp_basis.</code><code class="descname">lbi_dioph_soln</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>c</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bp_basis.html#lbi_dioph_soln"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bp_basis.lbi_dioph_soln" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the diophantaine solution for the equation ax + by = c</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="bp_basis.compute_basis_vec">
+<code class="descclassname">bp_basis.</code><code class="descname">compute_basis_vec</code><span class="sig-paren">(</span><em>d_eq</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bp_basis.html#compute_basis_vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bp_basis.compute_basis_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function computes y1, y2, y3 such that h*y1 + k*y2 + l*y3 = 0
+and modulus of y1 is a minimum</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d_eq: numpy array or list of size 3 and dimension 1</strong></p>
+<blockquote>
+<div><p>h = d_eq[0], k = d_eq[1], l = d_eq[2]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">np.array([y1, y2, y3])</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bp_basis.bp_basis">
+<code class="descclassname">bp_basis.</code><code class="descname">bp_basis</code><span class="sig-paren">(</span><em>miller_ind</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bp_basis.html#bp_basis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bp_basis.bp_basis" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function computes the primitve basis of the plane if the
+boundary plane indices are specified</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>miller_ind: numpy array</strong></p>
+<blockquote>
+<div><p>Miller indices of the plane (h k l)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">l_pl_g1: numpy array</p>
+<blockquote class="last">
+<div><p>The primitive basis of the plane in &#8216;g1&#8217; reference frame</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bp_basis.pl_density">
+<code class="descclassname">bp_basis.</code><code class="descname">pl_density</code><span class="sig-paren">(</span><em>l_pl_g1</em>, <em>l_g1_go1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bp_basis.html#pl_density"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bp_basis.pl_density" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a given two-dimensional plane basis, the planar density is
+computed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l_pl_g1: numpy array</strong></p>
+<p><strong>l_g1_go1: numpy array</strong></p>
+<blockquote>
+<div><p>Basis vectors of the underlying lattice with respect to the
+orthogonal reference frame &#8216;go1&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">pd: float</p>
+<blockquote class="last">
+<div><p>Planar density = (1/area covered by plane basis)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bp_basis.csl_finder_2d">
+<code class="descclassname">bp_basis.</code><code class="descname">csl_finder_2d</code><span class="sig-paren">(</span><em>l_pl1_g1</em>, <em>l_pl2_g1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bp_basis.html#csl_finder_2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bp_basis.csl_finder_2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given two plane bases, the 2D CSL bases are obtined by utilizing the
+smith normal form of the transformation between the two bases</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>l_pl1_g1, l_pl2_g1: numpy array</strong></p>
+<blockquote>
+<div><p>Basis vectors of planes 1 and 2 expressed in g1 reference frame</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">l_2d_csl_g1: numpy array</p>
+<blockquote class="last">
+<div><p>The basis vectors of the 2D CSL expressed in g1 reference frame</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bp_basis.gb_2d_csl">
+<code class="descclassname">bp_basis.</code><code class="descname">gb_2d_csl</code><span class="sig-paren">(</span><em>inds</em>, <em>t_mat</em>, <em>l_g_go</em>, <em>inds_type='miller_index'</em>, <em>mat_ref='g1'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bp_basis.html#gb_2d_csl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bp_basis.gb_2d_csl" title="Permalink to this definition">¶</a></dt>
+<dd><p>For a given boundary plane normal &#8216;bp1_g1&#8217; and the misorientation
+matrix &#8216;t_g1tog2_g1&#8217;, the two-dimensional CSL lattice is computed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>inds: numpy array</strong></p>
+<blockquote>
+<div><p>The boundary plane indices</p>
+</div></blockquote>
+<p><strong>inds_type: string</strong></p>
+<blockquote>
+<div><p>{&#8216;miller_index&#8217;, &#8216;normal_go&#8217;, &#8216;normal_g&#8217;}</p>
+</div></blockquote>
+<p><strong>t_mat: numpy array</strong></p>
+<blockquote>
+<div><p>Transformation matrix from g1 to g2 in &#8216;mat_ref&#8217; reference frame</p>
+</div></blockquote>
+<p><strong>mat_ref: string</strong></p>
+<blockquote>
+<div><p>{&#8216;go1&#8217;, &#8216;g1&#8217;}</p>
+</div></blockquote>
+<p><strong>lattice: Lattice class</strong></p>
+<p><strong>Attributes of the underlying lattice</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">l_2d_csl_g1, l_pl1_g1, l_pl2_g1: numpy arrays</p>
+<blockquote class="last">
+<div><p><code class="docutils literal"><span class="pre">l_2d_csl_g1</span></code> is the 2d CSL in g1 ref frame.</p>
+<p><code class="docutils literal"><span class="pre">l_pl1_g1</span></code> is the plane 1 basis in g1 ref frame.</p>
+<p><code class="docutils literal"><span class="pre">l_pl2_g1</span></code> is the plane 2 basis in g1 ref frame.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bp_basis.bicryst_planar_den">
+<code class="descclassname">bp_basis.</code><code class="descname">bicryst_planar_den</code><span class="sig-paren">(</span><em>inds</em>, <em>t_mat</em>, <em>l_g_go</em>, <em>inds_type='miller_index'</em>, <em>mat_ref='go1'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bp_basis.html#bicryst_planar_den"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bp_basis.bicryst_planar_den" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function computes the planar densities of the planes
+1 and 2 and the two-dimensional CSL</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>inds: numpy array</strong></p>
+<blockquote>
+<div><p>The boundary plane indices.</p>
+</div></blockquote>
+<p><strong>inds_type: string</strong></p>
+<blockquote>
+<div><p>{&#8216;miller_index&#8217;, &#8216;normal_go&#8217;, &#8216;normal_g&#8217;}</p>
+</div></blockquote>
+<p><strong>t_mat: numpy array</strong></p>
+<blockquote>
+<div><p>Transformation matrix from g1 to g2 in go1 (or g1) reference frame.</p>
+</div></blockquote>
+<p><strong>mat_ref: string</strong></p>
+<blockquote>
+<div><p>{&#8216;go1&#8217;, &#8216;g1&#8217;}</p>
+</div></blockquote>
+<p><strong>lattice: Lattice class</strong></p>
+<blockquote>
+<div><p>Attributes of the underlying lattice.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">pl_den_pl1, pl_den_pl2: numpy array</p>
+<blockquote>
+<div><p>The planar density of planes 1 and 2.</p>
+</div></blockquote>
+<p>pl_den_csl: numpy array</p>
+<blockquote class="last">
+<div><p>The planare density of the two-dimensional CSL.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-misorient_fz">
+<span id="misorientation-fundamental-zones"></span><h1>Misorientation Fundamental Zones<a class="headerlink" href="#module-misorient_fz" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="misorient_fz.misorient_fz">
+<code class="descclassname">misorient_fz.</code><code class="descname">misorient_fz</code><span class="sig-paren">(</span><em>misquats</em>, <em>cryst_ptgrp</em>, <em>tol=1e-12</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/misorient_fz.html#misorient_fz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#misorient_fz.misorient_fz" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function takes as input the misorientations and the corresponding
+crystallographic point group. It converts them using symmetry operations
+and returns the disorientations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>misquats: Quaternion class</strong></p>
+<blockquote>
+<div><p>Quaternion misorientations</p>
+</div></blockquote>
+<p><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Crystallogrphic point group in Schoenflies notation</p>
+</div></blockquote>
+<p><strong>tol: float</strong></p>
+<blockquote>
+<div><p>Tolerance for the disorientation to belong in the fundamental zone</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">disquats: quaternion class</p>
+<blockquote class="last">
+<div><p>Disorientations for the given misorientations</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="misorient_fz.check_cond">
+<code class="descclassname">misorient_fz.</code><code class="descname">check_cond</code><span class="sig-paren">(</span><em>g</em>, <em>cryst_ptgrp</em>, <em>tol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/misorient_fz.html#check_cond"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#misorient_fz.check_cond" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>g: quaternion object</strong></p>
+<blockquote>
+<div><p>Misorientation</p>
+</div></blockquote>
+<p><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Crystallogrphic point group in Schoenflies notation</p>
+</div></blockquote>
+<p><strong>tol: float</strong></p>
+<blockquote>
+<div><p>Tolerance for the misorientation to belong in the fundamental zone</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">True or False: Boolean</p>
+<blockquote class="last">
+<div><p>Depending on whether or not the misorientation is a disorientation</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-generate_symm_ops">
+<span id="generate-symmetry-operators"></span><h1>Generate Symmetry Operators<a class="headerlink" href="#module-generate_symm_ops" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="generate_symm_ops.generate_symm_mats">
+<code class="descclassname">generate_symm_ops.</code><code class="descname">generate_symm_mats</code><span class="sig-paren">(</span><em>cryst_ptgrp</em>, <em>tol=1e-10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/generate_symm_ops.html#generate_symm_mats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#generate_symm_ops.generate_symm_mats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give crystallographic point group, this function generates all the symmetry
+operations (as matrices) that belong to the point group using &#8216;generators&#8217;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Crystallogrphic point group in Schoenflies notation</p>
+</div></blockquote>
+<p><strong>tol: float</strong></p>
+<blockquote>
+<div><p>The tolerance used to check if two matrices are the same</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">symm_mat: numpy array</p>
+<blockquote class="last">
+<div><p>Size: n x 3 x3</p>
+<p>Symmetry operations as matrices for the corresponding point group</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="generate_symm_ops.generate_symm_quats">
+<code class="descclassname">generate_symm_ops.</code><code class="descname">generate_symm_quats</code><span class="sig-paren">(</span><em>cryst_ptgrp</em>, <em>tol=1e-10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/generate_symm_ops.html#generate_symm_quats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#generate_symm_ops.generate_symm_quats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give crystallographic point group, this function generates all the symmetry
+operations (as quaternions) that belong to the point group
+using &#8216;generators&#8217;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Crystallogrphic point group in Schoenflies notation</p>
+</div></blockquote>
+<p><strong>tol: float</strong></p>
+<blockquote>
+<div><p>The tolerance used to check if two matrices are the same</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">symm_quat: quaternion array</p>
+<blockquote class="last">
+<div><p>Size: n x 5</p>
+<p>Symmetry operations as matrices for the corresponding point group</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="generate_symm_ops.save_symm_pkl">
+<code class="descclassname">generate_symm_ops.</code><code class="descname">save_symm_pkl</code><span class="sig-paren">(</span><em>cryst_ptgrp</em>, <em>op_type</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/generate_symm_ops.html#save_symm_pkl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#generate_symm_ops.save_symm_pkl" title="Permalink to this definition">¶</a></dt>
+<dd><p>A pkl file with the symmetry operations of op_type (matrices or
+quaternions) are created and stored in the &#8216;pkl_files&#8217; directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cryst_ptgrp: string</strong></p>
+<blockquote>
+<div><p>Crystallogrphic point group in Schoenflies notation</p>
+</div></blockquote>
+<p><strong>op_type: {&#8216;matrices&#8217;, &#8216;quats&#8217;}</strong></p>
+<blockquote class="last">
+<div><p>Creates matrices or quaternion symmetry operations depending on op_type</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tools">
+<span id="tools"></span><h1>Tools<a class="headerlink" href="#module-tools" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="tools.vrrotmat2vec">
+<code class="descclassname">tools.</code><code class="descname">vrrotmat2vec</code><span class="sig-paren">(</span><em>mat1</em>, <em>rot_type='proper'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#vrrotmat2vec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.vrrotmat2vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an axis-angle np.array from Rotation Matrix:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mat1: nx3x3 numpy array</strong></p>
+<blockquote>
+<div><p>The nx3x3 rotation matrices to convert</p>
+</div></blockquote>
+<p><strong>rot_type: string (&#8216;proper&#8217; or &#8216;improper&#8217;)</strong></p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">improper</span></code> if there is a possibility of
+having improper matrices in the input,
+<code class="docutils literal"><span class="pre">proper</span></code> otherwise.</p>
+<p>Default: <code class="docutils literal"><span class="pre">proper</span></code></p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">ax_ang</span></code>: numpy 5xn array</p>
+<blockquote class="last">
+<div><p>The 3D rotation axis and angle (ax_ang)</p>
+<p>5 entries:</p>
+<p>First 3: axis</p>
+<p>4: angle</p>
+<p>5: 1 for proper and -1 for improper</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#tools.mat2quat" title="tools.mat2quat"><code class="xref py py-obj docutils literal"><span class="pre">mat2quat</span></code></a>, <a class="reference internal" href="#tools.axang2quat" title="tools.axang2quat"><code class="xref py py-obj docutils literal"><span class="pre">axang2quat</span></code></a>, <a class="reference internal" href="#tools.vrrotvec2mat" title="tools.vrrotvec2mat"><code class="xref py py-obj docutils literal"><span class="pre">vrrotvec2mat</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.vrrotvec2mat">
+<code class="descclassname">tools.</code><code class="descname">vrrotvec2mat</code><span class="sig-paren">(</span><em>ax_ang</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#vrrotvec2mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.vrrotvec2mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Rotation Matrix from Axis-Angle vector:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>``ax_ang``: numpy 5xn array</strong></p>
+<blockquote>
+<div><p>The 3D rotation axis and angle (ax_ang)</p>
+<p>5 entries:</p>
+<p>First 3: axis</p>
+<p>4: angle</p>
+<p>5: 1 for proper and -1 for improper</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">mtx: nx3x3 numpy array</p>
+<blockquote class="last">
+<div><p>3x3 rotation matrices</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#tools.mat2quat" title="tools.mat2quat"><code class="xref py py-obj docutils literal"><span class="pre">mat2quat</span></code></a>, <a class="reference internal" href="#tools.axang2quat" title="tools.axang2quat"><code class="xref py py-obj docutils literal"><span class="pre">axang2quat</span></code></a>, <a class="reference internal" href="#tools.vrrotmat2vec" title="tools.vrrotmat2vec"><code class="xref py py-obj docutils literal"><span class="pre">vrrotmat2vec</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.unique_rows_tol">
+<code class="descclassname">tools.</code><code class="descname">unique_rows_tol</code><span class="sig-paren">(</span><em>data</em>, <em>tol=1e-12</em>, <em>return_index=False</em>, <em>return_inverse=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#unique_rows_tol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.unique_rows_tol" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns the unique rows of the input matrix within that are within the
+specified tolerance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data: numpy array (m x n)</strong></p>
+<p><strong>tol: double</strong></p>
+<blockquote>
+<div><p>tolerance of comparison for each rows
+Default: 1e-12</p>
+</div></blockquote>
+<p><strong>return_index: Boolean</strong></p>
+<blockquote>
+<div><p>flag to return the index of unique rows based on the indices of the output</p>
+</div></blockquote>
+<p><strong>return_inverse: Boolean</strong></p>
+<blockquote>
+<div><p>flag to return the index of unique rows based on the indices of the input</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">unique_rows: numpy array (m&#8217; x n)</p>
+<p>ia: numpy array, integer (m&#8217; x 1)</p>
+<blockquote>
+<div><p>unique rows based on the indices of the output</p>
+</div></blockquote>
+<p>ic: numpy array, integer (m x 1)</p>
+<blockquote class="last">
+<div><p>unique rows based on the indices of the input</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">unique</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.axang2quat">
+<code class="descclassname">tools.</code><code class="descname">axang2quat</code><span class="sig-paren">(</span><em>ax_ang</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#axang2quat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.axang2quat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a quaternion corresponding to the rotation specified by an axis and an angle</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ax_ang: numpy array or a list of (4 x 1)</strong></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">quaternion_rep: numpy array (5 x 1)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.mat2quat">
+<code class="descclassname">tools.</code><code class="descname">mat2quat</code><span class="sig-paren">(</span><em>mat</em>, <em>rot_type='proper'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#mat2quat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.mat2quat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert Rotation Matrices to Quaternions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>mat: numpy array or a list of (3 x 3)</strong></p>
+<blockquote>
+<div><p>rotation matrix</p>
+</div></blockquote>
+<p><strong>rot_type: string (&#8216;proper&#8217; or &#8216;improper&#8217;)</strong></p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">improper</span></code> if there is a possibility of
+having improper matrices in the input,
+<code class="docutils literal"><span class="pre">proper</span></code> otherwise.</p>
+<p>Default: <code class="docutils literal"><span class="pre">proper</span></code></p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">quaternion_rep: numpy array (5 x 1)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#tools.quat2mat" title="tools.quat2mat"><code class="xref py py-obj docutils literal"><span class="pre">quat2mat</span></code></a>, <a class="reference internal" href="#tools.axang2quat" title="tools.axang2quat"><code class="xref py py-obj docutils literal"><span class="pre">axang2quat</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.quat2mat">
+<code class="descclassname">tools.</code><code class="descname">quat2mat</code><span class="sig-paren">(</span><em>q</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#quat2mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.quat2mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert Quaternion Arrays to Rotation Matrix</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>q: numpy array (5 x 1)</strong></p>
+<blockquote>
+<div><p>quaternion</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">g: numpy array (3 x 3)</p>
+<blockquote class="last">
+<div><p>rotation matrix</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#tools.mat2quat" title="tools.mat2quat"><code class="xref py py-obj docutils literal"><span class="pre">mat2quat</span></code></a>, <a class="reference internal" href="#tools.axang2quat" title="tools.axang2quat"><code class="xref py py-obj docutils literal"><span class="pre">axang2quat</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.lll_reduction">
+<code class="descclassname">tools.</code><code class="descname">lll_reduction</code><span class="sig-paren">(</span><em>matrix</em>, <em>delta=0.75</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#lll_reduction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.lll_reduction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function has been borrowed from pymatgen project with slight changes
+in input and output handling.
+Link to the project:</p>
+<blockquote>
+<div><a class="reference external" href="http://pymatgen.org/">http://pymatgen.org/</a></div></blockquote>
+<dl class="docutils">
+<dt>Link to the source code:</dt>
+<dd><a class="reference external" href="https://github.com/materialsproject/pymatgen/blob/92ee88ab6a6ec6e27b717150931e6d484d37a4e6/pymatgen/core/lattice.py">https://github.com/materialsproject/pymatgen/blob/92ee88ab6a6ec6e27b717150931e6d484d37a4e6/pymatgen/core/lattice.py</a></dd>
+</dl>
+<p>Performs a Lenstra-Lenstra-Lovasz lattice basis reduction to obtain a
+c-reduced basis. This method returns a basis which is as &#8220;good&#8221; as
+possible, with &#8220;good&#8221; defined by orthongonality of the lattice vectors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>delta: float</strong></p>
+<blockquote>
+<div><p>Reduction parameter.</p>
+<p>Default of 0.75 is usually fine.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a: numpy array</p>
+<blockquote class="last">
+<div><p>Reduced lattice:</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.eq">
+<code class="descclassname">tools.</code><code class="descname">eq</code><span class="sig-paren">(</span><em>m1</em>, <em>m2</em>, <em>tol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#eq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.eq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the two rotation matrices are the same</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.message_display">
+<code class="descclassname">tools.</code><code class="descname">message_display</code><span class="sig-paren">(</span><em>CheckMatrix</em>, <em>Checknumber</em>, <em>Message</em>, <em>Precis</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#message_display"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.message_display" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function displays a Message (passed as input) and gives and error
+in case the matrix passed to it is not integral.`</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.ehermite">
+<code class="descclassname">tools.</code><code class="descname">ehermite</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#ehermite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.ehermite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Elementary Hermite tranformation.
+For integers a and b, E = ehermite(a,b) returns
+an integer matrix with determinant 1 such that E * [a;b] = [g;0],
+where g is the gcd of a and b.
+E = ehermite(a,b)
+This function is in some ways analogous to GIVENS.
+John Gilbert, 415-812-4487, December 1993
+<a class="reference external" href="mailto:gilbert&#37;&#52;&#48;parc&#46;xerox&#46;com">gilbert<span>&#64;</span>parc<span>&#46;</span>xerox<span>&#46;</span>com</a>
+Xerox Palo Alto Research Center</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a, b: integers</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">E: numpy array 3x3</p>
+<blockquote class="last">
+<div><p>integer matrix with determinant 1 such that E * [a;b] = [g;0],
+where g is the gcd of a and b.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.smith_nf">
+<code class="descclassname">tools.</code><code class="descname">smith_nf</code><span class="sig-paren">(</span><em>matrix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#smith_nf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.smith_nf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Smith normal form of an integer matrix.
+[U,S,V] = smith(A) returns integer matrices U, S, and V such that
+A = U*S*V&#8217;,
+S is diagonal and nonnegative, S(i,i) divides S(i+1,i+1) for all i,
+det U =+-1, and det V =+-1.
+s = smith(A) just returns diag(S).
+Uses function ehermite.
+[U,S,V] = smith(A);</p>
+<p>This function is in some ways analogous to SVD.
+Originally implemented by: John Gilbert, 415-812-4487, December 1993
+<a class="reference external" href="mailto:gilbert&#37;&#52;&#48;parc&#46;xerox&#46;com">gilbert<span>&#64;</span>parc<span>&#46;</span>xerox<span>&#46;</span>com</a>
+Xerox Palo Alto Research Center</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>matrix: numpy array</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">S: numpy array</p>
+<blockquote>
+<div><p>S is diagonal and nonnegative, S(i,i) divides S(i+1,i+1) for all i</p>
+</div></blockquote>
+<p>U: numpy array</p>
+<blockquote>
+<div><p>det(U) =+-1</p>
+</div></blockquote>
+<p>V: numpy array</p>
+<blockquote class="last">
+<div><p>det(V) =+-1</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.extgcd">
+<code class="descclassname">tools.</code><code class="descname">extgcd</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#extgcd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.extgcd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a tuple (u, v, d); they are the greatest common divisor d
+of two integers x and y and u, v such that d = x * u + y * v.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="tools.Col">
+<em class="property">class </em><code class="descclassname">tools.</code><code class="descname">Col</code><a class="reference internal" href="_modules/tools.html#Col"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.Col" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is defined to ouput a word or sentence in a different color
+to the standard shell.
+The colors available are:
+<code class="docutils literal"><span class="pre">pink</span></code>, <code class="docutils literal"><span class="pre">blue</span></code>, <code class="docutils literal"><span class="pre">green</span></code>, <code class="docutils literal"><span class="pre">dgrn</span></code>: dark green, <code class="docutils literal"><span class="pre">yellow</span></code>, <code class="docutils literal"><span class="pre">amber</span></code></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tools.Col.c_prnt" title="tools.Col.c_prnt"><code class="xref py py-obj docutils literal"><span class="pre">c_prnt</span></code></a>(text,&nbsp;color)</td>
+<td>Print a string in color,</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="tools.Col.c_prnt">
+<code class="descname">c_prnt</code><span class="sig-paren">(</span><em>text</em>, <em>color</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#Col.c_prnt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.Col.c_prnt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a string in color,</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>Col: Col class instance</strong></p>
+<blockquote>
+<div><p>an instance of the <code class="docutils literal"><span class="pre">Col</span></code> class</p>
+</div></blockquote>
+<p><strong>text: string</strong></p>
+<blockquote>
+<div><p>Text to be shown in color.</p>
+</div></blockquote>
+<p><strong>color: string</strong></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">N/A</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to GBpy&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#tutorials">Tutorials</a></li>
+<li><a class="reference internal" href="#module-lattice">Lattice Class</a></li>
+<li><a class="reference internal" href="#module-quaternion">Geometry Tools</a></li>
+<li><a class="reference internal" href="#module-integer_manipulations">Integer Manipulations</a></li>
+<li><a class="reference internal" href="#module-csl_utility_functions">CSL Utility Function</a></li>
+<li><a class="reference internal" href="#module-find_csl_dsc">CSL/DSC Computation</a></li>
+<li><a class="reference internal" href="#module-bp_basis">Boundary Plane Basis</a></li>
+<li><a class="reference internal" href="#module-misorient_fz">Misorientation Fundamental Zones</a></li>
+<li><a class="reference internal" href="#module-generate_symm_ops">Generate Symmetry Operators</a></li>
+<li><a class="reference internal" href="#module-tools">Tools</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">GBpy 0.1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Arash D. Banadaki, Srikanth Patala.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
