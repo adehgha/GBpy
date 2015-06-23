@@ -2,7 +2,7 @@ cnumpy.core.multiarray
 _reconstruct
 p0
 (cquaternion
-quaternion
+Quaternion
 p1
 (I0
 tp2

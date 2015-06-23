@@ -454,7 +454,6 @@ def vrrotvec2mat(ax_ang):
     #file_dir = os.path.dirname(os.path.realpath(__file__))
     #path_dir2 = file_dir + '/../geometry/'
     #sys.path.append(path_dir2)
-    import quaternion as quat
     
     if ax_ang.ndim == 1:
         if np.size(ax_ang) == 5:
@@ -677,6 +676,7 @@ def quat2mat(q):
     --------
     mat2quat, axang2quat
     """
+    import quaternion as quat
     sz = quat.get_size(q)
     q0 = quat.getq0(q)
     q1 = quat.getq1(q)
@@ -730,15 +730,15 @@ def mat2quat(mat, rot_type='proper'):
     --------
     quat2mat, axang2quat
     """
+    import quaternion as quat
     ax_ang = vrrotmat2vec(mat, rot_type)
-
     q0 = np.cos(ax_ang[3, :]/2)
     q1 = ax_ang[0, :]*np.sin(ax_ang[3, :]/2)
     q2 = ax_ang[1, :]*np.sin(ax_ang[3, :]/2)
     q3 = ax_ang[2, :]*np.sin(ax_ang[3, :]/2)
     qtype = ax_ang[4, :]
 
-    return quat.quaternion(q0, q1, q2, q3, qtype)
+    return quat.Quaternion(q0, q1, q2, q3, qtype)
 # -----------------------------------------------------------------------------------------------------------
 
 
@@ -754,6 +754,8 @@ def axang2quat(ax_ang):
     ----------
     quaternion_rep: numpy array (5 x 1)
     """
+    import quaternion as quat
+
     if ax_ang.ndim == 1:
         if np.size(ax_ang) == 5:
             ax_ang = np.reshape(ax_ang, (5, 1))
@@ -787,7 +789,7 @@ def axang2quat(ax_ang):
     q3 = z*s
 
     qtype = ax_ang[4, :]
-    return quat.quaternion(q0, q1, q2, q3, qtype)
+    return quat.Quaternion(q0, q1, q2, q3, qtype)
 # -----------------------------------------------------------------------------------------------------------
 
 # mats = np.zeros((20, 3, 3))

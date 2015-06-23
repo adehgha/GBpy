@@ -13,32 +13,34 @@ import string
 file_dir = os.path.dirname(os.path.realpath(__file__))
 # Load Rotations Transformations , Matrix operations,
 # Unique Rows With Tolerance, Modules
-path_dir = file_dir + '/../../tools/'
+path_dir = file_dir + '/../../'
 sys.path.append(path_dir)
-import transformations as trans
+import tools as tl
+# import transformations as trans
 
 # # Load lattice module
 # path_dir = file_dir + '/../../lattice/'
 # sys.path.append(path_dir)
 # import lattice as lat
 
-# Load Quaternion Module
-path_dir = file_dir + '/../../geometry/'
-sys.path.append(path_dir)
+# # Load Quaternion Module
+# path_dir = file_dir + '/../../geometry/'
+# sys.path.append(path_dir)
 import quaternion as quat
 
-# Load Misorientation Fundamental Zones Module
-path_dir = file_dir + '/../../symmetry/'
-sys.path.append(path_dir)
+# # Load Misorientation Fundamental Zones Module
+# path_dir = file_dir + '/../../symmetry/'
+# sys.path.append(path_dir)
 import misorient_fz as mis_fz
+
+
+# path_dir = file_dir + '/../../'
+# sys.path.append(path_dir)
+import integer_manipulations as int_man
 
 path_dir = file_dir + '/../'
 sys.path.append(path_dir)
 import csl_utility_functions as csl_util
-
-path_dir = file_dir + '/../../'
-sys.path.append(path_dir)
-import integer_manipulations as int_man
 
 
 ####
@@ -213,7 +215,7 @@ def compare_sig_rots(sig_rots_m1, sig_rots_p, l1):
                                 td2 = rot_dm[ct3, :, :]
                                 mat_m1 = tn2.astype(float) / td2.astype(float)
                                 mat_m2 = np.dot(np.dot(l_g_go, mat_m1), l_go_g)
-                                quat_m = trans.mat2quat(mat_m2)
+                                quat_m = tl.mat2quat(mat_m2)
                                 disquat_m= mis_fz.misorient_fz(quat_m, cryst_ptgrp)
 
                                 tcheck = 0
@@ -223,7 +225,7 @@ def compare_sig_rots(sig_rots_m1, sig_rots_p, l1):
                                         td1 = rot_dp[ct2, :, :]
                                         matp1 = tn1.astype(float) / td1.astype(float)
                                         matp2 = np.dot(np.dot(l_g_go, matp1), l_go_g)
-                                        quat_p2 = trans.mat2quat(matp2)
+                                        quat_p2 = tl.mat2quat(matp2)
                                         disquat_p2 = mis_fz.misorient_fz(quat_p2, cryst_ptgrp)
 
                                         if quat.eq(disquat_p2, disquat_m, 1e-10):
@@ -240,14 +242,14 @@ def compare_sig_rots(sig_rots_m1, sig_rots_p, l1):
                         td1 = rot_dp[0, :, :]
                         matp1 = tn1.astype(float) / td1.astype(float)
                         matp2 = np.dot(np.dot(l_g_go, matp1), l_go_g)
-                        quat_p2 = trans.mat2quat(matp2)
+                        quat_p2 = tl.mat2quat(matp2)
                         disquat_p2 = mis_fz.misorient_fz(quat_p2, cryst_ptgrp)
 
                         tn2 = rot_nm[0, :, :]
                         td2 = rot_dm[0, :, :]
                         mat_m1 = tn2.astype(float) / td2.astype(float)
                         mat_m2 = np.dot(np.dot(l_g_go, mat_m1), l_go_g)
-                        quat_m = trans.mat2quat(mat_m2)                        
+                        quat_m = tl.mat2quat(mat_m2)                        
                         disquat_m = mis_fz.misorient_fz(quat_m, cryst_ptgrp)
 
                         # if mat_ops.eq(mat_m, matp2, 1e-10):
@@ -282,10 +284,11 @@ def test_lit_common_cslmats(elem_type):
                 compare_sig_rots(sig_rots_m3, sig_rots_p, l1)
 
 ####
-def test_lit_specific_cslmats(elem_type):
+def test_lit_specific_cslmats(elem_type, sig_type):
         """
         """
-        sig_type = 'specific'
+        # sig_type = 'specific'
+        # sig_type = 'common'
 
         # Load prior lit cls
         mat_file = '../prior_lit_csls/'+ elem_type + '_lit_csl_' + sig_type + '_rotations' + '.pkl'
@@ -304,3 +307,11 @@ def test_lit_specific_cslmats(elem_type):
                         sig_rots_p[ct2] = csl_util.csl_rotations(int(ct2), sig_type, l1)
                         sig_rots_m3[ct2] = sig_rots_m2[ct2]
                         compare_sig_rots(sig_rots_m3, sig_rots_p, l1)
+
+# test_lit_specific_cslmats('hP_Id', 'common')
+# test_lit_specific_cslmats('hR_Id', 'common')
+# test_lit_specific_cslmats('tP_Id', 'common')
+# test_lit_specific_cslmats('hP_ca', 'specific')
+# test_lit_specific_cslmats('hR_ca', 'specific')
+test_lit_specific_cslmats('tP_ca', 'specific')
+

@@ -82,5 +82,5 @@ def sph2vec(theta, rho, *args):
 
 
 def idquaternion():
-    return quat.quaternion(1, 0, 0, 0)
+    return quat.Quaternion(1, 0, 0, 0, 1)
 # -----------------------------------------------------------------------------------------------------------

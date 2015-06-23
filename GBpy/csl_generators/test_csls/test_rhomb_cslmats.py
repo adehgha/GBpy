@@ -155,6 +155,7 @@ def test_tet_common_cslmats(l1):
 
 
 
+# test_case = 1;
 # if test_case == 1:
 #     sig_type = 'common'
 #     l1 = lat.Lattice()

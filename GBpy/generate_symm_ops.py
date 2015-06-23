@@ -459,11 +459,11 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 1
             order_ptgrp = n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'C2':
@@ -471,13 +471,13 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 2
             order_ptgrp = n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'C3':
@@ -485,13 +485,13 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 2
             order_ptgrp = n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'C4':
@@ -499,13 +499,13 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 2
             order_ptgrp = n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'C6':
@@ -513,13 +513,13 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 2
             order_ptgrp = n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'D2':
@@ -527,14 +527,14 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 3
             order_ptgrp = 2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
             generators[:, 2] = trans.axang2quat(np.array([1, 0, 0, np.pi, 1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'D3':
@@ -542,14 +542,14 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 3
             order_ptgrp = 2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
             generators[:, 2] = trans.axang2quat(np.array([1, 0, 0, np.pi, 1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'D4':
@@ -557,14 +557,14 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 3
             order_ptgrp = 2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
             generators[:, 2] = trans.axang2quat(np.array([1, 0, 0, np.pi, 1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'D6':
@@ -572,21 +572,21 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 3
             order_ptgrp = 2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
             generators[:, 2] = trans.axang2quat(np.array([1, 0, 0, np.pi, 1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'T':
             gsz = 3
             order_ptgrp = 12
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/2, 1]))
@@ -594,14 +594,14 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
                 np.array([1, 1, 1, 2*np.pi/3, 1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'O':
             gsz = 3
             order_ptgrp = 24
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, np.pi/2, 1]))
@@ -609,7 +609,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
                 np.array([1, 0, 0, np.pi/2, 1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
     if cryst_ptgrp in laue_grps:
@@ -619,12 +619,12 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 2
             order_ptgrp = 2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'C2h':
@@ -632,14 +632,14 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 3
             order_ptgrp = 2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
             generators[:, 2] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'C3i':
@@ -647,14 +647,14 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 3
             order_ptgrp = 2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
             generators[:, 2] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'C4h':
@@ -662,14 +662,14 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 3
             order_ptgrp = 2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
             generators[:, 2] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'C6h':
@@ -677,14 +677,14 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 3
             order_ptgrp = 2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
             generators[:, 2] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'D2h':
@@ -692,7 +692,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 4
             order_ptgrp = 2*2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
@@ -700,7 +700,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             generators[:, 3] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'D3d':
@@ -708,7 +708,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 4
             order_ptgrp = 2*2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
@@ -716,7 +716,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             generators[:, 3] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'D4h':
@@ -724,7 +724,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 4
             order_ptgrp = 2*2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
@@ -732,7 +732,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             generators[:, 3] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'D6h':
@@ -740,7 +740,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             gsz = 4
             order_ptgrp = 2*2*n
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/n, 1]))
@@ -748,14 +748,14 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             generators[:, 3] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'Td':
             gsz = 4
             order_ptgrp = 2*12
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, 2*np.pi/2, 1]))
@@ -764,14 +764,14 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             generators[:, 3] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
         elif cryst_ptgrp == 'Oh':
             gsz = 4
             order_ptgrp = 2*24
             # Generators
-            generators = quat.quaternion(np.zeros((5, gsz)))
+            generators = quat.Quaternion(np.zeros((5, gsz)))
             generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
             generators[:, 1] = trans.axang2quat(
                 np.array([0, 0, 1, np.pi/2, 1]))
@@ -780,7 +780,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             generators[:, 3] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
 
             # Symmetry Operations
-            symm_quat = quat.quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
     count1 = 1
@@ -794,7 +794,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             tM1 = quat.mtimes(t1, t2)
             tcheck = 0
             ct2 = np.arange(0, numops+1)
-            if quat.eq(tM1, symm_quat[:, ct2], tol):
+            if np.any(quat.eq(tM1, symm_quat[:, ct2], tol)):
                 tcheck = 1
 
             if tcheck == 0:
@@ -838,3 +838,11 @@ def save_symm_pkl(cryst_ptgrp, op_type):
     # Move to pkl_files
     shutil.move(pkl_file, 'pkl_files/')
 # -----------------------------------------------------------------------------------------------------------
+
+# save_symm_pkl('D3', 'quats')
+# save_symm_pkl('D4', 'quats')
+# save_symm_pkl('D6', 'quats')
+save_symm_pkl('D6h', 'quats')
+save_symm_pkl('O', 'quats')
+save_symm_pkl('Oh', 'quats')
+

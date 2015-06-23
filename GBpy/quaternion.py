@@ -7,47 +7,120 @@
 
 
 import numpy as np
-# import vector3d as vec3d
+import tools as tools
 import geometry_tools as gmt
 
 
 ######################################################################
-class quaternion(np.ndarray):
+class Quaternion(np.ndarray):
     """
-    The quaternion class is defined to define the quaternion parameterization
-    of rotation and their operations
+    The Quaternion class is defined to represent the quaternion parameterization of rotation and their operations.
+    The object of this class is stored in form of a quaternion array, which inherits all the properties of
+    numpy.ndarray. The dimension of this array is (5 x n). Each quaterinion in the quaterinion array is referred
+    as q(i). Each quaterinion has 5 attributes saved, namely, q0, q1, q2, q3 and type. Where qn have the usual
+    meaning and type implies proper or improper type of rotations. Type has allowed values +1 and -1,
+    for proper and improper rotations, respectively.
+
+    The class has the following methods getq0, getq1, getq2, getq3, get_type, get_size, display, antipodal, inverse,
+    mtimes, eq, quat2mat and mat2quat. Please read the documentation included with each method to learn more.
     ...
 
     Attributes
-    ----------
-    quaternion: numpy array
-        5 x n dimensions
+    -----------
+    Quaternion: quaternion array, has all the properties of a numpy.ndarray
+    * array of dimension (5 x n)
+    * data type is Quaternion.
 
+    Methods
+    --------
+    getq0()
+    * Returns the q0 component for each quaternion present in the input quaternion array.
+
+    getq1()
+    * Returns the q1 component for each quaternion present in the input quaternion array.
+
+    getq2()
+    * Returns the q2 component for each quaternion present in the input quaternion array.
+
+    getq3()
+    * Returns the q3 component for each quaternion present in the input quaternion array.
+
+    get_type()
+    * Returns the rotation type of each quaternion present in the input quaternion array.
+
+    get_size()
+    * Returns the size of input quaternion array.
+
+    display()
+    * Returns a string which displays the input quaternion array in human readable format.
+
+    antipodal()
+    * Returns the antipodal (or equivalent) quaternions such that q0 component is positive.
+
+    inverse()
+    * Returns the inverse quaternions for a given input quaternion array.
+
+    mtimes()
+    * Calculates the quaternion multiplication of two input quaternions.
+
+    eq()
+    * Checks whether the two input quaternions are equal or not.
+
+    quat2mat()
+    * Converts the input quaternion array to a rotation matrix array.
+
+    mat2quat()
+    * Converts the input rotation matrix array or list, to a quaternion array.
+
+    Notes
+    ------
+    * An object of this class can be created using 0, 1, 4 or 5, input arguments.
+    * If the rotation type is not specified explicitly then it is always set to the default value of 1, i.e.
+    proper rotation type.
+    * If no argument is specified, an empty quaternion array of proper rotation type is created. Note that
+    this is not an actual rotation. The sum of the squares of components of a rotation quaternion must
+    be unity.
+    * In case at least 1 argument is specified the object may be created by one of the following allowed cases.
+
+        Case 1:
+        * narg == 1; type(arg) == Quaternion
+        A copy the argument is created as an object.
+
+        Case2:
+        * narg == 1; type(arg) == int
+        A (5 x arg) quaternion array is created and populated with NaN values for components.
+
+        Case3:
+        * narg ==1; type(arg) == np.ndarray; dim(arg) == 1
+        A 5 x 1 quaternion array is created from input argument array only if it has 4 or 5 elements.
+
+        Case4:
+        * narg == 1; type(arg) == np.ndarray; dim(arg) == 2
+        If the shape of argument array is (4 x n) or (5 x n) corresponding (5 x n) quaternion array is created.
+        If the shape of argument array is (n x 4) or (n x 5) then it is transposed and corresponding 5 x n 
+	quaternion array is created.
+        Note that the allowed shapes for the input argument in this case are (4/5 x n) or (n x 4/5)
+
+        Case5:
+        * narg == 4 or 5; type(arg) == float or integer or tuple with numeric values or np.ndarray
+        If 4 or 5 arguments are given then a quaternion array may only be created if all of the arguments are numeric.
+        The total number of elements for each input argument should be the same.
+        If an argument is a multi dimensional numpy array then it should be symmetric in shape and total number of
+        inner elements in this array should be the same as the number of elements for rest of the arguments. In such
+	cases the np.ndarray is treated as a one dimensional array, i.e. a (2 x2) array is used as a (1 x 4) array would.
+        Arguments may be of different type, i.e. a tuple of numerals and a multi dimension np.ndarray may be used
+        simultaneously for a quaterinion array creation.
+        The n (4 or 5) arguments should contain the respective qn components for the quaternions that are to be stored
+        in the quaternion array.
+
+    * The above 5 cases are the only allowed ways to create an object of this class. An error is raised for any other
+     case.
+
+     See Also
+     ---------
+     * numpy.ndarray
+     * geometry_tools.isnumeric
     """
-
-    # 1) The first four rows are the components q0, q1, q2, q3
-    # 2) The fifth component is 1 or -1:
-    #     a)  1 corresponds to proper rotation
-    #     b) -1 corresponds to improper rotation
-
-    # Possible Inputs:
-    # 0) nargs = 0: Output - Empty Array
-    # 1) nargs = 1:
-    #      a) Quaternion
-    #      b) 3d vector array
-    #      c) Numpy Array
-    # **2 and 3 Still Need Implementation**
-    # 2) nargs = 2:
-    #      a) q0 array (Constant or 1xn); Vector 3d Array
-    #      b) 1xn Rotation Type array; Numpy Array
-    # 3) nargs = 3:
-    #     a) q0 array (Constant or 1xn)
-    #     b) Vector 3d Array
-    #     c) 1xn Rotation Type Array
-    # 4) nargs = 4: a, b, c, d
-    # 5) nargs = 5: a, b, c, d, Type
-
-
     def __new__(cls, *args):
         nargs = len(args)
 
@@ -60,20 +133,13 @@ class quaternion(np.ndarray):
         ##############################################################
         elif nargs == 1:
 
-            if type(args[0]) is quaternion:
+            if type(args[0]) is Quaternion:
                 quatarray = args[0]
 
                 if np.shape(args[0])[0] == 5:
                     obj = quatarray
                 else:
                     raise Exception('Wrong Quaternion Slice')
-
-        #     elif type(args[0]) is vec3d.vector3d:
-        #         va = np.zeros((1, vec3d.get_size(args[0])))
-        #         vec = vec3d.double(args[0])
-        #         v_type = np.ones((1, vec3d.get_size(args[0])))
-        #         quatarray = np.concatenate((va, vec, v_type), axis=0)
-        #         obj = quatarray.view(cls)
 
             elif type(args[0]) is int:
                 quatarray = np.empty((5, args[0]))
@@ -113,8 +179,8 @@ class quaternion(np.ndarray):
 
                         if q_shape[1] == 4:
                             quat1 = args[0].transpose()
-                            v_type = np.ones((1, q_shape[1]))
-                            quatarray = np.vstack((quat1, v_type))
+                            v_type = np.ones((1, q_shape[0]))
+                            quatarray = np.row_stack((quat1, v_type))
 
                         else:
                             quatarray = args[0].transpose()
@@ -129,9 +195,64 @@ class quaternion(np.ndarray):
 
             else:
                 err_str1 = 'Wrong Input type: Must be a'
-                err_str2 = 'quaternion or vector3d or numpy array'
+                err_str2 = 'Quaternion or vector3d or numpy array'
                 err_str = err_str1+err_str2
                 raise Exception(err_str)
+        ##############################################################
+        elif nargs == 4:
+            if gmt.isnumeric(args[0]):
+                if np.size(args[0]) == 1:
+                    va = np.asarray(args[0]).reshape((np.size(args[0])))
+                    vb = np.asarray(args[1]).reshape((np.size(args[1])))
+                    vc = np.asarray(args[2]).reshape((np.size(args[2])))
+                    vd = np.asarray(args[3]).reshape((np.size(args[3])))
+                    v_type = np.ones((np.size(args[3])))
+                else:
+                    va = np.asarray(args[0]).reshape((1, np.size(args[0])))
+                    vb = np.asarray(args[1]).reshape((1, np.size(args[1])))
+                    vc = np.asarray(args[2]).reshape((1, np.size(args[2])))
+                    vd = np.asarray(args[3]).reshape((1, np.size(args[3])))
+                    v_type = np.ones((1, np.size(args[3])))
+                quatarray = np.concatenate((va, vb, vc, vd, v_type), axis=0)
+                obj = quatarray.view(cls)
+
+            else:
+                raise Exception('Wrong Input Types')
+        ##############################################################
+        elif nargs == 5:
+            if gmt.isnumeric(args[0]):
+                if np.size(args[0]) == 1:
+                    va = np.asarray(args[0]).reshape((np.size(args[0])))
+                    vb = np.asarray(args[1]).reshape((np.size(args[1])))
+                    vc = np.asarray(args[2]).reshape((np.size(args[2])))
+                    vd = np.asarray(args[3]).reshape((np.size(args[3])))
+                    v_type = np.asarray(args[4]).reshape((np.size(args[4])))
+                else:
+                    va = np.asarray(args[0]).reshape((1, np.size(args[0])))
+                    vb = np.asarray(args[1]).reshape((1, np.size(args[1])))
+                    vc = np.asarray(args[2]).reshape((1, np.size(args[2])))
+                    vd = np.asarray(args[3]).reshape((1, np.size(args[3])))
+                    v_type = np.asarray(args[4]).reshape((1, np.size(args[4])))
+                if np.any(np.logical_and(v_type != 1, v_type != -1)):
+                    raise Exception('Wrong Input for v_type')
+                quatarray = np.concatenate((va, vb, vc, vd, v_type), axis=0)
+                obj = quatarray.view(cls)
+            else:
+                raise Exception('Wrong Input Types')
+
+        else:
+            raise Exception('Wrong Number of Arguments')
+
+        return obj
+
+        # ##############################################################
+        #     elif type(args[0]) is vec3d.vector3d:
+        #         va = np.zeros((1, vec3d.get_size(args[0])))
+        #         vec = vec3d.double(args[0])
+        #         v_type = np.ones((1, vec3d.get_size(args[0])))
+        #         quatarray = np.concatenate((va, vec, v_type), axis=0)
+        #         obj = quatarray.view(cls)
+        # ##############################################################
 
         # ##############################################################
         # elif nargs == 2:
@@ -219,62 +340,35 @@ class quaternion(np.ndarray):
         #     obj = quatarray.view(cls)
         #
         ##############################################################
-        elif nargs == 4:
-
-            if gmt.isnumeric(args[0]):
-                if np.size(args[0]) == 1:
-                    va = np.asarray(args[0]).reshape((np.size(args[0])))
-                    vb = np.asarray(args[1]).reshape((np.size(args[1])))
-                    vc = np.asarray(args[2]).reshape((np.size(args[2])))
-                    vd = np.asarray(args[3]).reshape((np.size(args[3])))
-                    v_type = np.ones((np.size(args[3])))
-                else:
-                    va = np.asarray(args[0]).reshape((1, np.size(args[0])))
-                    vb = np.asarray(args[1]).reshape((1, np.size(args[1])))
-                    vc = np.asarray(args[2]).reshape((1, np.size(args[2])))
-                    vd = np.asarray(args[3]).reshape((1, np.size(args[3])))
-                    v_type = np.ones((1, np.size(args[3])))
-                quatarray = np.concatenate((va, vb, vc, vd, v_type), axis=0)
-                obj = quatarray.view(cls)
-
-            else:
-                raise Exception('Wrong Input Types')
-        ##############################################################
-        elif nargs == 5:
-            if gmt.isnumeric(args[0]):
-                if np.size(args[0]) == 1:
-                    va = np.asarray(args[0]).reshape((np.size(args[0])))
-                    vb = np.asarray(args[1]).reshape((np.size(args[1])))
-                    vc = np.asarray(args[2]).reshape((np.size(args[2])))
-                    vd = np.asarray(args[3]).reshape((np.size(args[3])))
-                    v_type = np.asarray(args[4]).reshape((np.size(args[4])))
-                else:
-                    va = np.asarray(args[0]).reshape((1, np.size(args[0])))
-                    vb = np.asarray(args[1]).reshape((1, np.size(args[1])))
-                    vc = np.asarray(args[2]).reshape((1, np.size(args[2])))
-                    vd = np.asarray(args[3]).reshape((1, np.size(args[3])))
-                    v_type = np.asarray(args[4]).reshape((1, np.size(args[4])))
-                if np.any(np.logical_and(v_type != 1, v_type != -1)):
-                    raise Exception('Wrong Input for v_type')
-                quatarray = np.concatenate((va, vb, vc, vd, v_type), axis=0)
-                obj = quatarray.view(cls)
-            else:
-                raise Exception('Wrong Input Types')
-
-        else:
-            raise Exception('Wrong Number of Arguments')
-
-        return obj
 
     def __init__(self, *args, **kwargs):
-        pass
+        super(Quaternion, self).__init__(*args, **kwargs)
 
+    # def __str__(q):
+    #     # super(Quaternion, q).__str__()
+    #     """
+    #     Display Quaternion Array in human readable format
+    #     """
+    #     # q = self
+    #     if q.ndim == 1:
+    #         str1 = 'Quaternion: \n q0 \t \t q1 \t \t q2 \t \t q3 \t \t type \n'
+    #         str1 += ("%f \t %f \t %f \t %f \t %d \n" %
+    #                  (q[0, ], q[1, ], q[2, ], q[3, ], q[4, ]))
+    #     else:
+    #         s1 = np.shape(q)[1]
+    #         str1 = 'Quaternion: \n q0 \t \t q1 \t \t q2 \t \t q3 \t \t type \n'
+    #         for ct1 in range(s1):
+    #             str1 += ("%f \t %f \t %f \t %f \t %d \n" %
+    #                      (q[0, ct1], q[1, ct1],
+    #                       q[2, ct1], q[3, ct1], q[4, ct1]))
+    #
+    #     return str1
     # def __array_finalize__(self, obj):
     #     print type(obj)
     #     if type(obj) is np.ndarray:
     #         print 'Ndarray type'
     #         return
-    #     elif type(obj) is quaternion:
+    #     elif type(obj) is Quaternion:
     #         print 'Quaternion Type'
     #         if self.ndim == 1:
     #             print 'Ndim = 1'
@@ -289,110 +383,176 @@ class quaternion(np.ndarray):
     #             else:
     #                 raise Exception('Wrong Quaternion Slicing')
 
-    def __str__(self):
-        """
-        Display Quaternion Array in human readable format
-        """
-        q = self
-        if q.ndim == 1:
-            str1 = 'Quaternion: \n q0 \t \t q1 \t \t q2 \t \t q3 \t \t type \n'
-            str1 += ("%f \t %f \t %f \t %f \t %d \n" %
-                     (q[0, ], q[1, ], q[2, ], q[3, ], q[4, ]))
-        else:
-            s1 = np.shape(q)[1]
-            str1 = 'Quaternion: \n q0 \t \t q1 \t \t q2 \t \t q3 \t \t type \n'
-            for ct1 in range(s1):
-                str1 += ("%f \t %f \t %f \t %f \t %d \n" %
-                         (q[0, ct1], q[1, ct1],
-                          q[2, ct1], q[3, ct1], q[4, ct1]))
-
-        return str1
-
-
-def double(g):
-    """
-    Convert to numpy array to use all the numpy array manipulation routines
-
-    Parameters
-    ----------------
-    g: quaternion class
-        quaternions
-
-    Returns:
-    -----------
-    g viewed as a numpy array
-    """
-    return g.view(np.ndarray)
+########################################################################################################################
+####################################################CLASS METHODS#######################################################
+########################################################################################################################
 
 
 def getq0(g):
     """
-    Return the q0 components of the quaternions
-    """
-    g = double(g)
-    if g.ndim == 1:
-        return g[0]
-    else:
-        return g[0, :]
+    Returns the q0 component for each quaternion present in the input quaternion array.
 
+    Parameters
+    ----------
+    g : input quaternion array
+    * a quaternion array of size (5 x n)
+
+    Returns
+    -------
+    q0 components stored in a 1-D numpy array of size n.
+    """
+    if g.ndim == 1:
+        return np.array(g[0])
+    else:
+        return np.array(g[0, :])
+# ----------------------------------------------------------------------------------------------------------------------
 
 def getq1(g):
     """
-    Return the q1 components of the quaternions
-    """
-    g = double(g)
-    if g.ndim == 1:
-        return g[1]
-    else:
-        return g[1, :]
+    Returns the q1 component for each quaternion present in the input quaternion array.
 
+    Parameters
+    ----------
+    g : input quaternion array
+    * a quaternion array of size (5 x n)
+
+    Returns
+    -------
+    q1 components stored in a 1-D numpy array of size n.
+    """
+    if g.ndim == 1:
+        return np.array(g[1])
+    else:
+        return np.array(g[1, :])
+# ----------------------------------------------------------------------------------------------------------------------
 
 def getq2(g):
     """
-    Return the q2 components of the quaternions
-    """
-    g = double(g)
-    if g.ndim == 1:
-        return g[2]
-    else:
-        return g[2, :]
+    Returns the q2 component for each quaternion present in the input quaternion array.
 
+    Parameters
+    ----------
+    g : input quaternion array
+    * a quaternion array of size (5 x n)
+
+    Returns
+    -------
+    q2 components stored in a 1-D numpy array of size n.
+    """
+    if g.ndim == 1:
+        return np.array(g[2])
+    else:
+        return np.array(g[2, :])
+# ----------------------------------------------------------------------------------------------------------------------
 
 def getq3(g):
     """
-    Return the q3 components of the quaternions
-    """
-    g = double(g)
-    if g.ndim == 1:
-        return g[3]
-    else:
-        return g[3, :]
+    Returns the q3 component for each quaternion present in the input quaternion array.
 
+    Parameters
+    ----------
+    g : input quaternion array
+    * a quaternion array of size (5 x n)
+
+    Returns
+    -------
+    q3 components stored in a 1-D numpy array of size n.
+    """
+    if g.ndim == 1:
+        return np.array(g[3])
+    else:
+        return np.array(g[3, :])
+# ----------------------------------------------------------------------------------------------------------------------
 
 def get_type(g):
     """
-    Return the rotation type of the quaternions
-    (proper = 1, improper = -1)
+    Returns the rotation type of each quaternion present in the input quaternion array.
+
+    Parameters
+    ----------
+    g : input quaternion array
+    * a quaternion array of size (5 x n)
+
+    Returns
+    -------
+    integer values (either +1 or -1) stored in a 1-D numpy array of size n.
+    * +1 is returned for proper rotations
+    * -1 is returned for improper rotations
     """
-    g = double(g)
     if g.ndim == 1:
         return g[4]
     else:
         return g[4, :]
-
+# ----------------------------------------------------------------------------------------------------------------------
 
 def get_size(g):
     """
-    Return the size of the quaternion array
+    Returns the size of input quaternion array.
+
+    Parameters
+    ----------
+    g : input quaternion array
+    * a quaternion array of size (5 x n)
+
+    Returns
+    -------
+    The size of the input quaternion array, n.
     """
     if g.ndim == 1:
         return 1
     else:
         return np.shape(g)[1]
+# ----------------------------------------------------------------------------------------------------------------------
 
+def display(q):
+    """
+    Returns a string which displays the input quaternion array in human readable format.
+
+    Parameters
+    ----------
+    g : input quaternion array
+    * a quaternion array of size (5 x n)
+
+    Returns
+    -------
+    str1: quaternion array in a human readable format
+
+    Notes
+    ------
+    * The 5 components of each quaternion stored in the array are displayed under 5 columns. Each row represents a
+    quaternion.
+    """
+    if q.ndim == 1:
+        str1 = 'Quaternion: \n q0 \t \t q1 \t \t q2 \t \t q3 \t \t type \n'
+        str1 += ("%f \t %f \t %f \t %f \t %d \n" %
+                  (q[0, ], q[1, ], q[2, ], q[3, ], q[4, ]))
+        return str1
+
+    s1 = get_size(q)
+    str1 = 'Quaternion: \n q0 \t \t q1 \t \t q2 \t \t q3 \t \t type \n'
+    for ct1 in range(s1):
+        str1 += ("%f \t %f \t %f \t %f \t %d \n" %
+                  (q[0, ct1], q[1, ct1], q[2, ct1], q[3, ct1], q[4, ct1]))
+
+    return str1
+# ----------------------------------------------------------------------------------------------------------------------
 
 def antipodal(q1):
     """
+    Returns the antipodal (or equivalent) quaternions such that q0 component is positive.
+
+    Parameters
+    ----------
+    q1 : input quaternion array
+    * a quaternion array of size (5 x n)
+
+    Returns
+    -------
+    A quaternion array of size (5 x n)
+
+    See Also
+    --------
+    getq0, getq1, getq2, getq3, get_type, get_size
     """
     a1 = getq0(q1)
     b1 = getq1(q1)
@@ -414,204 +574,234 @@ def antipodal(q1):
         c1[ind1] = -c1[ind1]
         d1[ind1] = -d1[ind1]
 
-    return quaternion(a1, b1, c1, d1, e1)
+    return Quaternion(a1, b1, c1, d1, e1)
+# ----------------------------------------------------------------------------------------------------------------------
 
-
-def anti_inv(q1):
+def inverse(q1):
     """
-    """
-    a1 = -getq0(q1)
-    b1 = -getq1(q1)
-    c1 = -getq2(q1)
-    d1 = -getq3(q1)
-    e1 = -get_type(q1)
-
-    return quaternion(a1, b1, c1, d1, e1)
-
-
-def dot(q1, q2):
-    """
-    Inner Product of quaternions q1 and q2
+    Returns the inverse quaternions for a given input quaternion array.
 
     Parameters
     ----------
-    q1, q2: @quaternion
+    q1 : input quaternion array
+    * a quaternion array of size (5 x n)
 
     Returns
     -------
-    dot_product: double
+    A quaternion array of size (5 x n)
+
+    See Also
+    --------
+    getq0, getq1, getq2, getq3, get_type
     """
     a1 = getq0(q1)
     b1 = getq1(q1)
     c1 = getq2(q1)
     d1 = getq3(q1)
     e1 = get_type(q1)
-    s1 = get_size(q1)
 
-    a2 = getq0(q2)
-    b2 = getq1(q2)
-    c2 = getq2(q2)
-    d2 = getq3(q2)
-    e2 = get_type(q2)
-    s2 = get_size(q2)
-
-    if s1 != s2:
-        if s1 == 1:
-            shp = np.shape(a2)
-            a1 = a1*np.ones(shp)
-            b1 = b1*np.ones(shp)
-            c1 = c1*np.ones(shp)
-            d1 = d1*np.ones(shp)
-            e1 = e1*np.ones(shp)
-
-        elif s2 == 1:
-            shp = np.shape(a2)
-            a2 = a2*np.ones(shp)
-            b2 = b2*np.ones(shp)
-            c2 = c2*np.ones(shp)
-            d2 = d2*np.ones(shp)
-            e2 = e2*np.ones(shp)
-        else:
-            raise Exception('Wrong Input Types')
-
-    d = a1*a2 + b1*b2 + c1*c2 + d1*d2
-    if e1.ndim == 0 and e2.ndim == 0:
-        if e1 == e2:
-            return d
-        else:
-            return np.NaN
-    else:
-        d[np.where(e2 != e1*np.ones(np.shape(e2)))] = np.NaN
-        return d
-
-
-def ctranspose(g):
-    """
-    """
-    if g.ndim == 1:
-        g[1] = -g[1]
-        g[2] = -g[2]
-        g[3] = -g[3]
-    else:
-        g[1, :] = -g[1, :]
-        g[2, :] = -g[2, :]
-        g[3, :] = -g[3, :]
-    return g
-
+    return Quaternion(a1, -b1, -c1, -d1, e1)
+# ----------------------------------------------------------------------------------------------------------------------
 
 def mtimes(q1, q2):
     """
-    Quaternion muliplication q1*q2
+    Calculates the quaternion multiplication of two input quaternions.
+
+    Parameters
+    ----------
+    q1, q2 : Two quaternion arrays
+    * Allowed options: Either size(q1) == size(q2) or size(q1) == 1 or size(q2) == 1
+
+    Returns
+    -------
+    A quaternion array of size max(size(q1), size(q2))
+
+    Notes
+    -------
+    * If size(q1) == size(q2), then each quaternion q1(i) is multiplied with q2(i)
+    * If size(q1) > size(q2), then size(q2) must be equal to 1. Each quaternion q1(i)
+    is multiplied with q2.
+    * If size(q2) > size(q1), then size(q1) must be equal to 1. Each quaternion q2(i)
+    is multiplied with q1.
+
+    See Also
+    --------
+    antipodal, getq0, getq1, getq2, getq3, get_type, get_size
     """
+    a1 = getq0(q1); b1 = getq1(q1); e1 = get_type(q1)
+    c1 = getq2(q1); d1 = getq3(q1); s1 = get_size(q1)
 
-    a1 = getq0(q1)
-    b1 = getq1(q1)
-    c1 = getq2(q1)
-    d1 = getq3(q1)
-    e1 = get_type(q1)
-    s1 = get_size(q1)
-
-    a2 = getq0(q2)
-    b2 = getq1(q2)
-    c2 = getq2(q2)
-    d2 = getq3(q2)
-    e2 = get_type(q2)
-    s2 = get_size(q2)
+    a2 = getq0(q2); b2 = getq1(q2); s2 = get_size(q2)
+    c2 = getq2(q2); d2 = getq3(q2); e2 = get_type(q2)
 
     if s1 != s2:
         if s1 == 1:
-            shp = np.shape(a2)
-            a1 = a1*np.ones(shp)
-            b1 = b1*np.ones(shp)
-            c1 = c1*np.ones(shp)
-            d1 = d1*np.ones(shp)
-            e1 = e1*np.ones(shp)
+            shp = np.shape(a2); a1 = a1*np.ones(shp)
+            b1 = b1*np.ones(shp); c1 = c1*np.ones(shp)
+            d1 = d1*np.ones(shp); e1 = e1*np.ones(shp)
 
         elif s2 == 1:
-            shp = np.shape(a2)
-            a2 = a2*np.ones(shp)
-            b2 = b2*np.ones(shp)
-            c2 = c2*np.ones(shp)
-            d2 = d2*np.ones(shp)
-            e2 = e2*np.ones(shp)
+            shp = np.shape(a2); a2 = a2*np.ones(shp)
+            b2 = b2*np.ones(shp); c2 = c2*np.ones(shp)
+            d2 = d2*np.ones(shp); e2 = e2*np.ones(shp)
         else:
-            raise Exception('Wrong Input Types')
+            str1 = 'size of q1 = ' + str(s1)
+            str2 = 'size of q2 = ' + str(s2)
+            raise Exception('Wrong Sizes: \n' + str1 + '\n' + str2)
 
     a = a1*a2 - b1*b2 - c1*c2 - d1*d2
     b = a1*b2 + b1*a2 + c1*d2 - d1*c2
     c = a1*c2 + c1*a2 + d1*b2 - b1*d2
     d = a1*d2 + d1*a2 + b1*c2 - c1*b2
 
-    quat1 = quaternion(a, b, c, d, e1*e2)
-
+    quat1 = Quaternion(a, b, c, d, e1*e2)
     return antipodal(quat1)
+# ----------------------------------------------------------------------------------------------------------------------
 
+def eq(q1, q2, tol=1e-04):
+    """
+    Checks whether the two input quaternions are equal or not.
+    Two quaternions quat1 and quat2 are equal if
+    1) type(quat1) == type(quat2) and
+    2) (getq0(quat1*inverse(quat2)) - 1) is less than tolerance (tol)
+    
+    Parameters
+    ----------
+    q1, q2: Two quaternion arrays
+    * Allowed options: Either size(q1) == size(q2) or size(q1) == 1 or size(q2) == 1
+    
+    tol: The tolerance to check if two quaternions are equal
+    
+    Returns
+    -------
+    A boolean array of size max(size(q1), size(q2))
 
-def eq(q1, q2, tol):
+    Notes
+    -------
+    * If size(q1) == size(q2), then each quaternion q1(i) is checked against q2(i)
+    * If size(q1) > size(q2), then size(q2) must be equal to 1. Each quaternion q1(i) is checked
+    against q2
+    * If size(q2) > size(q1), then size(q1) must be equal to 1. Each quaternion q2(i) is checked
+    against q1
+
+    See Also
+    --------
+    getq0, get_type
     """
-    ? q1 == q2
-    """
-    # s1 = get_size(q1)
-    # s2 = get_size(q2)
+
+    s1 = get_size(q1);  s2 = get_size(q2);
+    e1 = get_type(q1); e2 = get_type(q2);
+    if s1 != s2:
+        if s1 == 1:
+            e1 = e1*np.ones((s2, ))
+        elif s2 == 1:
+            e2 = e2*np.ones((s1, ))
+        else:
+            str1 = 'size of q1 = ' + str(s1)
+            str2 = 'size of q2 = ' + str(s2)
+            raise Exception('Wrong Sizes: \n' + str1 + '\n' + str2)
+
 
     q3 = mtimes(q1, inverse(q2))
-    q1_type = get_type(q1)
-    q2_type = get_type(q2)
+    # print "q3 = \n"; print display(q3);
+    # print "q3[0] cond = \n" + str((abs(q3[0] -1) < tol)); 
+    # print "Type cond = \n" + str((e1 - e2 == 0));
 
-    if np.any(np.all(((abs(abs(getq0(q3)) - 1) < tol),
-                      (q1_type == q2_type)), axis=0)):
-        return True
+    return (abs(q3[0] -1) < tol) & (e1 - e2 == 0)
+# ----------------------------------------------------------------------------------------------------------------------
+
+def quat2mat(q):
+    """
+    Converts the input quaternion array to a rotation matrix array.
+
+    Parameters
+    ----------
+    q: input quaternion
+    *  quaternion array of size (5 x n)
+
+    Returns
+    ----------
+    g: rotation matrix array
+    * numpy array of size (n x 3 x 3)
+
+    See Also
+    --------
+    get_size, getq0, getq1, getq2, getq3, get_type
+    """
+    sz = get_size(q)
+    q0 = getq0(q)
+    q1 = getq1(q)
+    q2 = getq2(q)
+    q3 = getq3(q)
+    qt = get_type(q)
+
+    g = np.zeros((sz, 3, 3))
+    g[:, 0, 0] = np.square(q0) + np.square(q1) - np.square(q2) - np.square(q3)
+    g[:, 0, 1] = 2*(q1*q2 - q0*q3)
+    g[:, 0, 2] = 2*(q3*q1 + q0*q2)
+    g[:, 1, 0] = 2*(q1*q2 + q0*q3)
+    g[:, 1, 1] = np.square(q0) - np.square(q1) + np.square(q2) - np.square(q3)
+    g[:, 1, 2] = 2*(q2*q3 - q0*q1)
+    g[:, 2, 0] = 2*(q3*q1 - q0*q2)
+    g[:, 2, 1] = 2*(q2*q3 + q0*q1)
+    g[:, 2, 2] = np.square(q0) - np.square(q1) - np.square(q2) + np.square(q3)
+
+    if sz == 1:
+        g = g.reshape((3, 3))
+        if qt == -1:
+            g = -g
     else:
-        return False
+        inds1 = np.where(qt == -1)
+        g[inds1, :, :] = -g[inds1, :, :]
 
-    # if s1 == s2:
-    #     if np.all(abs(abs(dot(q1, q2)-1) < tol):
-    #         return True
-    #     else:
-    #         return False
-    # else:
-    #     if s1 == 1 or s2 == 1:
-    #         if np.any(abs(dot(q1, q2)-1) < tol):
-    #             return True
-    #         else:
-    #             return False
-    #     else:
-    #         err_str1 = 'Input dimensions incompatible: \n Either: \n'
-    #         err_str2 = 'size(q1) == size(q2) or \n'
-    #         err_str3 = 'size(q1) == 1 or size(q2)==5 \n'
-    #         err_str4 = 'Instead'
-    #         err_str5 = 'size(q1) == %d or size(q2)== %d \n' % (s1, s2)
-    #         err_str = err_str1 + err_str2 + err_str3 + err_str4 + err_str5
-    #         raise Exception(err_str)
+    return g
+# ----------------------------------------------------------------------------------------------------------------------
 
-
-def display(q):
+def mat2quat(mat, rot_type='proper'):
     """
-    Display Quaternion Array in human readable format
+    Converts the input rotation matrix array or list, to a quaternion array.
+
+    Parameters
+    -----------
+    mat: rotation matrices, this input maybe given in the following two ways
+    * numpy array of size (n x 3 x 3)
+    * python list with n elements, each element is a rotation matrix with shape (3 x 3)
+
+    rot_type: string with either of the following values, 'proper' or 'improper'
+    * 'improper' if there is a possibility of having improper matrices in the input
+    * 'proper' if all the rotation matrices in the input are of proper rotation type
+    * default value is 'proper'
+
+    Returns
+    --------
+    q: quaternion
+    * quaternion array of size (5 x n)
+
+    See Also
+    ---------
+    tools.vrrotmat2vec
     """
+    from tools import vrrotmat2vec as vrrotmat2vec
+    ax_ang = vrrotmat2vec(mat, rot_type)
 
-    s1 = get_size(q)
-    str1 = 'Quaternion: \n q0 \t \t q1 \t \t q2 \t \t q3 \n'
-    for ct1 in range(s1):
-        str1 += ("%f \t %f \t %f \t %f \n"
-                 % (q[0, ct1], q[1, ct1], q[2, ct1], q[3, ct1]))
+    t1_vecs = ax_ang[:3].T
+    new_col = np.linalg.norm(t1_vecs, axis=1)
+    t1_vecs_norm = np.array([new_col, ]*3).T
+    t1_vecs = np.divide(t1_vecs, t1_vecs_norm)
+    ax_ang_norm = t1_vecs.T
 
-    return str1
+    q0 = np.cos(ax_ang[3, :]/2)
+    q1 = ax_ang_norm[0, :]*np.sin(ax_ang[3, :]/2)
+    q2 = ax_ang_norm[1, :]*np.sin(ax_ang[3, :]/2)
+    q3 = ax_ang_norm[2, :]*np.sin(ax_ang[3, :]/2)
+    qtype = ax_ang[4, :]
 
+    q = Quaternion(q0, q1, q2, q3, qtype)
 
-def inverse(q1):
-    """
-    """
-    a1 = getq0(q1)
-    b1 = getq1(q1)
-    c1 = getq2(q1)
-    d1 = getq3(q1)
-    e1 = get_type(q1)
-
-    return quaternion(a1, -b1, -c1, -d1, e1)
+    return q
+# ----------------------------------------------------------------------------------------------------------------------
 
 
-#
 # def angle(g1, *args):
 #     """
 #     calcualtes the rotational angle between rotations q1 and q2
@@ -619,7 +809,7 @@ def inverse(q1):
 #     omega = angle(q)
 #     omega = angle(q1,q2)
 #     Input
-#     q1, q2 - @quaternion
+#     q1, q2 - @Quaternion
 #
 #     Output
 #     omega  - double
@@ -659,7 +849,7 @@ def inverse(q1):
 #     c = a1*b2*d3 - a1*b3*d2 - a2*b1*d3 + a2*b3*d1 + a3*b1*d2 - a3*b2*d1
 #     d = a1*b3*c2 - a1*b2*c3 + a2*b1*c3 - a2*b3*c1 - a3*b1*c2 + a3*b2*c1
 #
-#     return quaternion(a, b, c, d)
+#     return Quaternion(a, b, c, d)
 #
 #
 
@@ -717,7 +907,7 @@ def inverse(q1):
 #                       [d, -c,  b,  a]]);
 #     else:
 # def qq
-# def quaternion
+# def Quaternion
 # def rdivide
 # def real
 # def repmat
@@ -733,3 +923,57 @@ def inverse(q1):
 # def uminus
 # def unique
 # def vertcat
+
+# def anti_inv(q1):
+#     """
+#     Return  for the Quaternion
+#     """
+#     a1 = -getq0(q1)
+#     b1 = -getq1(q1)
+#     c1 = -getq2(q1)
+#     d1 = -getq3(q1)
+#     e1 = -get_type(q1)
+
+#     return Quaternion(a1, b1, c1, d1, e1)
+
+
+# def dot(q1, q2):
+#     """
+#     Inner Product of Quaternions q1 and q2
+
+#     Parameters
+#     ----------
+#     q1, q2: @Quaternion
+
+#     Returns
+#     -------
+#     dot_product: double
+#     """
+#     a1 = getq0(q1); b1 = getq1(q1); e1 = get_type(q1)
+#     c1 = getq2(q1); d1 = getq3(q1); s1 = get_size(q1);
+
+#     a2 = getq0(q2); b2 = getq1(q2); s2 = get_size(q2);
+#     c2 = getq2(q2); d2 = getq3(q2); e2 = get_type(q2)
+
+#     if s1 != s2:
+#         if s1 == 1:
+#             shp = np.shape(a2); a1 = a1*np.ones(shp);
+#             b1 = b1*np.ones(shp); c1 = c1*np.ones(shp);
+#             d1 = d1*np.ones(shp); e1 = e1*np.ones(shp);
+
+#         elif s2 == 1:
+#             shp = np.shape(a2); a2 = a2*np.ones(shp);
+#             b2 = b2*np.ones(shp); c2 = c2*np.ones(shp);
+#             d2 = d2*np.ones(shp); e2 = e2*np.ones(shp);
+#         else:
+#             raise Exception('Wrong Input Types')
+
+#     d = a1*a2 + b1*b2 + c1*c2 + d1*d2
+#     if e1.ndim == 0 and e2.ndim == 0:
+#         if e1 == e2:
+#             return d
+#         else:
+#             return np.NaN
+#     else:
+#         d[np.where(e2 != e1*np.ones(np.shape(e2)))] = np.NaN
+#         return float(d)

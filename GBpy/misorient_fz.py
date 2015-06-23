@@ -145,7 +145,7 @@ def misorient_fz(misquats, cryst_ptgrp, tol=1e-12):
     if misquats.ndim == 1:
         misquats = np.reshape(misquats, (5, 1))
 
-    disquats = quat.quaternion(np.zeros(np.shape(misquats)))
+    disquats = quat.Quaternion(np.zeros(np.shape(misquats)))
     disquats[:] = np.NaN
 
     msz = quat.get_size(misquats)
@@ -158,10 +158,10 @@ def misorient_fz(misquats, cryst_ptgrp, tol=1e-12):
             for k in range(symm_sz):
                 tsymm_q2 = quat.mtimes(symm_quat[:, k], tsymm_q1)
 
-                tqn1 = quat.quaternion(np.copy(tsymm_q2))
+                tqn1 = quat.Quaternion(np.copy(tsymm_q2))
                 tqn2 = quat.antipodal(tsymm_q2)
-                tqn3 = quat.ctranspose(tsymm_q2)
-                tqn4 = quat.ctranspose(quat.antipodal(tsymm_q2))
+                tqn3 = quat.inverse(tsymm_q2)
+                tqn4 = quat.inverse(quat.antipodal(tsymm_q2))
 
                 if check_cond(tqn1, cryst_ptgrp, tol):
                     tcheck = 1

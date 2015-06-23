@@ -3,8 +3,7 @@
 # License: GNU-GPL Style.
 # How to cite GBpy:
 # Banadaki, A. D. & Patala, S. "An efficient algorithm for computing the primitive bases of a general lattice plane",
-#  Journal of Applied Crystallography 48, 585–588 (2015). doi:10.1107/S1600576715004446
-
+#  Journal  of Applied Crystallography 48, 585 - 588 (2015). doi:10.1107/S1600576715004446
 import numpy as np
 import pickle
 

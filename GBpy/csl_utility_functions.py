@@ -11,7 +11,6 @@ import numpy as np
 # import os
 import integer_manipulations as int_man
 import misorient_fz as mis_fz
-import quaternion as quat
 import tools as trans
 # -----------------------------------------------------------------------------------------------------------
 
@@ -943,7 +942,8 @@ def disorient_sigmarots(r_g1tog2_g1, l_g_go, cryst_ptgrp):
     q_go1togo2_go1 = trans.mat2quat(r_go1togo2_go1)
     qfz_go1togo2_go1 = mis_fz.misorient_fz(q_go1togo2_go1, cryst_ptgrp)
 
-    qt1 = quat.double(qfz_go1togo2_go1)
+    # qt1 = quat.double(qfz_go1togo2_go1)
+    qt1 = np.array(qfz_go1togo2_go1)
     qt1 = qt1.transpose()
     [t1, ia] = trans.unique_rows_tol(qt1, 1e-06, True)
 
