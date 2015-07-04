@@ -15,7 +15,6 @@ import quaternion as quat
 import tools as trans
 # -----------------------------------------------------------------------------------------------------------
 
-
 def generate_symm_mats(cryst_ptgrp, tol=1e-10):
     """
     Give crystallographic point group, this function generates all the symmetry
@@ -36,12 +35,11 @@ def generate_symm_mats(cryst_ptgrp, tol=1e-10):
         Symmetry operations as matrices for the corresponding point group
     """
 
-    prop_grps = ['C1', 'C2', 'C3', 'C4', 'C6', 'D2', 'D3', 'D4', 'D6',
+    prop_grps = ['C1', 'C2', 'C3', 'C4', 'C6', 'D2', 'D3', 'D4', 'D6', 'D8'
                  'T', 'O']
-    laue_grps = ['Ci', 'C2h', 'C3i', 'C4h', 'C6h', 'D2h', 'D3d', 'D4h', 'D6h',
+    laue_grps = ['Ci', 'C2h', 'C3i', 'C4h', 'C6h', 'D2h', 'D3d', 'D4h', 'D6h', 'D8h',
                  'Th', 'Oh']
-    # noncentro_grps = ['Cs', 'S4', 'S6', 'C2v', 'C3v', 'C4v', 'C6v', 'D2d',
-    # 'D3h', 'Td']
+    noncentro_grps = ['Cs', 'S4', 'S6', 'C2v', 'C3v', 'C4v', 'C6v', 'D2d', 'D3h', 'Td']
 
     if cryst_ptgrp in prop_grps:
 
@@ -163,6 +161,22 @@ def generate_symm_mats(cryst_ptgrp, tol=1e-10):
 
         elif cryst_ptgrp == 'D6':
             n = 6
+            gsz = 3
+            order_ptgrp = 2*n
+            # Generators
+            generators = np.zeros((gsz, 3, 3))
+            generators[0, :, :] = trans.vrrotvec2mat(np.array([0, 0, 1, 0, 1]))
+            generators[1, :, :] = trans.vrrotvec2mat(
+                np.array([0, 0, 1, 2*np.pi/n, 1]))
+            generators[2, :, :] = trans.vrrotvec2mat(
+                np.array([1, 0, 0, np.pi, 1]))
+
+            # Symmetry Operations
+            symm_mat = np.zeros([order_ptgrp, 3, 3])
+            symm_mat[:gsz, :, :] = generators
+
+        elif cryst_ptgrp == 'D8':
+            n = 8
             gsz = 3
             order_ptgrp = 2*n
             # Generators
@@ -359,6 +373,24 @@ def generate_symm_mats(cryst_ptgrp, tol=1e-10):
             symm_mat = np.zeros([order_ptgrp, 3, 3])
             symm_mat[:gsz, :, :] = generators
 
+        elif cryst_ptgrp == 'D8h':
+            n = 8
+            gsz = 4
+            order_ptgrp = 2*2*n
+            # Generators
+            generators = np.zeros((gsz, 3, 3))
+            generators[0, :, :] = trans.vrrotvec2mat(np.array([0, 0, 1, 0, 1]))
+            generators[1, :, :] = trans.vrrotvec2mat(
+                np.array([0, 0, 1, 2*np.pi/n, 1]))
+            generators[2, :, :] = trans.vrrotvec2mat(
+                np.array([1, 0, 0, np.pi, 1]))
+            generators[3, :, :] = trans.vrrotvec2mat(
+                np.array([0, 0, 1, 0, -1]))
+
+            # Symmetry Operations
+            symm_mat = np.zeros([order_ptgrp, 3, 3])
+            symm_mat[:gsz, :, :] = generators
+
         elif cryst_ptgrp == 'Td':
             gsz = 4
             order_ptgrp = 2*12
@@ -393,6 +425,22 @@ def generate_symm_mats(cryst_ptgrp, tol=1e-10):
             symm_mat = np.zeros([order_ptgrp, 3, 3])
             symm_mat[:gsz, :, :] = generators
 
+    if cryst_ptgrp in noncentro_grps:
+        if cryst_ptgrp == 'Cs':
+            n = 1
+            gsz = 2
+            order_ptgrp = 2*n
+            # Generators
+            generators = np.zeros((gsz, 3, 3))
+            generators[0, :, :] = trans.vrrotvec2mat(np.array([0, 0, 1, 0, 1]))
+            generators[1, :, :] = trans.vrrotvec2mat(np.array([0, 0, 1, 0, -1]))
+            generators[1, :, :] = np.dot(generators[1, :, :], trans.vrrotvec2mat(
+                np.array([0, 0, 1, np.pi, 1])))
+
+            # Symmetry Operations
+            symm_mat = np.zeros([order_ptgrp, 3, 3])
+            symm_mat[:gsz, :, :] = generators
+
     count1 = 1
     numops = gsz-1
 
@@ -413,6 +461,8 @@ def generate_symm_mats(cryst_ptgrp, tol=1e-10):
         if numops == initsize:
             count1 = count1+1
 
+
+    print symm_mat
     return symm_mat
 # -----------------------------------------------------------------------------------------------------------
 
@@ -440,10 +490,9 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
 
     prop_grps = ['C1', 'C2', 'C3', 'C4', 'C6', 'D2', 'D3', 'D4', 'D6',
                  'T', 'O']
-    laue_grps = ['Ci', 'C2h', 'C3i', 'C4h', 'C6h', 'D2h', 'D3d', 'D4h', 'D6h',
+    laue_grps = ['Ci', 'C2h', 'C3i', 'C4h', 'C6h', 'D2h', 'D3d', 'D4h', 'D6h', 'D8h',
                  'Th', 'Oh']
-    # noncentro_grps = ['Cs', 'S4', 'S6', 'C2v', 'C3v', 'C4v', 'C6v', 'D2d',
-    # 'D3h', 'Td']
+    noncentro_grps = ['Cs', 'S4', 'S6', 'C2v', 'C3v', 'C4v', 'C6v', 'D2d', 'D3h', 'Td']
 
     # if cryst_ptgrp in prop_grps:
     #     rot_type = 'proper'
@@ -751,6 +800,22 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
+        elif cryst_ptgrp == 'D8h':
+            n = 8
+            gsz = 4
+            order_ptgrp = 2*2*n
+            # Generators
+            generators = quat.Quaternion(np.zeros((5, gsz)))
+            generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
+            generators[:, 1] = trans.axang2quat(
+                np.array([0, 0, 1, 2*np.pi/n, 1]))
+            generators[:, 2] = trans.axang2quat(np.array([1, 0, 0, np.pi, 1]))
+            generators[:, 3] = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
+
+            # Symmetry Operations
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat[:, :gsz] = generators
+
         elif cryst_ptgrp == 'Td':
             gsz = 4
             order_ptgrp = 2*12
@@ -783,6 +848,26 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
             symm_quat[:, :gsz] = generators
 
+
+    if cryst_ptgrp in noncentro_grps:
+        if cryst_ptgrp == 'Cs':
+            n = 1
+            gsz = 2
+            order_ptgrp = 2*n
+            # Generators
+
+            # Generators
+            generators = quat.Quaternion(np.zeros((5, gsz)))
+            generators[:, 0] = trans.axang2quat(np.array([0, 0, 1, 0, 1]))
+            t_q1 = trans.axang2quat(np.array([0, 0, 1, 0, -1]))
+            t_q2 = trans.axang2quat(np.array([0, 0, 1, np.pi, 1]))
+            t_mat = quat.mtimes(t_q1, t_q2)
+            generators[:, 1] = t_mat
+
+            # Symmetry Operations
+            symm_quat = quat.Quaternion(np.zeros([5, order_ptgrp]))
+            symm_quat[:, :gsz] = generators
+
     count1 = 1
     numops = gsz-1
 
@@ -804,6 +889,8 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
             count1 += 1
 
     symm_quat = quat.antipodal(symm_quat)
+
+    print quat.display(symm_quat)
     return symm_quat
 # -----------------------------------------------------------------------------------------------------------
 
@@ -845,4 +932,6 @@ def save_symm_pkl(cryst_ptgrp, op_type):
 # save_symm_pkl('D6h', 'quats')
 # save_symm_pkl('O', 'quats')
 # save_symm_pkl('Oh', 'quats')
+# save_symm_pkl('C2h', 'quats')
+# save_symm_pkl('D8h', 'matrices')
 
