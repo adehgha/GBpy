@@ -430,3 +430,4 @@ def bicryst_planar_den(inds, t_mat, l_g_go, inds_type='miller_index',
 
     return pl_den_pl1, pl_den_pl2, pl_den_csl
 # -----------------------------------------------------------------------------------------------------------
+
