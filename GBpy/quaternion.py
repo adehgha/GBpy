@@ -21,8 +21,22 @@ class Quaternion(np.ndarray):
     meaning and type implies proper or improper type of rotations. Type has allowed values +1 and -1,
     for proper and improper rotations, respectively.
 
-    The class has the following methods getq0, getq1, getq2, getq3, get_type, get_size, display, antipodal, inverse,
-    mtimes, eq, quat2mat and mat2quat. Please read the documentation included with each method to learn more.
+    The class has the following methods 
+    getq0, 
+    getq1, 
+    getq2, 
+    getq3, 
+    get_type, 
+    get_size, 
+    display, 
+    antipodal, 
+    inverse,
+    mtimes, 
+    eq, 
+    quat2mat
+    mat2quat.
+    
+    Please read the documentation included with each method to learn more.
     ...
 
     Attributes
