@@ -878,15 +878,27 @@ def unique_rows_tol(data, tol=1e-12, return_index=False, return_inverse=False):
     b = np.ascontiguousarray(d_r).view(np.dtype((np.void, d_r.dtype.itemsize * d_r.shape[1])))
     _, ia = np.unique(b, return_index=True)
     _, ic = np.unique(b, return_inverse=True)
+
+    ret_arr = data[ia, :]
     if not return_index and not return_inverse:
-        return np.unique(b).view(d_r.dtype).reshape(-1, d_r.shape[1])
+        return ret_arr
     else:
         if return_index and return_inverse:
-            return np.unique(b).view(d_r.dtype).reshape(-1, d_r.shape[1]), ia, ic
+            return ret_arr, ia, ic
         elif return_index:
-            return np.unique(b).view(d_r.dtype).reshape(-1, d_r.shape[1]), ia
+            return ret_arr, ia
         elif return_inverse:
-            return np.unique(b).view(d_r.dtype).reshape(-1, d_r.shape[1]), ic
+            return ret_arr, ic
+
+    # if not return_index and not return_inverse:
+    #     return np.unique(b).view(d_r.dtype).reshape(-1, d_r.shape[1])
+    # else:
+    #     if return_index and return_inverse:
+    #         return np.unique(b).view(d_r.dtype).reshape(-1, d_r.shape[1]), ia, ic
+    #     elif return_index:
+    #         return np.unique(b).view(d_r.dtype).reshape(-1, d_r.shape[1]), ia
+    #     elif return_inverse:
+    #         return np.unique(b).view(d_r.dtype).reshape(-1, d_r.shape[1]), ic
 # -----------------------------------------------------------------------------------------------------------
 
 
