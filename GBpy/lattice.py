@@ -30,7 +30,7 @@ class Lattice(object):
     lat_params: dictionary
         Lattice parameters ('a', 'b', 'c', 'alpha', 'beta', 'gamma')
 
-    l_g_go: numpy array
+    l_p_po: numpy array
         Primitve basis of the lattice
 
     basis_atoms:
@@ -81,7 +81,7 @@ class Lattice(object):
             b1x = a*np.array([1.0, 0.0, 0.0])
             b1y = a*np.array([0.0, 1.0, 0.0])
             b1z = a*np.array([0.0, 0.0, 1.0])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
             # Point group symmetry of the lattice
             self.cryst_ptgrp = 'Oh'
         # ------------------------------------------------------------------------------------------------------
@@ -95,7 +95,7 @@ class Lattice(object):
             b1x = a*np.array([1.0, 0.0, 0.0])
             b1y = a*np.array([0.0, 1.0, 0.0])
             b1z = a*np.array([0.0, 0.0, 1.0])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
             # Point group symmetry of the lattice
             self.cryst_ptgrp = 'Oh'
         # ------------------------------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ class Lattice(object):
             b1x = a*np.array([-0.5,  0.5,  0.5])
             b1y = a*np.array([ 0.5, -0.5,  0.5])
             b1z = a*np.array([ 0.5,  0.5, -0.5])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
             # Point group symmetry of the lattice
             self.cryst_ptgrp = 'Oh'
         # ------------------------------------------------------------------------------------------------------
@@ -125,7 +125,7 @@ class Lattice(object):
             b1x = a*np.array([-0.5,  0.5,  0.5])
             b1y = a*np.array([ 0.5, -0.5,  0.5])
             b1z = a*np.array([ 0.5,  0.5, -0.5])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
             # Point group symmetry of the lattice
             self.cryst_ptgrp = 'Oh'
         # ------------------------------------------------------------------------------------------------------
@@ -139,7 +139,7 @@ class Lattice(object):
             b1x = a*np.array([0.0, 0.5, 0.5])
             b1y = a*np.array([0.5, 0.0, 0.5])
             b1z = a*np.array([0.5, 0.5, 0.0])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
             # Point group symmetry of the lattice
             self.cryst_ptgrp = 'Oh'
         # ------------------------------------------------------------------------------------------------------
@@ -158,7 +158,7 @@ class Lattice(object):
             b1x = a*np.array([0.0, 0.5, 0.5])
             b1y = a*np.array([0.5, 0.0, 0.5])
             b1z = a*np.array([0.5, 0.5, 0.0])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
 
             self.basis_atoms = np.array([0, 0, 0])
 
@@ -180,7 +180,7 @@ class Lattice(object):
             b1x = a*np.array([1., 0., 0.])
             b1y = np.dot(vrrotvec2mat(np.array([0., 0., 1., g_ang])), b1x)
             b1z = c*np.array([0., 0., 1.])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
             self.basis_atoms = np.array([[0., 0., 0.], [1./3, 2./3, 1./2]])
         # ------------------------------------------------------------------------------------------------------
         if elem_type.lower() == 'hp_ca':
@@ -201,7 +201,7 @@ class Lattice(object):
             b1x = a*np.array([1., 0., 0.])
             b1y = np.dot(vrrotvec2mat(np.array([0., 0., 1., g_ang])), b1x)
             b1z = c*np.array([0., 0., 1.])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
 
         # ------------------------------------------------------------------------------------------------------
         # ------------------------------------------------------------------------------------------------------
@@ -220,7 +220,7 @@ class Lattice(object):
             b1x = a*np.array([1., 0., 0.])
             b1y = np.dot(vrrotvec2mat(np.array([0., 0., 1., g_ang])), b1x)
             b1z = c*np.array([0., 0., 1.])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
 
             self.basis_atoms = np.array([[0., 0., 0.], [1./3, 2./3, 1./2]])
         # ------------------------------------------------------------------------------------------------------
@@ -239,7 +239,7 @@ class Lattice(object):
             b1x = a*np.array([1., 0., 0.])
             b1y = a*np.array([0., 1., 0.])
             b1z = c*np.array([0., 0., 1.])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
         # ------------------------------------------------------------------------------------------------------
         # ------------------------------------------------------------------------------------------------------
         if elem_type.lower() == 'tp_ca':
@@ -259,7 +259,7 @@ class Lattice(object):
             b1x = a*np.array([1., 0., 0.])
             b1y = a*np.array([0., 1., 0.])
             b1z = c*np.array([0., 0., 1.])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
         # ------------------------------------------------------------------------------------------------------
 
         # Rhombohedral lattices
@@ -281,7 +281,7 @@ class Lattice(object):
             b1x = np.array([ np.sqrt(3)*k1/2, k1/2, k2])
             b1y = np.array([-np.sqrt(3)*k1/2, k1/2, k2])
             b1z = np.array([0, -k1, k2])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
 
             self.cryst_ptgrp = 'D3d'
         # ------------------------------------------------------------------------------------------------------
@@ -306,7 +306,7 @@ class Lattice(object):
             b1x = np.array([ np.sqrt(3)*k1/2, k1/2, k2])
             b1y = np.array([-np.sqrt(3)*k1/2, k1/2, k2])
             b1z = np.array([0, -k1, k2])
-            self.l_g_go = np.column_stack((b1x, b1y, b1z))
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
             self.cryst_ptgrp = 'D3d'
         # ------------------------------------------------------------------------------------------------------
 
@@ -318,8 +318,8 @@ class Lattice(object):
             %(l1.lat_params['a'], l1.lat_params['b'], l1.lat_params['c'],
               l1.lat_params['alpha'], l1.lat_params['beta'], l1.lat_params['gamma'])
         str1 += 'Point Group: %s \n' %(l1.cryst_ptgrp)
-        str1 += 'Primitive lattice (l_g_go): \n'
-        str1 += str(l1.l_g_go)
+        str1 += 'Primitive lattice (l_p_po): \n'
+        str1 += str(l1.l_p_po)
         str1 += '\n'
         str1 += 'Crystal Point group: '
         str1 += self.cryst_ptgrp
