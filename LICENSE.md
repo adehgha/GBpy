@@ -1,6 +1,6 @@
 GNU-GPL style license for GBpy package.
 
-Copyright (c) 2014, Arash Dehghan Banadaki and Srikanth Patala.
+Copyright (c) 2015, Arash Dehghan Banadaki and Srikanth Patala.
 All rights reserved.
 
 This file is part of GBpy.

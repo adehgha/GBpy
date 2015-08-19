@@ -153,7 +153,7 @@ class Lattice(object):
 
             self.cryst_ptgrp = 'Oh'
             self.burgers_mag = a / np.sqrt(2)
-            self.eam_file = np.array(['alloy', 'Al99.eam.alloy', -3.53999996838])
+            self.eam_file = np.array(['alloy', 'Al99.eam.alloy', -3.36000010077])
 
             b1x = a*np.array([0.0, 0.5, 0.5])
             b1y = a*np.array([0.5, 0.0, 0.5])
