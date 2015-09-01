@@ -384,11 +384,9 @@ def find_csl_dsc(L_G1_GO1, R_G1ToG2_G1):
 # -----------------------------------------------------------------------------------------------------------
 
 def make_right_handed(l_csl_p1, l_p_po):
-    l_csl_po1 = np.dot(l_p_po, l_csl_p1)
-    if (np.linalg.det(l_csl_po1) < 0):
-        t1_array = l_csl_po1.copy()
-        t1_array[:, 0] = l_csl_po1[:, 1]
-        t1_array[:, 1] = l_csl_po1[:, 0]
-        l_csl_po1 = t1_array.copy()
-    l_csl_p1 = np.dot(np.linalg.inv(l_p_po), l_csl_po1)
+    if (np.linalg.det(l_csl_p1) < 0):
+        t1_array = l_csl_p1.copy()
+        t1_array[:, 0] = l_csl_p1[:, 1]
+        t1_array[:, 1] = l_csl_p1[:, 0]
+        l_csl_p1 = t1_array.copy()
     return l_csl_p1
