@@ -161,6 +161,25 @@ class Lattice(object):
             self.l_p_po = np.column_stack((b1x, b1y, b1z))
 
             self.basis_atoms = np.array([0, 0, 0])
+        # ------------------------------------------------------------------------------------------------------
+        if elem_type.lower() == 'cu':
+            self.elem_type = 'Cu'
+            self.pearson = 'cF'
+
+            a = 3.615
+            a_ang = np.pi/2
+            self.lat_params = {'a': a, 'b': a, 'c': a, 'alpha': a_ang, 'beta': a_ang, 'gamma': a_ang}
+
+            self.cryst_ptgrp = 'Oh'
+            self.burgers_mag = a / np.sqrt(2)
+            self.eam_file = np.array(['alloy', 'Cu01.eam.alloy', -3.53999996838])
+
+            b1x = a*np.array([0.0, 0.5, 0.5])
+            b1y = a*np.array([0.5, 0.0, 0.5])
+            b1z = a*np.array([0.5, 0.5, 0.0])
+            self.l_p_po = np.column_stack((b1x, b1y, b1z))
+
+            self.basis_atoms = np.array([0, 0, 0])
 
         # Hexagonal Lattices
         # ------------------------------------------------------------------------------------------------------
