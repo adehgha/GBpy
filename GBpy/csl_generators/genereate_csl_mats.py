@@ -50,7 +50,7 @@ elif test_case == 5:
     l1 = lat.Lattice(lat_type, ca_rat)
 
 sig_rots = {}
-sig_num = np.arange(250) + 1
+sig_num = np.arange(1000) + 1
 
 for i in sig_num:
     print i

@@ -350,15 +350,34 @@ def gb_2d_csl(inds, t_mat, l_g_go,
     miller2_ind = int_man.int_finder(np.dot(-l_go1_rg2, bp1_go1))
 
     l_pl1_g1 = bp_basis(miller1_ind)
+    l_pl1_g1 = reduce_go1_mat(l_pl1_g1, l_g1_go1)
     l_pl2_g2 = bp_basis(miller2_ind)
-
+    l_pl2_g2 = reduce_go1_mat(l_pl2_g2, l_g1_go1)
     l_pl2_g1 = np.dot(l_g2_g1, l_pl2_g2)
 
     l_2d_csl_g1 = csl_finder_2d(l_pl1_g1, l_pl2_g1)
+    l_2d_csl_g1 = reduce_go1_mat(l_2d_csl_g1, l_g1_go1)
 
     return l_2d_csl_g1, l_pl1_g1, l_pl2_g1
 # -----------------------------------------------------------------------------------------------------------
 
+def reduce_go1_mat(l_pl1_g1, l_g1_go1):
+    l_go1_g1 = np.linalg.inv(l_g1_go1)
+    l_pl1_go1 = np.dot(l_g1_go1, l_pl1_g1);
+    sz1 = np.shape(l_pl1_go1)[0];
+    sz2 = np.shape(l_pl1_go1)[1];
+
+    tmat1 = l_pl1_go1.reshape((sz1*sz2, ));
+    temp_mat1 = int_man.int_finder(tmat1);
+    tmat_max = np.max(np.abs(temp_mat1));
+    ind1 = np.where(np.abs(temp_mat1) == tmat_max)[0];
+    Dnum = temp_mat1[ind1[0]]/tmat1[ind1[0]];
+
+    temp_mat1 = temp_mat1.reshape((sz1, sz2))
+    Dnum_mat = Dnum*np.ones(np.shape(temp_mat1))
+    l_pl1_go1 = lll_reduction(temp_mat1)/Dnum_mat
+    l_pl1_g1 = np.dot(l_go1_g1, l_pl1_go1)
+    return l_pl1_g1
 
 def bicryst_planar_den(inds, t_mat, l_g_go, inds_type='miller_index',
                        mat_ref='go1'):

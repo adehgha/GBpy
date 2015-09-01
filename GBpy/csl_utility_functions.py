@@ -893,10 +893,10 @@ def compute_tmat(quad_int, tau, lat_type):
         g[:, 2, 1] = 2*(v*w + m*u) / s
 
         if lat_type.pearson == 'cF' or lat_type.pearson == 'cI':
-            l_g_go = lat_type.l_g_go
-            l_go_g = np.linalg.inv(l_g_go)
+            l_p_po = lat_type.l_p_po
+            l_go_g = np.linalg.inv(l_p_po)
             for i in range(np.shape(g)[0]):
-                g[i, :, :] = np.dot(np.dot(l_go_g, g[i, :, :]), l_g_go)
+                g[i, :, :] = np.dot(np.dot(l_go_g, g[i, :, :]), l_p_po)
 
     if sz == 1:
         g = g.reshape((3, 3))
@@ -904,7 +904,7 @@ def compute_tmat(quad_int, tau, lat_type):
     return g
 # -----------------------------------------------------------------------------------------------------------
 
-def disorient_sigmarots(r_g1tog2_g1, l_g_go, cryst_ptgrp):
+def disorient_sigmarots(r_g1tog2_g1, l_p_po, cryst_ptgrp):
     """
     The disorientation corresponding to each rotation matrix is computed
     and the unique set is returned
@@ -914,7 +914,7 @@ def disorient_sigmarots(r_g1tog2_g1, l_g_go, cryst_ptgrp):
     r_g1tog2_g1: numpy array (n x 3 x 3)
         Transformation matrices in g1 reference frame
 
-    l_g_go: numpy array
+    l_p_po: numpy array
         The primitive basis vectors of the underlying lattice in the orthogonal
         reference frame.
 
@@ -929,7 +929,7 @@ def disorient_sigmarots(r_g1tog2_g1, l_g_go, cryst_ptgrp):
     if r_g1tog2_g1.ndim == 2:
         r_g1tog2_g1 = np.reshape(r_g1tog2_g1, (1, 3, 3))
 
-    l_go_g = np.linalg.inv(l_g_go)
+    l_go_g = np.linalg.inv(l_p_po)
     msz = np.shape(r_g1tog2_g1)[0]
 
     r_go1togo2_go1 = np.zeros(np.shape(r_g1tog2_g1))
@@ -937,7 +937,7 @@ def disorient_sigmarots(r_g1tog2_g1, l_g_go, cryst_ptgrp):
 
     for i in range(msz):
         r_go1togo2_go1[i, :, :] = np.dot(
-            np.dot(l_g_go, r_g1tog2_g1[i, :, :]), l_go_g)
+            np.dot(l_p_po, r_g1tog2_g1[i, :, :]), l_go_g)
 
     q_go1togo2_go1 = trans.mat2quat(r_go1togo2_go1)
     qfz_go1togo2_go1 = mis_fz.misorient_fz(q_go1togo2_go1, cryst_ptgrp)
@@ -954,7 +954,7 @@ def disorient_sigmarots(r_g1tog2_g1, l_g_go, cryst_ptgrp):
     for ct1 in range(np.size(ia)):
         if abs(abs(qfz_go1togo2_go1[:, ia[ct1]][0])-1) > 1e-10:
             mat1 = trans.quat2mat(qfz_go1togo2_go1[:, ia[ct1]])
-            rots_g1tog2_g1[ct2, :, :] = np.dot(np.dot(l_go_g, mat1), l_g_go)
+            rots_g1tog2_g1[ct2, :, :] = np.dot(np.dot(l_go_g, mat1), l_p_po)
             ct2 += 1
 
     if ct2 == 0:
@@ -1112,10 +1112,10 @@ def csl_rotations(sigma, sig_type, lat_type):
 
     # Compute rotation matrices in G1 lattice
     r_g1tog2_g1 = compute_tmat(quad_int, tau, lat_type)
-    l_g_go = lat_type.l_g_go
+    l_p_po = lat_type.l_p_po
 
     # Convert to disorientations to keep the unique rotations
-    r_g1tog2_g1 = disorient_sigmarots(r_g1tog2_g1, l_g_go, cryst_ptgrp)
+    r_g1tog2_g1 = disorient_sigmarots(r_g1tog2_g1, l_p_po, cryst_ptgrp)
 
     if np.size(r_g1tog2_g1) == 0:
         return {'N': np.empty(0), 'D': np.empty(0)}
