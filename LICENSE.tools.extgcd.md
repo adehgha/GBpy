@@ -1,4 +1,4 @@
-License for tools.extgcd This function has been borrowed from pymatgen project and has been modified to fit the needs of this GBpy package.
+License for tools.extgcd: This function has been borrowed from NZMATH project and has been modified to fit the needs of the GBpy package.
 Link to the project:
         http://tnt.math.se.tmu.ac.jp/nzmath/
 Link to the source code:

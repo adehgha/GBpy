@@ -1,4 +1,4 @@
-License for tools.lll_reduction: This function has been borrowed from pymatgen project and has been modified to fit the needs of this GBpy package.
+License for tools.lll_reduction: This function has been borrowed from pymatgen project and has been modified to fit the needs of the GBpy package.
 Link to the project:
         http://pymatgen.org/
 Link to the source code:
