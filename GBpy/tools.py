@@ -875,6 +875,12 @@ def unique_rows_tol(data, tol=1e-12, return_index=False, return_inverse=False):
     """
     prec = -np.fix(np.log10(tol))
     d_r = np.fix(data * 10 ** prec) / 10 ** prec + 0.0
+    ### fix rounds off towards zero; issues with the case of 0.9999999998 and 1.0
+
+    ### rint solves the issue, needs extensive testing
+    # prec = -np.rint(np.log10(tol))
+    # d_r = np.rint(data * 10 ** prec) / 10 ** prec + 0.0
+
     b = np.ascontiguousarray(d_r).view(np.dtype((np.void, d_r.dtype.itemsize * d_r.shape[1])))
     _, ia = np.unique(b, return_index=True)
     _, ic = np.unique(b, return_inverse=True)
