@@ -123,7 +123,7 @@ class Quaternion(np.ndarray):
         inner elements in this array should be the same as the number of elements for rest of the arguments. In such
 	cases the np.ndarray is treated as a one dimensional array, i.e. a (2 x2) array is used as a (1 x 4) array would.
         Arguments may be of different type, i.e. a tuple of numerals and a multi dimension np.ndarray may be used
-        simultaneously for a quaterinion array creation.
+        simultaneously for a quaternion array creation.
         The n (4 or 5) arguments should contain the respective qn components for the quaternions that are to be stored
         in the quaternion array.
 
@@ -518,7 +518,7 @@ def get_size(g):
         return np.shape(g)[1]
 # ----------------------------------------------------------------------------------------------------------------------
 
-def display(q):
+def display(q, p_flag=True):
     """
     Returns a string which displays the input quaternion array in human readable format.
 
@@ -526,6 +526,8 @@ def display(q):
     ----------
     g : input quaternion array
     * a quaternion array of size (5 x n)
+    p_flag : flag to print the returned display string
+    * a boolean with default value == True
 
     Returns
     -------
@@ -535,6 +537,9 @@ def display(q):
     ------
     * The 5 components of each quaternion stored in the array are displayed under 5 columns. Each row represents a
     quaternion.
+    * p_flag == True prints and returns the display string
+    * p_flag == False returns the display string
+
     """
     if q.ndim == 1:
         str1 = 'Quaternion: \n q0 \t \t q1 \t \t q2 \t \t q3 \t \t type \n'
@@ -547,11 +552,12 @@ def display(q):
     for ct1 in range(s1):
         str1 += ("%f \t %f \t %f \t %f \t %d \n" %
                   (q[0, ct1], q[1, ct1], q[2, ct1], q[3, ct1], q[4, ct1]))
-
+    if p_flag == True:
+        print str1
     return str1
 # ----------------------------------------------------------------------------------------------------------------------
 
-def antipodal(q1):
+def antipodal(q1, tol=1e-12):
     """
     Returns the antipodal (or equivalent) quaternions such that q0 component is positive.
 
@@ -559,10 +565,17 @@ def antipodal(q1):
     ----------
     q1 : input quaternion array
     * a quaternion array of size (5 x n)
+    tol : tolerance to overcome floating point error
+    * a float, default value is 1e-08
 
     Returns
     -------
     A quaternion array of size (5 x n)
+
+    Notes
+    -----
+    * Antipodal quaternion for quaternions representing Pi rotations (q0==0) are obtained with a convention.
+    * If q0 == 0, q3 >0; if q0 == 0 and q3 == 0, q2 >0; if q == 0, q3 == 0 and q2 == 0, q1 > 0.
 
     See Also
     --------
@@ -581,12 +594,80 @@ def antipodal(q1):
             b1 = -b1
             c1 = -c1
             d1 = -d1
+        if a1 < tol:
+            if d1 < 0:
+                b1 = -b1
+                c1 = -c1
+                d1 = -d1
+            if d1 < tol:
+                if c1 < 0:
+                    b1 = -b1
+                    c1 = -c1
+                if c1 < tol:
+                    if b1 < 0:
+                        b1 = -b1
+
     else:
-        ind1 = np.where(a1 < 0)
+        ind1 = np.where(a1 < 0)[0]
         a1[ind1] = -a1[ind1]
         b1[ind1] = -b1[ind1]
         c1[ind1] = -c1[ind1]
         d1[ind1] = -d1[ind1]
+
+        ind2 = np.where(a1 < tol)[0]
+        b2 = b1[ind2]; c2 = c1[ind2]; d2 = d1[ind2]
+        ind3 = np.where(d2 < 0)[0]
+        b2[ind3] = -b2[ind3]
+        c2[ind3] = -c2[ind3]
+        d2[ind3] = -d2[ind3]
+
+
+        ind4 = np.where(d2 < tol)[0]
+        b3 = b2[ind4]; c3 = c2[ind4]
+        ind5 = np.where(c3 < 0)[0]
+        b3[ind5] = -b3[ind5]
+        c3[ind5] = -c3[ind5]
+
+
+
+        ind6 = np.where(c3 < tol)[0]
+        b4 = b3[ind6]
+        ind7 = np.where(b4 < 0)[0]
+        b4[ind7] = -b4[ind7]
+
+        b3[ind6] = b4
+        b2[ind4] = b3; c2[ind4] = c3
+        b1[ind2] = b2; c1[ind2] = c2; d1[ind2] = d2
+
+    # ind8 = np.where(b1[ind6] < tol)
+    # b1[ind8] = -b1[ind8]
+    # c1[ind8] = -c1[ind8]
+    # d1[ind8] = -d1[ind8]
+    #
+    # ind8 = np.where(b1[ind2] < tol)
+    # ind3 = np.where(np.abs(b1[ind2]) < tol)
+    # ind5 = np.where(np.abs(c1[ind3]) < tol)
+    #
+    #
+    # if np.abs(d1) < tol:
+    #     if np.abs(c1) < tol:
+    #         if b1 < 0:
+    #             a1[ind2] = a1[ind2]
+    #             b1[ind2] = -b1[ind2]
+    #             c1[ind2] = -c1[ind2]
+    #             d1[ind2] = -d1[ind2]
+    #     else:
+    #         if c1 < 0:
+    #             a1[ind1] = a1[ind1]
+    #             b1[ind1] = -b1[ind1]
+    #             c1[ind1] = -c1[ind1]
+    #             d1[ind1] = -d1[ind1]
+    # else:
+    #     ind5 = np.where(d1[ind2] < 0)
+    #     b1[ind5] = -b1[ind5]
+    #     c1[ind5] = -c1[ind5]
+    #     d1[ind5] = -d1[ind5]
+    #
 
     return Quaternion(a1, b1, c1, d1, e1)
 # ----------------------------------------------------------------------------------------------------------------------
