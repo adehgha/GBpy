@@ -101,6 +101,6 @@ GBpy is written by:
                 
 * `Srikanth Patala <spatala@ncsu.edu>`__
 * `Arash Dehghan Banadaki <adehgha@ncsu.edu>`__
-* `Patala Research Group <http://patala.org/>`__.
+* `Patala Research Group <http://research.mse.ncsu.edu/patala/>`__.
         
 Copyright (c) 2015,  Arash Dehghan Banadaki and Srikanth Patala.
