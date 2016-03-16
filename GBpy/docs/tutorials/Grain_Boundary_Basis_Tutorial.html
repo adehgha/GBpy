@@ -222,7 +222,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Please refer to sections 1.1-1.3 of the <a href="">link</a> for a comprehensive discussion about Miller Indices and common conventions. In <a href="https://pypi.python.org/pypi/GBpy">GBpy</a> whenever we use the term Miller Indices, we are referring to the reciprocals of intercepts of a crystallographic plane <strong>with the primitive Basis Vectors</strong>.</p>
+<p>Please refer to <a href="https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/tutorials/Plane_Basis_Tutorial.html">sections 1.1-1.3</a> of the tutorial for a comprehensive discussion about Miller Indices and common conventions. In <a href="https://pypi.python.org/pypi/GBpy">GBpy</a> whenever we use the term Miller Indices, we are referring to the reciprocals of intercepts of a crystallographic plane <strong>with the primitive Basis Vectors</strong>.</p>
 <p><strong><code>Miller Indices: reciprocal of intercepts of a crystallographic plane with the primitive Basis Vectors</code></strong></p>
 <p>Other conventions in defining the Miller Indices are ultimately converted to the above definition in GBpy.</p>
 <p>In the present tutorial we manually extract various Indices and demonstrate how they can be fed to the <a href="https://pypi.python.org/pypi/GBpy">GBpy</a>. In practice such conversions are not necessary as long as the user is consistent with the definitions of GBpy, and can be used for verifying the answer.</p>
@@ -255,7 +255,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>In this tutorial we would like to find a <strong>reduced planar basis</strong> for a $\Sigma3$ Grain Boundary(GB) plane with the normal vector <strong><code>[2 3 1]</code></strong>.  Note that the normal is defined in the orthogonal reference frame (supercell f.c.c) of the lower crystal (Crystal 1).</p>
-<p>Note that whenever we are working with a plane in GBpy we need to be careful with the reference in which the planes are defined and what the Miller Indices of that plane are. For GBs however there is a ritch set of functions that perform all the conversions. The user only needs to be consistent with the GBpy's conventions.</p>
+<p>Note that whenever we are working with a plane in GBpy we need to be careful with the reference in which the planes are defined and what the Miller Indices of that plane are. For GBs however there is a rich set of functions that perform all the conversions. The user only needs to be consistent with the GBpy's conventions.</p>
 <p>In the following tutorial we demonstrate the features of the <strong>gb_2d_csl</strong> function.</p>
 
 </div>
@@ -285,7 +285,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In <a href="">Tutorial 3</a> we have extensively discussed the structure of the database of misorientations that ships with GBpy. In this tutorial we first extract the transformation matrix associated with $\Sigma3$ misorientation that can be found in <strong><code>"cF_Id_csl_common_rotations.pkl"</code></strong>.</p>
+<p>In <a href="https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/tutorials/CSL_DSC_Tutorial.html">Tutorial 3</a> we have extensively discussed the structure of the database of misorientations that ships with GBpy. In this tutorial we first extract the transformation matrix associated with $\Sigma3$ misorientation that can be found in <strong><code>"cF_Id_csl_common_rotations.pkl"</code></strong>.</p>
 
 </div>
 </div>
@@ -331,7 +331,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Also, from <a href="">Tutorial 1</a> we know the components of a primitive f.c.c in supercell reference frame, i.e. $\Lambda_{p}^{po}$, is defined as:</p>
+<p>Also, from <a href="https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/tutorials/Plane_Basis_Tutorial.html">Tutorial 1</a> we know the components of a primitive f.c.c in supercell reference frame, i.e. $\Lambda_{p}^{po}$, is defined as:</p>
 
 </div>
 </div>
@@ -403,7 +403,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The function specifically developed for this task is named <strong><code>gb_2d_csl()</code></strong> that can be accessed from <strong><code>GBpy.bp_basis.gb_2d_csl()</code></strong>.</p>
-<p>Let's go over all the inputs, outputs and the options that are avialble for <strong><code>gb_2d_csl</code></strong>.</p>
+<p>Let's go over all the inputs, outputs and the options that are available for <strong><code>gb_2d_csl</code></strong>.</p>
 <p>$\Lambda_{2D~CSL}^{p1}, \Lambda_{Crystal 1}^{p1}, \Lambda_{Crystal 2}^{p1} $ = <strong><code>gb_2d_csl</code></strong> (<strong><code>indices</code></strong>, $T^{ref}$, $\Lambda_{p}^{po}$, <strong><code>index_type</code></strong>, <strong><code>T_reference</code></strong>)</p>
 
 </div>
@@ -449,7 +449,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In this example our indices are provided in the orthogonal basis therefore we have to overwrite the default value of the <strong><code>index_type</code></strong> and change it to <strong><code>normal_go</code></strong>. The default value of the <strong><code>T_reference</code></strong>, i.e. <strong><code>'g1'</code></strong> is a correct choice as we are using the supplied misorintation data from the database. Let's import the approriate package and abbreviate it for the sake of simplicity.</p>
+<p>In this example our indices are provided in the orthogonal basis therefore we have to overwrite the default value of the <strong><code>index_type</code></strong> and change it to <strong><code>normal_go</code></strong>. The default value of the <strong><code>T_reference</code></strong>, i.e. <strong><code>'g1'</code></strong> is a correct choice as we are using the supplied misorintation data from the database. Let's import the appropriate package and abbreviate it for the sake of simplicity.</p>
 
 </div>
 </div>
@@ -511,7 +511,7 @@ L_pl2_p1:
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Note in the above naming of variables <code>L_2d_csl_p1, L_pl1_p1</code> and <code>L_pl2_p1</code> are respectively $\Lambda_{2D~CSL}^{p1}, \Lambda_{Crystal 1}^{p1}$ and $\Lambda_{Crystal 2}^{p1} $.</p>
-<p>From the <a href="">Tutorial 1</a> we found out that the Miller Indices associated with the normal vector <strong><code>[2 3 1]</code></strong> (defined in orthogonal reference frame) is going to be <strong><code>(4 3 5)</code></strong>. So Let's experiment with the input type and pass the Miller Indices as the index. Accordingly we need to change the <code>index_type</code> varibale to the 'miller_index' which is the default value. In other words both <code>index_type</code> and <code>T_reference</code> will have the default variables and no overwriting is necessary.</p>
+<p>From the <a href="https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/tutorials/Plane_Basis_Tutorial.html">Tutorial 1</a> we found out that the Miller Indices associated with the normal vector <strong><code>[2 3 1]</code></strong> (defined in orthogonal reference frame) is going to be <strong><code>(4 3 5)</code></strong>. So Let's experiment with the input type and pass the Miller Indices as the index. Accordingly we need to change the <code>index_type</code> varibale to the 'miller_index' which is the default value. In other words both <code>index_type</code> and <code>T_reference</code> will have the default variables and no overwriting is necessary.</p>
 
 </div>
 </div>

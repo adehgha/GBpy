@@ -222,7 +222,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>While $\Sigma$-rotations are widely known and used in crystacrystallography they are not trivial to build. Therefore we have computed a wide range of $\Sigma$-rotations and have included them inside the <a href="https://pypi.python.org/pypi/GBpy">GBpy</a> package in a separate folder named <code>pkl_files</code>. If you have installed the GBpy package using the <code>pip install GBpy</code> command or if you have cloned the <a href="https://github.com/adehgha/GBpy">GBpy github repository</a> on Github you have received the <code>pkl_files</code> folder. To access the <code>pkl_files</code> folder, you need to know where the GBpy package resides on your system. The following steps will help you navigate through the GBpy package folder structure. If you already have the rotation matrix (3x3 matrix) associated with the $\Sigma$-rotation igonre the following steps.</p>
+<p>While $\Sigma$-rotations are widely known and used in crystallography they are not trivial to build. Therefore we have computed a wide range of $\Sigma$-rotations and have included them inside the <a href="https://pypi.python.org/pypi/GBpy">GBpy</a> package in a separate folder named <code>pkl_files</code>. If you have installed the GBpy package using the <code>pip install GBpy</code> command or if you have cloned the <a href="https://github.com/adehgha/GBpy">GBpy github repository</a> on Github you have received the <code>pkl_files</code> folder. To access the <code>pkl_files</code> folder, you need to know where the GBpy package resides on your system. The following steps will help you navigate through the GBpy package folder structure. If you already have the rotation matrix (3x3 matrix) associated with the $\Sigma$-rotation igonre the following steps.</p>
 
 </div>
 </div>
@@ -341,7 +341,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The common $\Sigma$-rotations of cubic lattices are saved in a file named <strong><code>"cF_Id_csl_common_rotations.pkl"</code></strong>. You can find $\Sigma$-rotations of other lattices in the same folder likewise (i.e. hexagnal(hP), tetragonal(tP), etc.), however in this tutorial the focus is on face-centered cubic (f.c.c) lattice. To access the contents of <code>"cF_Id_csl_common_rotations.pkl"</code> use the following commands:</p>
+<p>The common $\Sigma$-rotations of cubic lattices are saved in a file named <strong><code>"cF_Id_csl_common_rotations.pkl"</code></strong>. You can find $\Sigma$-rotations of other lattices in the same folder similarly (i.e. hexagnal(hP), tetragonal(tP), etc.), however in this tutorial the focus is on face-centered cubic (f.c.c) lattice. To access the contents of <code>"cF_Id_csl_common_rotations.pkl"</code> use the following commands:</p>
 
 </div>
 </div>
@@ -365,9 +365,9 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The variable <code>"pkl_content"</code> contains first 200 common $\Sigma$-rotations of cubic lattices, stored as a <a href="https://docs.python.org/2/tutorial/datastructures.html#dictionaries">dictionary</a> data structure. Each entery in the dictionary can be access by specifying the <strong><em>key</em></strong> to that entery. The key for each sigma rotation is a <strong>string</strong> with the $\Sigma$-number. We would like to emphasize that the key to each entery has to be a string. For instance for $\Sigma$3 you need to pass '3' to the pkl_content as the key.</p>
+<p>The variable <code>"pkl_content"</code> contains first 200 common $\Sigma$-rotations of cubic lattices, stored as a <a href="https://docs.python.org/2/tutorial/datastructures.html#dictionaries">dictionary</a> data structure. Each entry in the dictionary can be access by specifying the <strong><em>key</em></strong> to that entry. The key for each sigma rotation is a <strong>string</strong> with the $\Sigma$-number. We would like to emphasize that the key to each entry has to be a string. For instance for $\Sigma$3 you need to pass '3' to the pkl_content as the key.</p>
 <p>It is very important to note that all the rotation matrices are expressed in <strong><em>primitive bases</em></strong> of the associated lattices. To use the rotation matrices in an orthogonal basis one needs to perform <a href="http://mathworld.wolfram.com/SimilarityTransformation.html">similarity transformation</a> on the provided rotation matrices. We will demonstrate an example of such transformation later in this tutorial. Luckily for cubic lattices the $\Sigma$-rotations remain constant in both <em>primitive</em> and <em>orthogonal</em> bases.</p>
-<p>To avoid the truction error we have stored the Numerator (saved as 'N') and the Denominator (saved as 'D') of each $\Sigma$-rotation separately. To construct the rotation matrix associated with each $\Sigma$-rotation you need to devide the elements of <strong>N</strong> by elements of <strong>D</strong>. The result will be a 3x3 rotation matrix which will be a <code>numpy</code> array. The following steps shows how you can construct the rotation matrix associated with the $\Sigma$3 rotation:</p>
+<p>To avoid the truncation error we have stored the Numerator (saved as 'N') and the Denominator (saved as 'D') of each $\Sigma$-rotation separately. To construct the rotation matrix associated with each $\Sigma$-rotation you need to divide the elements of <strong>N</strong> by elements of <strong>D</strong>. The result will be a 3x3 rotation matrix which will be a <code>numpy</code> array. The following steps shows how you can construct the rotation matrix associated with the $\Sigma$3 rotation:</p>
 
 </div>
 </div>
@@ -555,7 +555,7 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>So far we have been able to obtain the rotation matrix associated with the $\Sigma$3 rotation which is stored in the variable <strong><code>Sigma3</code></strong>. As mentioned in <strong>section 1.1</strong>, it is very important to recognize that the obtained rotation matrices are expressed in primitive basis of the lattice. To use the rotation matrices in an orthogonal basis one needs to perform similarity transformation on the provided rotation matrices.</p>
 <p>By convention we use the <strong><em>p</em></strong> for primitive basis and <strong><em>po</em></strong> for orthogonal basis of a lattice.</p>
-<p>If we define the transformation matrix of the $\Sigma$3 (that transforms crystal $p_{1}$ to $p_{2}$) in the primitive basis as $T_{p_{1} \rightarrow p_{2}}^{p}$, same transormation in orthogonal basis of the lattice (e.g. supercell lattice) will be defined as $T_{p_{1} \rightarrow p_{2}}^{po}$ and can be found using the similarity transformation as:</p>
+<p>If we define the transformation matrix of the $\Sigma$3 (that transforms crystal $p_{1}$ to $p_{2}$) in the primitive basis as $T_{p_{1} \rightarrow p_{2}}^{p}$, same transformation in orthogonal basis of the lattice (e.g. supercell lattice) will be defined as $T_{p_{1} \rightarrow p_{2}}^{po}$ and can be found using the similarity transformation as:</p>
 <p>$T_{p_{1} \rightarrow p_{2}}^{po} = \Lambda_{po}^{p} \times T_{p_{1} \rightarrow p_{2}}^{p} \times \Lambda_{p}^{po}$</p>
 <p>where $\Lambda_{p}^{po}$ is a 3x3 matrix which defines the components of the basis of the primitve lattice in an orthogonal reference frame attached to the same lattice. Therefore, $\Lambda_{p}^{po}$ is a constant for each lattice. $\Lambda_{p}^{po}$ for various lattices can be obtained from the lattice class in GBpy. For example, the components of a primitive f.c.c. lattice with lattice parameter $a = 1.0 \unicode{x212B} $, $\Lambda_{p}^{po}$, is defined as:</p>
 
@@ -712,7 +712,7 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>To compute the CSL and DSC lattices, <strong>GBpy</strong> only requires the $T_{p_{1}\rightarrow p_{2}}^{p}$ that can be directly accessed from teh provided pkl files. It automatically performs the similarity transformation using the $\Lambda_{p}^{po}$ that can be obtained from the lattice class.</p>
+<p>To compute the CSL and DSC lattices, <strong>GBpy</strong> only requires the $T_{p_{1}\rightarrow p_{2}}^{p}$ that can be directly accessed from the provided pkl files. It automatically performs the similarity transformation using the $\Lambda_{p}^{po}$ that can be obtained from the lattice class.</p>
 <p>We have stored the $\Lambda_{p}^{po}$ in <strong><code>L_p_po</code></strong> and $T_{p_{1}\rightarrow p_{2}}^{p}$ in <strong><code>Sigma3</code></strong> that are shown in the following:</p>
 
 </div>
@@ -788,8 +788,8 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 <p>To find the CSL and DSC lattices the user should use the function <strong><code>find_csl_dsc</code></strong>. This function is available in a file with the same name. To use this function first you must import GBpy as a package or directly import the function from the file.</p>
 <p><strong><code>find_csl_dsc</code></strong> needs two inputs and provides the CSL and DSC lattices in primitive basis. The syntax is as follows:</p>
 <p>$\Lambda_{CSL}^{p1}$, $\Lambda_{DSC}^{p1}$ = <strong><code>find_csl_dsc</code> ($\Lambda_{p}^{po}$, $T_{p_{1}\rightarrow p_{2}}^{p}$)</strong></p>
-<p>Follow the below steps to obtain the CSL and DSC lattices using <strong>GBpy</strong>:</p>
-<p>First import the appropraite module from <strong>GBpy</strong>. Next call the <strong><code>find_csl_dsc</code></strong> function with the following syntax:</p>
+<p>Follow the steps below to obtain the CSL and DSC lattices using <strong>GBpy</strong>:</p>
+<p>First import the appropriate module from <strong>GBpy</strong>. Next call the <strong><code>find_csl_dsc</code></strong> function with the following syntax:</p>
 
 </div>
 </div>
@@ -891,7 +891,7 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>To find the $\Lambda_{CSL}^{po1}$ and $\Lambda_{DSC}^{po1}$, one must change treference he reference frame to the orthogonal basis as follows:</p>
+<p>To find the $\Lambda_{CSL}^{po1}$ and $\Lambda_{DSC}^{po1}$, one must change the reference frame to the orthogonal basis as follows:</p>
 <p>$\Lambda_{CSL}^{po1}$ = $\Lambda_{p}^{po} \times \Lambda_{CSL}^{p1}$</p>
 <p>Hence we can obtain the $\Lambda_{CSL}^{po1}$ as:</p>
 
@@ -976,7 +976,7 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The $\Lambda_{CSL}^{po1}$ provides a basis for the <strong>coincidence sites</strong> of a bicrystal that have a misorientation of the specified $\Sigma$ (e.g. $\Sigma3$ in this case). Note that the basis obtained $\Lambda_{CSL}^{po1}$ is in reduced form (using <em>lll-reduction</em> algorithm) and therefore the length of the basis vectors are as close as possible. Each column of the $\Lambda_{CSL}^{po1}$ contains one of the basis vectors of the CSL lattice. These basis vectors of CSL the lattice are of paramount importance in simulation of interfaces and are used to construct a periodic simulation cell.</p>
-<p>The $\Lambda_{DSC}^{po1}$ provides a basis for the <strong>displacement shift lattice</strong> of a bicrystal that have a misorientation of the specified $\Sigma$ (e.g. $\Sigma3$ in this case). The basis vectors of a DSC lattice provide unique displacement intervals in space in which the coincidence pattern of the bicrystal remains preserved. In other words any displacement in one of the bicrystals along the DSC basis vectors and with a magnitude of integer mutiples of the norm of the DSC basis vectors, preserves the CSL pattern. This property of the DSC lattice is of great importance in energy minimization of interfaces.</p>
+<p>The $\Lambda_{DSC}^{po1}$ provides a basis for the <strong>displacement shift lattice</strong> of a bicrystal that have a misorientation of the specified $\Sigma$ (e.g. $\Sigma3$ in this case). The basis vectors of a DSC lattice provide unique displacement intervals in space in which the coincidence pattern of the bicrystal remains preserved. In other words any displacement in one of the bicrystals along the DSC basis vectors and with a magnitude of integer multiples of the norm of the DSC basis vectors, preserves the CSL pattern. This property of the DSC lattice is of great importance in energy minimization of interfaces.</p>
 <hr>
 <p>Copyright (c) 2015, <a href="mailto:adehgha@ncsu.edu">Arash D. Banadaki</a>, <a href="mailto:spatala@ncsu.edu">Srikanth Patala</a></p>
 

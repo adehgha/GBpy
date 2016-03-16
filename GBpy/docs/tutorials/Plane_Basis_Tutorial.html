@@ -219,12 +219,12 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Miller Indices are often used to refer to a given crystallograohic plane in crystals. However various conventions are commonly used in determining the Miller Indices that can completely change the plane of reference. For this reason we would like to decalre our conventions in defining the Miller Indices to avoid any confusions.
-By definition Miller Indices are defined as the reciprocal of intercepts of a crystallographic plane with the Unit Cell Basis Vectors. The confusion is often caused by the definition of the Unit Cell. In f.c.c and b.c.c lattices primitive basis vectors are non-orthogonal while the supercell basis vectors are orthogonal. Most importantly since the reciprocal and direct lattices are the identical in f.c.c and b.c.c, the Miller Indices (defined in suppercell unit cell) are the same as the plane normal indices. This unique property and convenience of using an orthogonal set of basis vectors is the root cause of the bipartisan approach to defining the Miller Indices. The downfall of such an approach is the fact that it does not have much utility in other types of lattices  e.g. hcp. Therefore in <a href="https://pypi.python.org/pypi/GBpy">GBpy</a> whenever we use the term Miller Indices, we are referring to the reciprocals of intercepts of a crystallographic plane <strong>with the primitive Basis Vectors</strong>.</p>
+<p>Miller Indices are often used to refer to a given crystallograohic plane in crystals. However various conventions are commonly used in determining the Miller Indices that can completely change the plane of reference. For this reason we would like to declare our conventions in defining the Miller Indices to avoid any confusions.
+By definition Miller Indices are defined as the reciprocal of intercepts of a crystallographic plane with the Unit Cell Basis Vectors. The confusion is often caused by the definition of the Unit Cell. In f.c.c and b.c.c lattices primitive basis vectors are non-orthogonal while the supercell basis vectors are orthogonal. Most importantly since the reciprocal and direct lattices are the identical in f.c.c and b.c.c, the Miller Indices (defined in supercell unit cell) are the same as the plane normal indices. This unique property and convenience of using an orthogonal set of basis vectors is the root cause of the bipartisan approach to defining the Miller Indices. The downfall of such an approach is the fact that it does not have much utility in other types of lattices  e.g. hcp. Therefore in <a href="https://pypi.python.org/pypi/GBpy">GBpy</a> whenever we use the term Miller Indices, we are referring to the reciprocals of intercepts of a crystallographic plane <strong>with the primitive Basis Vectors</strong>.</p>
 <p><strong><code>Miller Indices: reciprocal of intercepts of a crystallographic plane with the primitive Basis Vectors</code></strong></p>
 <p>or alternatively:</p>
 <p><strong><code>Miller Indices: normal vector indices of the plane defined in primitive reciprocal lattice</code></strong></p>
-<p>The above interchangable definitions are consistently used in GBpy for referring to Miller Indices. Other conventions in defining the Miller Indices are ultimately converted to the above definition.</p>
+<p>The above interchangeable definitions are consistently used in GBpy for referring to Miller Indices. Other conventions in defining the Miller Indices are ultimately converted to the above definition.</p>
 <p>In the present tutorial we manually extract various Indices and demonstrate how they can be fed to the <a href="https://pypi.python.org/pypi/GBpy">GBpy</a>. In practice such conversions are not necessary as long as the user is consistent with the definitions of GBpy, and can be used for verifying the answer.</p>
 
 </div>
@@ -301,7 +301,7 @@ By definition Miller Indices are defined as the reciprocal of intercepts of a cr
 <p>Therefore by finding the $\Lambda_{po}^{p^{*}}$ we can find the components of $\vec{n}$ in reciprocal space which will be the Miller Indices of the plane <strong><code>(2 3 1)</code></strong>.</p>
 <p>The following relationship holds between reciprocal and direct lattice spaces:</p>
 <p>$\Lambda_{po}^{p^{*}} = (\Lambda^{po}_{p^{*}})^{-1} = ((\Lambda^{po}_{p})^{*})^{-1}~~(6)$</p>
-<p>where $\Lambda^{po}_{p}$ is a known matrix for a given lattice. For an f.c.c lattice with the lattice parameter of $a = 1.0 \unicode{x212B}$, $\Lambda^{po}_{p}$ is the following matrix. This matrix can also be obtained from the lattice class in GBpy for a number of elements. Refer to the <a href="https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/build/html/index.html">GBpy documentation</a> for further details. If we name the $\Lambda^{po}_{p}$ as <strong><code>L_p_po</code></strong>:</p>
+<p>where $\Lambda^{po}_{p}$ is a known matrix for a given lattice. For a f.c.c lattice with the lattice parameter of $a = 1.0 \unicode{x212B}$, $\Lambda^{po}_{p}$ is the following matrix. This matrix can also be obtained from the lattice class in GBpy for a number of elements. Refer to the <a href="https://cdn.rawgit.com/adehgha/GBpy/master/GBpy/docs/_build/html/index.html">GBpy documentation</a> for further details. If we name the $\Lambda^{po}_{p}$ as <strong><code>L_p_po</code></strong>:</p>
 
 </div>
 </div>
@@ -343,7 +343,7 @@ By definition Miller Indices are defined as the reciprocal of intercepts of a cr
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>From $(6)$ we need to find the reciprocal of the $\Lambda^{po}_{p}$. To do so use the <strong><code>GBpy.find_csl_dsc.reciprocal_mat()</code></strong>. For the sake of convenience we abreviate the imported function <strong><code>GBpy.find_csl_dsc</code></strong> as <strong><code>fcd</code></strong>:</p>
+<p>From $(6)$ we need to find the reciprocal of the $\Lambda^{po}_{p}$. To do so use the <strong><code>GBpy.find_csl_dsc.reciprocal_mat()</code></strong>. For the sake of convenience we abbreviate the imported function <strong><code>GBpy.find_csl_dsc</code></strong> as <strong><code>fcd</code></strong>:</p>
 
 </div>
 </div>
@@ -472,7 +472,7 @@ Finally from $(5)$ we can find the $n_{p}^{*}$ as:</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>However since the Miller Indices are ought to be integral we have to find a common scaling factor for all the components such that the result is going to be scalar. We have implemented a function named <strong>int_finder</strong> that performs this task for a variety of input types and on rows and columns of matrices. For irrational numbers <strong>int_finder</strong> accepts a tolerance and performs the same operation on the closest rational number within the specified tolerance. You can find this function in the package as: <strong>GBpy.integer_manipulations.int_finder()</strong>. Therefore we repeat the previous steps and pass the results to the <strong>int_finder</strong> to obtain an intergal answer.</p>
+<p>However since the Miller Indices are ought to be integral we have to find a common scaling factor for all the components such that the result is going to be scalar. We have implemented a function named <strong>int_finder</strong> that performs this task for a variety of input types and on rows and columns of matrices. For irrational numbers <strong>int_finder</strong> accepts a tolerance and performs the same operation on the closest rational number within the specified tolerance. You can find this function in the package as: <strong>GBpy.integer_manipulations.int_finder()</strong>. Therefore we repeat the previous steps and pass the results to the <strong>int_finder</strong> to obtain an integral answer.</p>
 
 </div>
 </div>
@@ -532,7 +532,7 @@ Finally from $(5)$ we can find the $n_{p}^{*}$ as:</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>From the previous section we found the Miller Indices of an f.c.c plane with the normal of <strong>[2 3 1]</strong> to be <strong>(4 3 5)</strong>. Now all we have to do is to pass the obtained indices to the appropriate function in GBpy. <strong>bp_basis</strong> is a function that gets the Miller Indices as the input and returns a 3X2 matrix, where each column is one of the two planar basis vectors. <strong>Note that the output of the bp_basis() is always expressed in the primitive lattice basis.</strong> Also the obtained vectors are always in the reduced form, meaning that the length of the obtained bsais vectors are as close as possible. You can find the <strong>bp_basis</strong> function in the following path:
+<p>From the previous section we found the Miller Indices of an f.c.c plane with the normal of <strong>[2 3 1]</strong> to be <strong>(4 3 5)</strong>. Now all we have to do is to pass the obtained indices to the appropriate function in GBpy. <strong>bp_basis</strong> is a function that gets the Miller Indices as the input and returns a 3X2 matrix, where each column is one of the two planar basis vectors. <strong>Note that the output of the bp_basis() is always expressed in the primitive lattice basis.</strong> Also the obtained vectors are always in the reduced form, meaning that the length of the obtained basis vectors are as close as possible. You can find the <strong>bp_basis</strong> function in the following path:
 <strong>GBpy.bp_basis.bp_basis()</strong></p>
 
 </div>
@@ -627,7 +627,7 @@ Finally from $(5)$ we can find the $n_{p}^{*}$ as:</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>At the interfacee of a bicrystal, the $\Lambda_{2D}^{po}$ provides a basis for the interface. If the two crystals are related to each other by a $\Sigma$-rotation, the obtained $\Lambda_{2D}^{po}$ is a basis for the <strong>coincidence site lattice</strong> at the interface. Therefore the bicrystal conserves its periodicity in the obtained 2D-basis. In other words the obtained basis is in fact the basis for the unit cell of the bicrystal and since it is in the reduced form, it is going to have the smallest skewness, hence ideal for constructing a periodic simulation box.</p>
+<p>At the interface of a bicrystal, the $\Lambda_{2D}^{po}$ provides a basis for the interface. If the two crystals are related to each other by a $\Sigma$-rotation, the obtained $\Lambda_{2D}^{po}$ is a basis for the <strong>coincidence site lattice</strong> at the interface. Therefore the bicrystal conserves its periodicity in the obtained 2D-basis. In other words the obtained basis is in fact the basis for the unit cell of the bicrystal and since it is in the reduced form, it is going to have the smallest skewness, hence ideal for constructing a periodic simulation box.</p>
 <p>The above process is frquently repeated for simulation of grain boundaries. Therefore we have developed a set of functions that make the conversion of indices more convenient and will accept various conventions for the Miller Indices. Please refer to the grain boundary 2D-CSL tutorial for how to use these functions.</p>
 <hr>
 <p>Copyright (c) 2015, <a href="mailto:adehgha@ncsu.edu">Arash D. Banadaki</a>, <a href="mailto:spatala@ncsu.edu">Srikanth Patala</a></p>
