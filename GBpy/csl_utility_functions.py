@@ -256,7 +256,7 @@ def mesh_muvw(cryst_ptgrp, sigma, sig_type, *args):
     x3 = x3.ravel()
     x4 = x4.ravel()
 
-    return np.vstack((x1, x2, x3, x4)).astype(int)
+    return np.vstack((x1, x2, x3, x4)).astype(dtype='int64')
 # -----------------------------------------------------------------------------------------------------------
 
 
@@ -500,7 +500,7 @@ def eliminate_mults(quad_int):
     Divide all the integer quadruples by their corresponding least common
     multiples and return the unique set of integer quadruples
     """
-    quad_gcd = int_man.gcd_array(quad_int.astype(int), 'columns')
+    quad_gcd = int_man.gcd_array(quad_int.astype(dtype='int64'), 'columns')
     quad_gcd = np.tile(quad_gcd, (4, 1))
 
     a = quad_int / quad_gcd
@@ -778,10 +778,10 @@ def gcd1d_arr(arr_tup):
     GCD of rows of 1D arrays of integers
     """
     asz = len(arr_tup)
-    gc1 = arr_tup[0].astype(int)
+    gc1 = arr_tup[0].astype(dtype='int64')
     for ct1 in range(asz - 1):
         gc1 = np.copy(np.column_stack((gc1,
-                                       arr_tup[ct1+1].astype(int))))
+                                       arr_tup[ct1+1].astype(dtype='int64'))))
 
     if gc1.ndim == 1:
         gc1 = np.reshape(gc1, (1, np.size(gc1)))

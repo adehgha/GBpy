@@ -49,7 +49,8 @@ def gcd_array(input, order='all'):
         input = np.reshape(input, (1, input.shape[0]))
 
     # Only integer values are allowed
-    if input.dtype.name != 'int64':
+    # if input.dtype.name != 'int64':
+    if not np.issubdtype(input.dtype, np.int):
         raise Exception("Inputs must be real integers.")
 
     err_msg = "Not a valid input. Please choose either \"rows\" " + \
@@ -146,7 +147,8 @@ def lcm_array(input, order='all'):
         input = np.reshape(input, (1, input.shape[0]))
 
     # Only integer values are allowed
-    if input.dtype.name != 'int64':
+    # if input.dtype.name != 'int64':
+    if not np.issubdtype(input.dtype, np.int):
         raise Exception("Inputs must be real integers.")
 
     err_msg = "Not a valid input. Please choose either \"rows\" " + \
@@ -244,8 +246,8 @@ def rat(input, tol=1e-06):
         input1 = np.reshape(input1, (1, 1))
 
     Sz = input1.shape
-    N = np.zeros((Sz[0], Sz[1]), dtype=np.int)
-    D = np.zeros((Sz[0], Sz[1]), dtype=np.int)
+    N = np.zeros((Sz[0], Sz[1]), dtype='int64')
+    D = np.zeros((Sz[0], Sz[1]), dtype='int64')
     nDec = int(1/tol)
     for i in range(Sz[0]):
         for j in range(Sz[1]):
@@ -299,7 +301,7 @@ def int_finder(input_v, tol=1e-6, order='all', tol1=1e-6):
     if int_check(input1, 15).all():
         input1 = np.around(input1)
         # Divide by LCM (rows, cols, all) <--- To Do
-        tmult = gcd_array(input1.astype(int), order)
+        tmult = gcd_array(input1.astype(dtype='int64'), order)
         if (order == 'all'):
             input1 = input1 / tmult
         elif (order == 'rows'):
