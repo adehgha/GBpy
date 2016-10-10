@@ -9,16 +9,17 @@ import numpy as np
 import sys
 import pickle
 import os
+import GBpy
 
 file_dir = os.path.dirname(os.path.realpath(__file__))
 path_dir3 = file_dir + '/../'
 sys.path.append(path_dir3)
 # Load Integer Manipulations Module
-import integer_manipulations as int_man
+import GBpy.integer_manipulations as int_man
 # Load Lattice Module
-import lattice as lat
+import GBpy.lattice as lat
 # Load CSL Utility function
-import csl_utility_functions as csl_util
+import GBpy.csl_utility_functions as csl_util
 
 # Test Cases
 # 1: Common rotations for cubic lattices
@@ -26,7 +27,7 @@ import csl_utility_functions as csl_util
 # 3: Common rotations for primitive hexagonal lattices
 # 4: Common rotations for primitive rhombohedral lattices
 
-test_case = 1
+test_case = 6
 # Input parameters for pkl files
 if test_case == 1:
     sig_type = 'common'
@@ -48,6 +49,10 @@ elif test_case == 5:
     ca_rat = 3
     lat_type = 'tP_ca'
     l1 = lat.Lattice(lat_type, ca_rat)
+elif test_case == 6:
+    sig_type = 'common'
+    lat_type = 'cI_Id'
+    l1 = lat.Lattice(lat_type)
 
 sig_rots = {}
 sig_num = np.arange(1000) + 1

@@ -258,7 +258,7 @@ div#notebook {
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>/usr/local/lib/python2.7/dist-packages/GBpy
+<pre>/media/valuedc/lin/prog/github/GBpy/GBpy
 </pre>
 </div>
 </div>
@@ -310,24 +310,34 @@ div#notebook {
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&apos;symm_mats_D3d.pkl&apos;,
- &apos;symm_mats_D6.pkl&apos;,
- &apos;symm_mats_O.pkl&apos;,
- &apos;symm_mats_Oh.pkl&apos;,
+<pre>[&apos;__init__.py&apos;,
+ &apos;symm_quats_Cs.pkl&apos;,
  &apos;symm_quats_Oh.pkl&apos;,
+ &apos;symm_quats_D6.pkl&apos;,
+ &apos;symm_mats_D4h.pkl&apos;,
+ &apos;symm_mats_D6.pkl&apos;,
+ &apos;hP_Id_csl_common_rotations.pkl&apos;,
+ &apos;symm_mats_C2h.pkl&apos;,
+ &apos;hR_Id_csl_common_rotations.pkl&apos;,
+ &apos;symm_mats_D3d.pkl&apos;,
+ &apos;symm_mats_D6h.pkl&apos;,
  &apos;symm_quats_O.pkl&apos;,
+ &apos;symm_mats_D2h.pkl&apos;,
+ &apos;cF_Id_csl_common_rotations.pkl&apos;,
+ &apos;cI_Id_csl_common_rotations.pkl&apos;,
+ &apos;symm_mats_D8h.pkl&apos;,
+ &apos;symm_mats_O.pkl&apos;,
+ &apos;__init__.pyc&apos;,
+ &apos;symm_mats_Cs.pkl&apos;,
  &apos;tP_Id_exp_csl_common_rotations.pkl&apos;,
  &apos;symm_quats_D4.pkl&apos;,
- &apos;symm_quats_D6.pkl&apos;,
- &apos;hP_Id_csl_common_rotations.pkl&apos;,
- &apos;tP_Id_csl_common_rotations.pkl&apos;,
- &apos;cF_Id_csl_common_rotations.pkl&apos;,
+ &apos;symm_quats_C2h.pkl&apos;,
+ &apos;symm_quats_D8h.pkl&apos;,
+ &apos;symm_mats_Oh.pkl&apos;,
  &apos;tP_ca_csl_specific_tau_1_9_rotations.pkl&apos;,
- &apos;hR_Id_csl_common_rotations.pkl&apos;,
- &apos;symm_mats_D6h.pkl&apos;,
+ &apos;symm_quats_D6h.pkl&apos;,
  &apos;symm_quats_D3.pkl&apos;,
- &apos;symm_mats_D4h.pkl&apos;,
- &apos;symm_quats_D6h.pkl&apos;]</pre>
+ &apos;tP_Id_csl_common_rotations.pkl&apos;]</pre>
 </div>
 
 </div>
@@ -473,13 +483,13 @@ div#notebook {
  
         [[ 17.,  17.,  17.],
          [ 17.,  17.,  17.],
-         [ 17.,  17.,  17.]]]), &apos;N&apos;: array([[[  7., -11.,   7.],
-         [ 14.,  12.,  -3.],
-         [ -3.,  12.,  14.]],
- 
-        [[ 15.,  -5.,   3.],
+         [ 17.,  17.,  17.]]]), &apos;N&apos;: array([[[ 15.,  -5.,   3.],
          [  8.,  20.,   5.],
-         [ -8.,  -3.,  12.]]])}</pre>
+         [ -8.,  -3.,  12.]],
+ 
+        [[  7., -11.,   7.],
+         [ 14.,  12.,  -3.],
+         [ -3.,  12.,  14.]]])}</pre>
 </div>
 
 </div>
@@ -514,13 +524,13 @@ div#notebook {
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Sigma17_a = [[ 0.41176471 -0.64705882  0.41176471]
- [ 0.82352941  0.70588235 -0.17647059]
- [-0.17647059  0.70588235  0.82352941]] 
-
-Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
+<pre>Sigma17_a = [[ 0.88235294 -0.29411765  0.17647059]
  [ 0.47058824  1.17647059  0.29411765]
- [-0.47058824 -0.17647059  0.70588235]]
+ [-0.47058824 -0.17647059  0.70588235]] 
+
+Sigma17_b = [[ 0.41176471 -0.64705882  0.41176471]
+ [ 0.82352941  0.70588235 -0.17647059]
+ [-0.17647059  0.70588235  0.82352941]]
 </pre>
 </div>
 </div>
@@ -556,7 +566,7 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 <p>So far we have been able to obtain the rotation matrix associated with the $\Sigma$3 rotation which is stored in the variable <strong><code>Sigma3</code></strong>. As mentioned in <strong>section 1.1</strong>, it is very important to recognize that the obtained rotation matrices are expressed in primitive basis of the lattice. To use the rotation matrices in an orthogonal basis one needs to perform similarity transformation on the provided rotation matrices.</p>
 <p>By convention we use the <strong><em>p</em></strong> for primitive basis and <strong><em>po</em></strong> for orthogonal basis of a lattice.</p>
 <p>If we define the transformation matrix of the $\Sigma$3 (that transforms crystal $p_{1}$ to $p_{2}$) in the primitive basis as $T_{p_{1} \rightarrow p_{2}}^{p}$, same transformation in orthogonal basis of the lattice (e.g. supercell lattice) will be defined as $T_{p_{1} \rightarrow p_{2}}^{po}$ and can be found using the similarity transformation as:</p>
-<p>$T_{p_{1} \rightarrow p_{2}}^{po} = \Lambda_{po}^{p} \times T_{p_{1} \rightarrow p_{2}}^{p} \times \Lambda_{p}^{po}$</p>
+<p>$T_{p_{1} \rightarrow p_{2}}^{po} = \Lambda_{p}^{po} \times T_{p_{1} \rightarrow p_{2}}^{p} \times \Lambda_{po}^{p}$</p>
 <p>where $\Lambda_{p}^{po}$ is a 3x3 matrix which defines the components of the basis of the primitve lattice in an orthogonal reference frame attached to the same lattice. Therefore, $\Lambda_{p}^{po}$ is a constant for each lattice. $\Lambda_{p}^{po}$ for various lattices can be obtained from the lattice class in GBpy. For example, the components of a primitive f.c.c. lattice with lattice parameter $a = 1.0 \unicode{x212B} $, $\Lambda_{p}^{po}$, is defined as:</p>
 
 </div>
@@ -651,7 +661,7 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 <div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">T_p1top2_po</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">L_po_p</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Sigma3</span><span class="p">,</span> <span class="n">L_p_po</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<div class=" highlight hl-ipython2"><pre><span class="n">T_p1top2_po</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">L_p_po</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Sigma3</span><span class="p">,</span> <span class="n">L_po_p</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">T_p1top2_po</span>
 </pre></div>
 
@@ -836,9 +846,9 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[[ 0. -1.  1.]
- [-1.  1.  1.]
- [ 1.  0.  1.]]
+<pre>[[-1.  0.  1.]
+ [ 0. -1.  1.]
+ [ 1.  1.  1.]]
 </pre>
 </div>
 </div>
@@ -875,9 +885,9 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[[ 0.33333333 -0.33333333 -0.66666667]
- [ 0.33333333 -0.33333333  0.33333333]
- [ 0.33333333  0.66666667  0.33333333]]
+<pre>[[-0.33333333 -0.33333333  0.33333333]
+ [ 0.66666667 -0.33333333  0.33333333]
+ [-0.33333333  0.66666667  0.33333333]]
 </pre>
 </div>
 </div>
@@ -917,9 +927,9 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[[ 0.   0.5  1. ]
- [ 0.5 -0.5  1. ]
- [-0.5  0.   1. ]]
+<pre>[[ 0.5  0.   1. ]
+ [ 0.   0.5  1. ]
+ [-0.5 -0.5  1. ]]
 </pre>
 </div>
 </div>
@@ -942,7 +952,7 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">L_dsc_po1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">L_p_po</span><span class="p">,</span> <span class="n">L_dsc_p1</span><span class="p">)</span>
@@ -959,9 +969,9 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[[ 0.33333333  0.16666667  0.33333333]
- [ 0.33333333  0.16666667 -0.16666667]
- [ 0.33333333 -0.33333333 -0.16666667]]
+<pre>[[ 0.16666667  0.16666667  0.33333333]
+ [-0.33333333  0.16666667  0.33333333]
+ [ 0.16666667 -0.33333333  0.33333333]]
 </pre>
 </div>
 </div>
@@ -982,6 +992,19 @@ Sigma17_b = [[ 0.88235294 -0.29411765  0.17647059]
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
 </div>
     </div>
   </div>
