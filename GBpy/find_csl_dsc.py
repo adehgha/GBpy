@@ -184,7 +184,8 @@ def csl_finder_smith(r_g1tog2_g1):
         raise Exception('l_csl_g1 is not defined in L_G1_G1 axis')
 
     # Reduced CSL bases using the LLL algorithm
-    l_csl_g1 = lll_reduction((l_csl_g1))
+    # Actually don't reduce yet because the matrix is in "g1" reference frame!
+    # l_csl_g1 = lll_reduction((l_csl_g1))
     return l_csl_g1
 # -----------------------------------------------------------------------------------------------------------
 
