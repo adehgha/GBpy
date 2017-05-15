@@ -9,16 +9,17 @@ import numpy as np
 import sys
 import pickle
 import os
+import GBpy
 
 file_dir = os.path.dirname(os.path.realpath(__file__))
 path_dir3 = file_dir + '/../'
 sys.path.append(path_dir3)
 # Load Integer Manipulations Module
-import integer_manipulations as int_man
+import GBpy.integer_manipulations as int_man
 # Load Lattice Module
-import lattice as lat
+import GBpy.lattice as lat
 # Load CSL Utility function
-import csl_utility_functions as csl_util
+import GBpy.csl_utility_functions as csl_util
 
 # Test Cases
 # 1: Common rotations for cubic lattices

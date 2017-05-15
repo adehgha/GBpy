@@ -117,9 +117,9 @@ class Lattice(object):
         # ------------------------------------------------------------------------------------------------------
         # $\alpha$-Fe
         if elem_type.lower() == 'fe_alpha':
-            self.elem_type = 'Fe'
+            self.elem_type = 'Fe_alpha'
             self.pearson = 'cI'
-            a = 2.870
+            a = 2.855324
             self.lat_params = {'a': a, 'b': a, 'c': a, 'alpha': np.pi/2,
                                'beta': np.pi/2, 'gamma': np.pi/2}
             b1x = a*np.array([-0.5,  0.5,  0.5])
@@ -128,6 +128,9 @@ class Lattice(object):
             self.l_p_po = np.column_stack((b1x, b1y, b1z))
             # Point group symmetry of the lattice
             self.cryst_ptgrp = 'Oh'
+            self.burgers_mag = a * np.sqrt(3)/ 2
+            self.eam_file = np.array(['alloy', 'Fe_2.eam.fs', -4.12243510073005, 'Fe'])
+            self.basis_atoms = np.array([0, 0, 0])
         # ------------------------------------------------------------------------------------------------------
         # FCC Lattices
         if elem_type == 'cF_Id':
@@ -153,7 +156,7 @@ class Lattice(object):
 
             self.cryst_ptgrp = 'Oh'
             self.burgers_mag = a / np.sqrt(2)
-            self.eam_file = np.array(['alloy', 'Al99.eam.alloy', -3.36000010077])
+            self.eam_file = np.array(['alloy', 'Al99.eam.alloy', -3.36000010077, 'Al'])
 
             b1x = a*np.array([0.0, 0.5, 0.5])
             b1y = a*np.array([0.5, 0.0, 0.5])
@@ -173,7 +176,7 @@ class Lattice(object):
 
             self.cryst_ptgrp = 'Oh'
             self.burgers_mag = a / np.sqrt(2)
-            self.eam_file = np.array(['alloy', 'ni1.set', -4.45000000526637])
+            self.eam_file = np.array(['alloy', 'ni1.set', -4.45000000526637, 'Ni'])
 
             b1x = a*np.array([0.0, 0.5, 0.5])
             b1y = a*np.array([0.5, 0.0, 0.5])
@@ -192,7 +195,7 @@ class Lattice(object):
 
             self.cryst_ptgrp = 'Oh'
             self.burgers_mag = a / np.sqrt(2)
-            self.eam_file = np.array(['alloy', 'Cu01.eam.alloy', -3.53999996838])
+            self.eam_file = np.array(['alloy', 'Cu01.eam.alloy', -3.53999996838, 'Cu'])
             # self.eam_file = np.array(['alloy', 'Cu01.eam.alloy', -3.54021833020492]) # 2007 version of Mishin's potential (2001)
 
             b1x = a*np.array([0.0, 0.5, 0.5])
