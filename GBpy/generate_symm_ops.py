@@ -462,7 +462,7 @@ def generate_symm_mats(cryst_ptgrp, tol=1e-10):
             count1 = count1+1
 
 
-    print symm_mat
+    # print symm_mat
     return symm_mat
 # -----------------------------------------------------------------------------------------------------------
 
@@ -890,7 +890,7 @@ def generate_symm_quats(cryst_ptgrp, tol=1e-10):
 
     symm_quat = quat.antipodal(symm_quat)
 
-    print quat.display(symm_quat)
+    # print quat.display(symm_quat)
     return symm_quat
 # -----------------------------------------------------------------------------------------------------------
 
