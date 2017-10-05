@@ -927,7 +927,7 @@ def save_symm_pkl(cryst_ptgrp, op_type):
 # -----------------------------------------------------------------------------------------------------------
 
 # save_symm_pkl('D3', 'quats')
-# save_symm_pkl('D4', 'quats')
+# save_symm_pkl('D4', 'matrices')
 # save_symm_pkl('D6', 'quats')
 # save_symm_pkl('D6h', 'quats')
 # save_symm_pkl('O', 'quats')
