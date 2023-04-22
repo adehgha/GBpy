@@ -4,7 +4,7 @@
         
 * GBpy on `GitHub <https://github.com/adehgha/GBpy>`__
 * GBpy `Documentation <https://rawcdn.githack.com/adehgha/GBpy/dea7986b17742bfe2aab8ba20b0751b3d8c8d5af/GBpy/docs/_build/html/index.html>`__
-* GBpy `Tutorials <https://rawcdn.githack.com/adehgha/GBpy/dea7986b17742bfe2aab8ba20b0751b3d8c8d5af/GBpy/docs/tutorials/index.html>`__
+* GBpy `Tutorials <https://rawcdn.githack.com/adehgha/GBpy/5f2dfb3ebd722261a6ef266e2aee71295eb29278/GBpy/docs/tutorials/index.html>`__
 
 .. image:: https://img.shields.io/pypi/v/GBpy.svg
     :target: https://pypi.python.org/pypi/GBpy
@@ -25,7 +25,7 @@ Functions:
 * ``GBpy.misorient_fz``, function for finding the unique disorientations in fundamental zone of various crystal point groups.
 * ``GBpy.integer_manipulations``, collection of many useful ineteger manipulation functions.
                 
-and many other useful tools. Please refer to the `documentation <https://rawcdn.githack.com/adehgha/GBpy/dea7986b17742bfe2aab8ba20b0751b3d8c8d5af/GBpy/docs/_build/html/index.html>`__ and `tutorials <https://rawcdn.githack.com/adehgha/GBpy/dea7986b17742bfe2aab8ba20b0751b3d8c8d5af/GBpy/docs/tutorials/index.html>`__ for detailed description and utility of functions.
+and many other useful tools. Please refer to the `documentation <https://rawcdn.githack.com/adehgha/GBpy/dea7986b17742bfe2aab8ba20b0751b3d8c8d5af/GBpy/docs/_build/html/index.html>`__ and `tutorials <https://rawcdn.githack.com/adehgha/GBpy/5f2dfb3ebd722261a6ef266e2aee71295eb29278/GBpy/docs/tutorials/index.html>`__ for detailed description and utility of functions.
                 
 Classes:
 ========
